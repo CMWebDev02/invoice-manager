@@ -1,5 +1,12 @@
 {
   "files": [],
   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
-  "compilerOptions": { "moduleResolution": "node16" }
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "es6",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/renderer/src/*"]
+    }
+  }
 }

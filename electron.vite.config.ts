@@ -13,7 +13,10 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        // Required to define the @ symbol used with shadcn components.
+        //https://dev.to/nedwize/how-to-add-shadcn-to-an-electron-vite-project-dn
+        '@': resolve('src/renderer/src')
       }
     },
     plugins: [react(), tailwindcss()]
