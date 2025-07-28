@@ -1,4 +1,3 @@
-import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
 import ButtonLink from '@renderer/components/user/button-link';
 
