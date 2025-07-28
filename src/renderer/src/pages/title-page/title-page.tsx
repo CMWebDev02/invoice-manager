@@ -7,8 +7,8 @@ export default function TitlePage(): React.JSX.Element {
     <div className="w-full h-full flex justify-center items-center">
       <Card>
         <CardContent className="flex flex-col gap-2">
-          <Button>Sorters</Button>
-          <Button>Viewers</Button>
+          <ButtonLink linkHref="./sorters">Sorters</ButtonLink>
+          <ButtonLink linkHref="./viewers">Viewers</ButtonLink>
           <ButtonLink linkHref="./changelogs">Changelogs</ButtonLink>
           <ButtonLink linkHref="./settings">Settings</ButtonLink>
         </CardContent>

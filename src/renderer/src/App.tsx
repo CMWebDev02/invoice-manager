@@ -4,6 +4,8 @@ import TitlePage from './pages/title-page/title-page';
 import NavBar from './components/user/nav-bar';
 import SettingsPage from './pages/settings/settings-page';
 import ChangeLogsPage from './pages/changelogs/changelogs-pages';
+import ViewersPage from './pages/viewers/viewers-page';
+import SortersPage from './pages/sorters/sorters-page';
 
 export default function App(): React.JSX.Element {
   return (
@@ -13,6 +15,8 @@ export default function App(): React.JSX.Element {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<TitlePage />} />
+            <Route path="/viewers" element={<ViewersPage />} />
+            <Route path="/sorters" element={<SortersPage />} />
             <Route path="/changelogs" element={<ChangeLogsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
