@@ -13,7 +13,13 @@ export default tseslint.config(
     settings: {
       react: {
         version: 'detect'
-      }
+      },
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto'
+        }
+      ]
     }
   },
   {
