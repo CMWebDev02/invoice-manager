@@ -1,5 +1,6 @@
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
+import ButtonLink from '@renderer/components/user/button-link';
 
 export default function TitlePage(): React.JSX.Element {
   return (
@@ -8,8 +9,8 @@ export default function TitlePage(): React.JSX.Element {
         <CardContent className="flex flex-col gap-2">
           <Button>Sorters</Button>
           <Button>Viewers</Button>
-          <Button>Changelogs</Button>
-          <Button>Settings</Button>
+          <ButtonLink linkHref="./changelogs">Changelogs</ButtonLink>
+          <ButtonLink linkHref="./settings">Settings</ButtonLink>
         </CardContent>
       </Card>
     </div>
