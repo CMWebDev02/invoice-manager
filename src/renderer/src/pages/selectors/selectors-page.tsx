@@ -4,9 +4,13 @@ import ButtonLink from '@renderer/components/user/button-link';
 import { getUserSaveData } from '@renderer/lib/utils';
 import { useState } from 'react';
 
-export default function SortersPage(): React.JSX.Element {
+interface SelectorsPageProps {
+  selectorType: 'sorters' | 'viewers';
+}
+
+export default function SelectorsPage({ selectorType }: SelectorsPageProps): React.JSX.Element {
   const [editingMode, setEditingMode] = useState<boolean>(false);
-  const savedSorters = getUserSaveData('sorters');
+  const savedSorters = getUserSaveData(selectorType);
 
   const toggleEditingMode = (): void => setEditingMode(!editingMode);
 
