@@ -14,3 +14,7 @@ export function getUserSaveData(page: 'sorters' | 'viewers'): string[] {
     return [];
   }
 }
+
+export function getDirectories(parentDirectoryPath: string): string[] {
+  return ['Temp', 'Temp 2'];
+}
