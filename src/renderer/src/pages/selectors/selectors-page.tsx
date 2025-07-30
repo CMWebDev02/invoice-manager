@@ -1,8 +1,11 @@
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent, CardFooter, CardTitle } from '@renderer/components/ui/card';
+import { Dialog, DialogTrigger } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
 import { getUserSaveData } from '@renderer/lib/utils';
 import { useState } from 'react';
+import SortersModal from './components/sorters-modal';
+import ViewersModal from './components/viewers-modal';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -17,7 +20,11 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   const SortersButtons = savedSorters.map((sorterName) => {
     return (
       <div key={sorterName} className="bg-black">
-        {editingMode && <Button className="cursor-pointer">^</Button>}
+        {editingMode && (
+          <DialogTrigger>
+            <Button className="cursor-pointer">^</Button>
+          </DialogTrigger>
+        )}
         <Button disabled={editingMode} className="cursor-pointer">
           {sorterName}
         </Button>
@@ -27,23 +34,27 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   });
 
   return (
-    <Card>
-      <CardTitle>This is the Sorters Page</CardTitle>
-
-      <CardContent className="flex flex-col items-center gap-2">{SortersButtons}</CardContent>
-      <CardFooter>
-        {editingMode ? (
-          <>
-            <Button onClick={toggleEditingMode}>Save</Button>
-            <Button>New</Button>
-          </>
-        ) : (
-          <>
-            <ButtonLink linkHref="/">Return</ButtonLink>
-            <Button onClick={toggleEditingMode}>Edit</Button>
-          </>
-        )}
-      </CardFooter>
-    </Card>
+    <Dialog>
+      {selectorType === 'sorters' ? <SortersModal /> : <ViewersModal />}
+      <Card>
+        <CardTitle>This is the Sorters Page</CardTitle>
+        <CardContent className="flex flex-col items-center gap-2">{SortersButtons}</CardContent>
+        <CardFooter>
+          {editingMode ? (
+            <>
+              <Button onClick={toggleEditingMode}>Save</Button>
+              <DialogTrigger>
+                <Button>New</Button>
+              </DialogTrigger>
+            </>
+          ) : (
+            <>
+              <ButtonLink linkHref="/">Return</ButtonLink>
+              <Button onClick={toggleEditingMode}>Edit</Button>
+            </>
+          )}
+        </CardFooter>
+      </Card>
+    </Dialog>
   );
 }
