@@ -1,45 +1,33 @@
 import { getDirectories } from '@renderer/lib/utils';
-import { type Dirent } from 'fs';
-import { type ChangeEvent, useState } from 'react';
+import { Dirent } from 'fs';
+import { useState } from 'react';
+import DiskSelector from './disk-selector';
 
 interface DirectorySelectorProps {
-  updateSavedPath: React.Dispatch<React.SetStateAction<string>>;
+  updateSavedPath: (dirPath: string) => void;
+  drivesList: string[];
 }
 
-export default function DirectorySelector({ updateSavedPath }: DirectorySelectorProps): React.JSX.Element {
-  // Possibly move this up a parent component to allow for reusing the same call to get the drives list.
-  const [drivesList, setDrivesList] = useState<string[]>([]);
+export default function DirectorySelector({ updateSavedPath, drivesList }: DirectorySelectorProps): React.JSX.Element {
   const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>('');
+  const [directoriesArray, setDirectoriesArray] = useState<Dirent[]>([]);
 
-  //   Pulls the current directories for the selected drive upon selecting a new drive.
-  function setDrivePath(e: ChangeEvent<HTMLSelectElement>): void {
-    if (e.target.value !== 'N/A') {
-      const drivePath = e.target.value;
-      changeDirectories(`${drivePath}\\`);
-    }
+  async function changeDirectories(dirPath: string): Promise<void> {
+    const allDirectories = await getDirectories(dirPath);
+    setDirectoriesArray(allDirectories);
   }
 
-  function changeDirectories(dirPath: string): string[] {
-    //change to Dirent[]
-    return getDirectories(dirPath);
-  }
-
-  // If an empty string is passed in the folders in the user's home directory will be returned.
-  const DirectoryOptions = changeDirectories('').map((directoryOption) => {
-    // Need to pull directory name and have an onClick to set the current directory to the full directory path
-    return <div key={directoryOption}>{directoryOption}</div>;
-  });
+  // // Move to a separate file and pass in the directories received from changeDirectories
+  // // If an empty string is passed in the folders in the user's home directory will be returned.
+  // const DirectoryOptions = changeDirectories('').map((directoryOption) => {
+  //   // Need to pull directory name and have an onClick to set the current directory to the full directory path
+  //   return <div key={directoryOption}>{directoryOption.name}</div>;
+  // });
 
   return (
     <div>
       <div>
-        {/* Make into a separate component with the setDrivePath logic */}
-        {/* Component that allows for navigation of different drive paths
-        once a drive is changed, the call to the directories within the drive is made */}
-        <select onChange={setDrivePath}>
-          <option value={'N/A'}>Select Drive</option>
-          {drivesList.length > 0 && drivesList.map((drive) => <option key={drive}>{drive}</option>)}
-        </select>
+        <DiskSelector drivesList={drivesList} changeDirectories={changeDirectories} />
 
         <h2>{currentDirectoryPath}</h2>
 
@@ -47,7 +35,7 @@ export default function DirectorySelector({ updateSavedPath }: DirectorySelector
         <button onClick={() => updateSavedPath(currentDirectoryPath)}>Save</button>
       </div>
 
-      <div>{DirectoryOptions}</div>
+      {/* <div>{DirectoryOptions}</div> */}
     </div>
   );
 }

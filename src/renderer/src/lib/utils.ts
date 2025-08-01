@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { type Dirent } from 'fs';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]): string {
@@ -15,6 +16,12 @@ export function getUserSaveData(page: 'sorters' | 'viewers'): string[] {
   }
 }
 
-export function getDirectories(parentDirectoryPath: string): string[] {
-  return ['Temp', 'Temp 2'];
+export async function getAllDrives(): Promise<string[]> {
+  const allDrives = await window.api.file_system.getAllDrives();
+  return allDrives;
+}
+
+export async function getDirectories(parentDirectoryPath: string): Promise<Dirent<string>[]> {
+  const allDirectories = await window.api.file_system.getDirectories(parentDirectoryPath);
+  return allDirectories;
 }

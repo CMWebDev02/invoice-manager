@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import os from 'os';
-import { getDiskInfo } from 'node-disk-info';
 import { type Dirent } from 'fs';
 
 const userHomeDir = os.homedir();
@@ -19,7 +18,9 @@ export function getHomeDir(): string {
 
 export async function getAllDrives(): Promise<string[]> {
   try {
-    const allDrives = await getDiskInfo();
+    // install the new npm i drivelist node module
+    // pull the current drives from the computer and return them to the user
+    const allDrives = await ;
     return allDrives.map((drive) => drive.mounted);
   } catch (error) {
     console.log(error);
