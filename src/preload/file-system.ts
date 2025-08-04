@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-// import disklist from 'disklist';
+import disklist from 'disklist';
 
 const userHomeDir = os.homedir();
 
@@ -21,7 +21,7 @@ export async function getAllDrives(): Promise<string[]> {
   try {
     // pull the current drives from the computer and return them to the user
     // const allDrives = await disklist.listDrives();
-    // console.log(allDrives);
+    console.log(disklist);
     // return allDrives.map((drive) => drive.description);
     return ['a'];
   } catch (error) {
