@@ -20,15 +20,11 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   const SortersButtons = savedSorters.map((sorterName) => {
     return (
       <div key={sorterName} className="bg-black">
-        {editingMode && (
-          <DialogTrigger>
-            <Button className="cursor-pointer">^</Button>
-          </DialogTrigger>
-        )}
+        {editingMode && <DialogTrigger className="cursor-pointer">^</DialogTrigger>}
         <Button disabled={editingMode} className="cursor-pointer">
           {sorterName}
         </Button>
-        {editingMode && <Button className="cursor-pointer">X</Button>}
+        {editingMode && <DialogTrigger className="cursor-pointer">X</DialogTrigger>}
       </div>
     );
   });
@@ -43,9 +39,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           {editingMode ? (
             <>
               <Button onClick={toggleEditingMode}>Save</Button>
-              <DialogTrigger>
-                <Button>New</Button>
-              </DialogTrigger>
+              <DialogTrigger>New</DialogTrigger>
             </>
           ) : (
             <>

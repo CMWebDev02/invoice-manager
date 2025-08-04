@@ -2,6 +2,7 @@ import { getDirectories } from '@renderer/lib/utils';
 import { Dirent } from 'fs';
 import { useState } from 'react';
 import DiskSelector from './disk-selector';
+import { Button } from '@renderer/components/ui/button';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -32,7 +33,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
         <h2>{currentDirectoryPath}</h2>
 
         {/* Updates the selected folder to be the new saved path */}
-        <button onClick={() => updateSavedPath(currentDirectoryPath)}>Save</button>
+        <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save</Button>
       </div>
 
       {/* <div>{DirectoryOptions}</div> */}

@@ -29,6 +29,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "disklist": "^1.0.1",
     "electron-store": "^10.1.0",
     "electron-updater": "^6.3.9",
     "lucide-react": "^0.525.0",
