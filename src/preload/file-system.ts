@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import { spawn } from 'child_process';
+import { getUserDrives } from '../main/system-storage';
 
 const userHomeDir = os.homedir();
 
@@ -20,12 +20,7 @@ export function getHomeDir(): string {
 export async function getAllDrives(): Promise<string[]> {
   try {
     // pull the current drives from the computer and return them to the user
-
-    const process = spawn('powershell.exe', ['(Get-Volume).DriveLetter']);
-    // Currently, this returns the drive letters, create in a separate file and have it run when the program launches, also filter the drives and only allow a letter to be saved once.
-    process.stdout.on('data', (data) => console.log(data.toString()));
-    // return allDrives.map((drive) => drive.description);
-    return ['a'];
+    return getUserDrives();
   } catch (error) {
     console.log(error);
     return [];
