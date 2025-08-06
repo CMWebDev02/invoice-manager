@@ -31,7 +31,7 @@ class PowerShell {
       try {
         const checkInterval = setInterval(() => {
           if (this._isDataAdded === true) {
-            checkInterval.close();
+            clearInterval(checkInterval);
             resolve(true);
             return;
           }

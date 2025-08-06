@@ -5,8 +5,22 @@ import NavBar from './components/user/nav-bar';
 import SettingsPage from './pages/settings/settings-page';
 import ChangeLogsPage from './pages/changelogs/changelogs-pages';
 import SelectorsPage from './pages/selectors/selectors-page';
+import { useEffect, useState } from 'react';
 
 export default function App(): React.JSX.Element {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function pullUserDrives(): Promise<void> {
+      await window.api.initialization.storeUserDrives();
+      setIsLoading(false);
+    }
+
+    pullUserDrives();
+  }, []);
+
+  if (isLoading) return <h1>Loading</h1>;
+
   return (
     <>
       <NavBar />

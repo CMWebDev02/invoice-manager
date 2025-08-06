@@ -6,11 +6,16 @@ type FileSystemTypes = {
   getAllDrives: () => Promise<string[]>;
 };
 
+type InitializationTypes = {
+  storeUserDrives: () => Promise<void>;
+};
+
 declare global {
   interface Window {
     electron: ElectronAPI;
     api: {
       file_system: FileSystemTypes;
+      initialization: InitializationTypes;
     };
   }
 }
