@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import { getUserDrives } from '../main/system-storage';
+import { getUserDrives } from './system-storage';
 
 const userHomeDir = os.homedir();
 
