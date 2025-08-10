@@ -19,6 +19,7 @@ export default function App(): React.JSX.Element {
     pullUserDrives();
   }, []);
 
+  // Add an actual loading screen
   if (isLoading) return <h1>Loading</h1>;
 
   return (

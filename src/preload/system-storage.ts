@@ -10,6 +10,7 @@ const store = new Store<StoreTypes>();
 export async function storeUserDrives(): Promise<void> {
   try {
     const userDrives = await pullUserDrives();
+    userDrives.sort();
     store.set('userDrives', JSON.stringify(userDrives));
   } catch (error) {
     console.error(error);
@@ -18,7 +19,6 @@ export async function storeUserDrives(): Promise<void> {
 
 export function getUserDrives(): string[] {
   const drivesString: string = store.get('userDrives');
-  // Filter through the string and only keep the drive letters.
   const userDrives = JSON.parse(drivesString);
   return userDrives;
 }
