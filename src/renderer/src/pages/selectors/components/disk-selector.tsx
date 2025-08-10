@@ -10,7 +10,8 @@ export default function DiskSelector({ drivesList, changeDirectories }: DiskSele
   function setDrivePath(e: ChangeEvent<HTMLSelectElement>): void {
     if (e.target.value !== 'N/A') {
       const drivePath = e.target.value;
-      // changeDirectories(`${drivePath}\\`);
+      // Appends the ':\\' to the drive letter
+      changeDirectories(`${drivePath}:\\`);
     }
   }
 

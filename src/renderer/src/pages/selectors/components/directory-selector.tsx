@@ -15,6 +15,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
 
   async function changeDirectories(dirPath: string): Promise<void> {
     const allDirectories = await getDirectories(dirPath);
+    console.log(allDirectories)
     setDirectoriesArray(allDirectories);
   }
 
@@ -33,7 +34,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
         <h2>{currentDirectoryPath}</h2>
 
         {/* Updates the selected folder to be the new saved path */}
-        <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save</Button>
+        <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save Dir</Button>
       </div>
 
       {/* <div>{DirectoryOptions}</div> */}

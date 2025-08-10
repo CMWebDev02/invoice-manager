@@ -5,6 +5,7 @@ import { Label } from '@renderer/components/ui/label';
 import { getAllDrives } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import DirectorySelector from './directory-selector';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 export default function SortersModal(): React.JSX.Element {
   // Possibly move this up a parent component to allow for reusing the same call to get the drives list.
@@ -25,25 +26,24 @@ export default function SortersModal(): React.JSX.Element {
 
   return (
     <DialogContent>
+      <DialogTitle>Temp</DialogTitle>
       <DialogHeader>
         <Button>Save</Button>
       </DialogHeader>
-      <DialogDescription>
-        <div>
-          <Label>Sorter Title</Label>
-          <Input />
-        </div>
-        <div>
-          <Label>Invoices Destination</Label>
-          <Input />
-          <div>Directory Selector Goes Here</div>
-        </div>
-        <div>
-          <Label>Directories Destination</Label>
-          <Input />
-          <DirectorySelector updateSavedPath={updateCurrentSavePath} drivesList={drivesList} />
-        </div>
-      </DialogDescription>
+      <div>
+        <Label>Sorter Title</Label>
+        <Input />
+      </div>
+      <div>
+        <Label>Invoices Destination</Label>
+        <Input />
+        <div>Directory Selector Goes Here</div>
+      </div>
+      <div>
+        <Label>Directories Destination</Label>
+        <Input />
+        <DirectorySelector updateSavedPath={updateCurrentSavePath} drivesList={drivesList} />
+      </div>
     </DialogContent>
   );
 }
