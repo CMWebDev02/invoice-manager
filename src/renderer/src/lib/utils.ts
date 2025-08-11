@@ -22,6 +22,8 @@ export async function getAllDrives(): Promise<string[]> {
 }
 
 export async function getDirectories(parentDirectoryPath: string): Promise<Dirent<string>[]> {
-  const allDirectories = await window.api.file_system.getDirectories(parentDirectoryPath);
+  // Assigns user's home directory in the event an empty string is passed in.
+  const dirPath = parentDirectoryPath === '' ? window.api.file_system.getHomeDir() : parentDirectoryPath;
+  const allDirectories = await window.api.file_system.getDirectories(dirPath);
   return allDirectories;
 }
