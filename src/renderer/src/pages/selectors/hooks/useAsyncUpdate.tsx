@@ -1,3 +1,4 @@
+import { type Dirent } from 'fs';
 import { useEffect, useState } from 'react';
 
 type UseAsyncUpdate = {
@@ -6,13 +7,20 @@ type UseAsyncUpdate = {
   error: unknown;
 };
 
+// https://www.tutorialsteacher.com/typescript/typescript-generic-interface
+// https://www.typescriptlang.org/docs/handbook/2/generics.html
+
+type PotentialResultTypes = Dirent[];
+
+type PotentialTriggerTypes = string;
+
 interface UseAsyncUpdateProps {
-  asyncFunction: (updateTrigger: unknown) => Promise<unknown>;
-  updateTrigger: string | number;
+  asyncFunction: (updateTrigger: PotentialTriggerTypes) => Promise<PotentialResultTypes>;
+  updateTrigger: PotentialTriggerTypes;
 }
 
 export default function useAsyncUpdate({ asyncFunction, updateTrigger }: UseAsyncUpdateProps): UseAsyncUpdate {
-  const [updateResults, setUpdateResults] = useState<unknown>();
+  const [updateResults, setUpdateResults] = useState<PotentialResultTypes>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<unknown>();
 
