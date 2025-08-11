@@ -20,7 +20,6 @@ export default function useAsyncUpdate({ asyncFunction, updateTrigger }: UseAsyn
     try {
       async function getUpdatedResults(): Promise<void> {
         const results = await asyncFunction(updateTrigger);
-        console.log(results);
         setUpdateResults(results);
       }
       setIsLoading(true);

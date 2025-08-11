@@ -1,9 +1,10 @@
 import { getDirectories } from '@renderer/lib/utils';
 import { Dirent } from 'fs';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
 import useAsyncUpdate from '../hooks/useAsyncUpdate';
+import DirectoryList from './directory-list';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -25,6 +26,9 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
         <DiskSelector drivesList={drivesList} updateCurrentDirectoryPath={updateCurrentDirectoryPath} />
 
         <h2>{currentDirectoryPath}</h2>
+
+        {/* Add an actual loading icon */}
+        {isLoading ? <div>loading</div> : <DirectoryList directoriesArray={directoriesArray} asyncFetchError={directoriesError} />}
 
         {/* Updates the selected folder to be the new saved path */}
         <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save Dir</Button>
