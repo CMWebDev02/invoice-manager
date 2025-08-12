@@ -1,14 +1,17 @@
 import { Button } from '@renderer/components/ui/button';
-import { joinChildDir } from '@renderer/lib/utils';
+import { joinPaths } from '@renderer/lib/utils';
 import { type Dirent } from 'fs';
+import { useMemo } from 'react';
 
 interface DirectoryListProps {
   directoriesArray: Dirent[];
   asyncFetchError: unknown;
   updateCurrentDirectoryPath: (dirPath: string) => void;
+  reversePathTraversal: () => void;
 }
 
-export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath }: DirectoryListProps): React.JSX.Element {
+export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, reversePathTraversal }: DirectoryListProps): React.JSX.Element {
+  const BackwardsNavigateButton = useMemo(() => <Button onClick={reversePathTraversal}>...</Button>, [reversePathTraversal]);
   if (asyncFetchError)
     return (
       // Add an actual error page
@@ -20,7 +23,7 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
       <div>{dir.name}</div>
       <Button
         onClick={() => {
-          const childDirPath = joinChildDir(dir.parentPath, dir.name);
+          const childDirPath = joinPaths(dir.parentPath, dir.name);
           console.log(childDirPath);
           updateCurrentDirectoryPath(childDirPath);
         }}
@@ -30,5 +33,10 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
     </div>
   ));
 
-  return <div>{values}</div>;
+  return (
+    <div>
+      {BackwardsNavigateButton}
+      {values}
+    </div>
+  );
 }

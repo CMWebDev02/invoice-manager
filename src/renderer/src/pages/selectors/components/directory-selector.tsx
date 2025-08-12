@@ -1,4 +1,4 @@
-import { getDirectories } from '@renderer/lib/utils';
+import { getDirectories, joinPaths, userHomeDir } from '@renderer/lib/utils';
 import { useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
@@ -12,12 +12,18 @@ interface DirectorySelectorProps {
 }
 
 export default function DirectorySelector({ updateSavedPath, drivesList }: DirectorySelectorProps): React.JSX.Element {
-  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>('');
+  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(userHomeDir);
 
   const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: getDirectories, updateTrigger: currentDirectoryPath });
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);
+  }
+
+  // Traverses to the parent path of the current directory using relative paths.
+  function reversePathTraversal(): void {
+    const previousRelativePath = joinPaths(currentDirectoryPath, '..');
+    setCurrentDirectoryPath(previousRelativePath);
   }
 
   return (
@@ -28,7 +34,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
         <h2>{currentDirectoryPath}</h2>
 
         {/* Add an actual loading icon */}
-        {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath}/>}
+        {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} reversePathTraversal={reversePathTraversal} />}
 
         {/* Updates the selected folder to be the new saved path */}
         <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save Dir</Button>

@@ -6,6 +6,8 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+export const userHomeDir = window.api.file_system.getHomeDir();
+
 export function getUserSaveData(page: 'sorters' | 'viewers'): string[] {
   if (page === 'sorters') {
     return ['Customer Documents', 'Payables'];
@@ -28,7 +30,7 @@ export async function getDirectories(parentDirectoryPath: string): Promise<Diren
   return allDirectories;
 }
 
-export function joinChildDir(parentDir: string, childDir: string): string {
+export function joinPaths(parentDir: string, childDir: string): string {
   const newDirPath = window.api.file_system.joinPaths(parentDir, childDir);
   return newDirPath;
 }
