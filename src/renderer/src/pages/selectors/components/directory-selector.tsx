@@ -4,6 +4,7 @@ import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
 import useAsyncUpdate from '../hooks/useAsyncUpdate';
 import DirectoryList from './directory-list';
+import { type Dirent } from 'fs';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -13,7 +14,7 @@ interface DirectorySelectorProps {
 export default function DirectorySelector({ updateSavedPath, drivesList }: DirectorySelectorProps): React.JSX.Element {
   const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>('');
 
-  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate({ asyncFunction: getDirectories, updateTrigger: currentDirectoryPath });
+  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: getDirectories, updateTrigger: currentDirectoryPath });
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);

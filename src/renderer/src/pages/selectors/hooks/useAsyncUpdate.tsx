@@ -1,8 +1,7 @@
-import { type Dirent } from 'fs';
 import { useEffect, useState } from 'react';
 
-type UseAsyncUpdate = {
-  updateResults: unknown;
+type UseAsyncUpdate<UpdateType> = {
+  updateResults: UpdateType;
   isLoading: boolean;
   error: unknown;
 };
@@ -10,17 +9,15 @@ type UseAsyncUpdate = {
 // https://www.tutorialsteacher.com/typescript/typescript-generic-interface
 // https://www.typescriptlang.org/docs/handbook/2/generics.html
 
-type PotentialResultTypes = Dirent[];
-
-type PotentialTriggerTypes = string;
-
-interface UseAsyncUpdateProps {
-  asyncFunction: (updateTrigger: PotentialTriggerTypes) => Promise<PotentialResultTypes>;
-  updateTrigger: PotentialTriggerTypes;
+// PropType defines the typing for the updateTrigger and what is passed into the asyncFunction props
+// ReturnType defines the type returned by the asyncFunction
+interface UseAsyncUpdateProps<PropType, ReturnType> {
+  asyncFunction: (updateTrigger: PropType) => Promise<ReturnType>;
+  updateTrigger: PropType;
 }
 
-export default function useAsyncUpdate({ asyncFunction, updateTrigger }: UseAsyncUpdateProps): UseAsyncUpdate {
-  const [updateResults, setUpdateResults] = useState<PotentialResultTypes>();
+export default function useAsyncUpdate<PropType, ReturnType>({ asyncFunction, updateTrigger }: UseAsyncUpdateProps<PropType, ReturnType>): UseAsyncUpdate<ReturnType | null> {
+  const [updateResults, setUpdateResults] = useState<ReturnType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<unknown>();
 
