@@ -27,3 +27,8 @@ export async function getDirectories(parentDirectoryPath: string): Promise<Diren
   const allDirectories = await window.api.file_system.getDirectories(dirPath);
   return allDirectories;
 }
+
+export function joinChildDir(parentDir: string, childDir: string): string {
+  const newDirPath = window.api.file_system.joinPaths(parentDir, childDir);
+  return newDirPath;
+}

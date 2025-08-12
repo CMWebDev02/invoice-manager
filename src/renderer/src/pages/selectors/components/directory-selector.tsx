@@ -28,7 +28,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList }: Direc
         <h2>{currentDirectoryPath}</h2>
 
         {/* Add an actual loading icon */}
-        {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList directoriesArray={directoriesArray} asyncFetchError={directoriesError} />}
+        {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath}/>}
 
         {/* Updates the selected folder to be the new saved path */}
         <Button onClick={() => updateSavedPath(currentDirectoryPath)}>Save Dir</Button>
