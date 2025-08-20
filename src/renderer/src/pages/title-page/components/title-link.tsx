@@ -9,7 +9,7 @@ interface TitleLinkProps {
 export default function TitleLink({ linkHref, children }: TitleLinkProps): React.JSX.Element {
   return (
     <Link to={linkHref} className="w-full">
-      <Button className="cursor-pointer w-full text-2xl">{children}</Button>
+      <Button className="w-full text-2xl">{children}</Button>
     </Link>
   );
 }
