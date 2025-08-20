@@ -25,7 +25,7 @@ export default function App(): React.JSX.Element {
   return (
     <>
       <NavBar />
-      <main className="h-[calc(100vh-2.5rem)] w-screen">
+      <main className="h-[calc(100vh-2.5rem)] w-screen bg-background">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<TitlePage />} />

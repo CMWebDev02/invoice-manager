@@ -8,8 +8,8 @@ interface ButtonLinkProps {
 
 export default function ButtonLink({ linkHref, children }: ButtonLinkProps): React.JSX.Element {
   return (
-    <Link to={linkHref}>
-      <Button className="cursor-pointer ">{children}</Button>
+    <Link to={linkHref} className="w-full">
+      <Button className="cursor-pointer w-full text-2xl">{children}</Button>
     </Link>
   );
 }
