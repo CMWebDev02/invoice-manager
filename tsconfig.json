@@ -3,7 +3,7 @@
   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }],
   "compilerOptions": {
     "esModuleInterop": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "nodenext",
     "module": "es6",
     "baseUrl": ".",
     "paths": {

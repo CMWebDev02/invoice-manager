@@ -185,3 +185,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .scrollbar {
+    scrollbar-color: var(--foreground) var(--background) !important;
+    scrollbar-width: thin;
+    }
+}
