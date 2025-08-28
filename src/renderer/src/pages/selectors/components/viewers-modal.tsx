@@ -3,7 +3,11 @@ import { DialogContent, DialogDescription, DialogHeader } from '@renderer/compon
 import { Input } from '@renderer/components/ui/input';
 import { Label } from '@renderer/components/ui/label';
 
-export default function ViewersModal(): React.JSX.Element {
+interface ViewersModalProps {
+  drivesList: string[];
+}
+
+export default function ViewersModal({ drivesList }: ViewersModalProps): React.JSX.Element {
   return (
     <DialogContent>
       <DialogHeader>

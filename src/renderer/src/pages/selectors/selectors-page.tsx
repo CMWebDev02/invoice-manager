@@ -2,8 +2,8 @@ import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
 import { Dialog, DialogTrigger } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
-import { getUserSaveData } from '@renderer/lib/utils';
-import { useState } from 'react';
+import { getAllDrives, getUserSaveData } from '@renderer/lib/utils';
+import { useEffect, useState } from 'react';
 import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
 import { buttonVariants } from '@renderer/components/ui/button';
@@ -17,8 +17,18 @@ interface SelectorsPageProps {
 export default function SelectorsPage({ selectorType }: SelectorsPageProps): React.JSX.Element {
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const savedSorters = getUserSaveData(selectorType);
+  const [drivesList, setDrivesList] = useState<string[]>([]);
 
   const toggleEditingMode = (): void => setEditingMode(!editingMode);
+
+  useEffect(() => {
+    async function getUserDrives(): Promise<void> {
+      const userDrives = await getAllDrives();
+      console.log(userDrives);
+      setDrivesList(userDrives);
+    }
+    getUserDrives();
+  }, []);
 
   const SortersButtons = savedSorters.map((sorterName) => {
     return (
@@ -52,7 +62,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
       <Dialog>
         {/* Modal for the associated selector */}
-        {selectorType === 'sorters' ? <SortersModal /> : <ViewersModal />}
+        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} /> : <ViewersModal drivesList={drivesList} />}
 
         {/* Main card displayed on the page */}
         <Card

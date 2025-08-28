@@ -1,28 +1,19 @@
 import { Button } from '@renderer/components/ui/button';
-import { DialogContent, DialogDescription, DialogHeader } from '@renderer/components/ui/dialog';
+import { DialogContent, DialogHeader } from '@renderer/components/ui/dialog';
 import { Input } from '@renderer/components/ui/input';
 import { Label } from '@renderer/components/ui/label';
-import { getAllDrives } from '@renderer/lib/utils';
-import { useEffect, useState } from 'react';
+
 import DirectorySelector from './directory-selector';
 import { DialogTitle } from '@radix-ui/react-dialog';
 
-export default function SortersModal(): React.JSX.Element {
-  // Possibly move this up a parent component to allow for reusing the same call to get the drives list.
-  const [drivesList, setDrivesList] = useState<string[]>([]);
+interface SortersModalProps {
+  drivesList: string[];
+}
 
+export default function SortersModal({ drivesList }: SortersModalProps): React.JSX.Element {
   function updateCurrentSavePath(dirPath: string): void {
     console.log(dirPath);
   }
-
-  useEffect(() => {
-    async function getUserDrives(): Promise<void> {
-      const userDrives = await getAllDrives();
-      console.log(userDrives);
-      setDrivesList(userDrives);
-    }
-    getUserDrives();
-  }, []);
 
   return (
     <DialogContent>
