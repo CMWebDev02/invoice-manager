@@ -66,10 +66,11 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
         {/* Main card displayed on the page */}
         <Card
-          className="bg-secondary p-2 h-1/4 max-h-1/4
-          w-78
-          md:w-86
-          lg:w-96
+          className="bg-secondary p-2 
+          
+          h-3/4 md:h-1/2
+          max-h-3/4 md:max-h-1/2
+          w-78 md:w-86 lg:w-96
         "
         >
           <CardContent
