@@ -8,6 +8,7 @@ import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
 import { buttonVariants } from '@renderer/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -21,19 +22,26 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   const SortersButtons = savedSorters.map((sorterName) => {
     return (
-      <div key={sorterName} className="bg-primary w-full flex flex-row justify-center">
-        {editingMode && <DialogTrigger className={buttonVariants({ variant: 'default' }) + ' w-1/6'}></DialogTrigger>}
+      <div key={sorterName} className="bg-primary w-full flex flex-row justify-center p-1">
+        {editingMode && (
+          <DialogTrigger className={buttonVariants({ variant: 'default' }) + ' w-1/6'}>
+            <FontAwesomeIcon icon={faAngleUp} size="lg" />
+          </DialogTrigger>
+        )}
         <Button
           disabled={editingMode}
-          className="
-        w-4/6
-        "
+          className={`
+            ${editingMode ? 'w-4/6' : 'w-full'}
+            text-lg
+            md:text-xl
+            lg:text-2xl
+            `}
         >
           {sorterName}
         </Button>
         {editingMode && (
           <DialogTrigger className={buttonVariants({ variant: 'destructive' }) + ' w-1/6'}>
-            <FontAwesomeIcon icon={byPrefixAndName.fas['xmark']} />
+            <FontAwesomeIcon icon={faXmark} size="lg" />
           </DialogTrigger>
         )}
       </div>
@@ -71,8 +79,8 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
         >
           {editingMode ? (
             <>
-              <Button onClick={toggleEditingMode}>Save</Button>
               <DialogTrigger className={buttonVariants({ variant: 'default' })}>New</DialogTrigger>
+              <Button onClick={toggleEditingMode}>Save</Button>
             </>
           ) : (
             <>
