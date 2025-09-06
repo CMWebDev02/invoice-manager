@@ -56,16 +56,16 @@ export default function SortersModal({ drivesList }: SortersModalProps): React.J
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
-        <div>
-          <FlexColContainer>
+        <div className="h-full">
+          <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Invoices Destination</h3>
             <h4>Temp</h4>
           </FlexColContainer>
-          {/* <DirectorySelector updateSavedPath={updateCurrentSavePath} drivesList={drivesList} /> */}
+          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateCurrentSavePath} drivesList={drivesList} />
         </div>
 
-        <div>
-          <FlexColContainer>
+        <div className="h-full">
+          <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Directories Destination</h3>
             <h4>Temp</h4>
           </FlexColContainer>
