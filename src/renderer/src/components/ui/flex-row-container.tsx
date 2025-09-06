@@ -1,8 +1,10 @@
+import { cn } from '@renderer/lib/utils';
+
 interface FlexRowContainerProps {
   children: React.ReactNode;
-  additionalClasses?: string;
+  className?: string;
 }
 
-export default function FlexRowContainer({ children, additionalClasses }: FlexRowContainerProps): React.JSX.Element {
-  return <div className={"flex flex-row w-full " + additionalClasses}>{children}</div>;
+export default function FlexRowContainer({ children, className }: FlexRowContainerProps): React.JSX.Element {
+  return <div className={cn('flex flex-row', className)}>{children}</div>;
 }
