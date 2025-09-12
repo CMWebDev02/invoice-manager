@@ -12,6 +12,29 @@ interface DirectoryListProps {
   className?: string;
 }
 
+// Have each list item be selectable
+// Once a user clicks the item
+// It highlights red to indicate it currently selected
+// Once the user clicks save, then the dir.name is used to update the selected directory path var
+
+// Directory Selection
+// INIT selectedDirectory
+// Get selectedDirectory // once a user clicks a directory, use its dir.name value to store in selectedDirectory
+// For each div in directoriesArray
+//  IF dir.name === selectedDirectory THEN
+//  "text-red"
+//  ELSE
+//  "text-primary"
+//  ENDIF
+// ENDFOR
+
+// Directory Saving
+// ON user clicking Save Button
+// Call saveSelectedDirectory(dir: string)
+// FUNCTION saveSelectedDirectory
+//  
+// ENDFUNCTION
+
 export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
@@ -40,9 +63,8 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
 
   const values = directoriesArray.map((dir: Dirent) => (
     <div key={dir.name} className="flex w-full bg-primary">
-      {/* Add logic to enable selection and displaying of the currently selected directory path */}
       <div
-        className="w-3/4 flex items-center select-none"
+        className={`w-3/4 flex items-center select-none ${dir.name === selectDirectoryPath}`}
         id={dir.name}
         onClick={() => {
           updateDirectoryPath(dir.parentPath, dir.name, 'selection');
