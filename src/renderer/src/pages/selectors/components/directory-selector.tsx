@@ -1,5 +1,5 @@
 import { cn, getDirectories, joinPaths, userHomeDir } from '@renderer/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
 import useAsyncUpdate from '../hooks/useAsyncUpdate';
@@ -21,18 +21,19 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);
+    setSelectedDirectoryPath('');
+  }
+
+  // Traverses to the parent path of the current directory using relative paths.
+  function reversePathTraversal(): void {
+    const previousRelativePath = joinPaths(currentDirectoryPath, '..');
+    updateCurrentDirectoryPath(previousRelativePath);
   }
 
   function updateDirectoryPath(dirPath: string): void {
     // Finish adding logic to denote if a path is currently selected or not, by having the path be colored red or the board becoming red
     // also add in the save option to use the selected directory
     setSelectedDirectoryPath(dirPath);
-  }
-
-  // Traverses to the parent path of the current directory using relative paths.
-  function reversePathTraversal(): void {
-    const previousRelativePath = joinPaths(currentDirectoryPath, '..');
-    setCurrentDirectoryPath(previousRelativePath);
   }
 
   return (

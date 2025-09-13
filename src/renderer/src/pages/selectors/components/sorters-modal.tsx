@@ -9,17 +9,35 @@ import DirectorySelector from './directory-selector';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
+import { validateDirectoryPath } from '@renderer/lib/utils';
+import { useState } from 'react';
 
 interface SortersModalProps {
   drivesList: string[];
 }
 
 export default function SortersModal({ drivesList }: SortersModalProps): React.JSX.Element {
-  function updateCurrentSavePath(dirPath: string): void {
+  const [invoicesDestination, setInvoicesDestination] = useState<string>('');
+  const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
+
+  async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
     if (dirPath !== '') {
-      console.log(dirPath);
+      const isValidPath = await validateDirectoryPath(dirPath);
+      if (isValidPath && pathDestination === 'invoices') {
+        setInvoicesDestination(dirPath);
+      } else if (isValidPath && pathDestination === 'directories') {
+        setDirectoriesDestination(dirPath);
+      }
     }
   }
+
+  // Calls the update path function to update the appropriate destination path
+  const updateInvoiceDestinationPath = (dirPath: string): void => {
+    updateCurrentSavePath(dirPath, 'invoices');
+  };
+  const updateDirectoriesDestinationPath = (dirPath: string): void => {
+    updateCurrentSavePath(dirPath, 'directories');
+  };
 
   return (
     <DialogContent
@@ -61,16 +79,17 @@ export default function SortersModal({ drivesList }: SortersModalProps): React.J
         <div className="h-full">
           <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Invoices Destination</h3>
-            <h4>Temp</h4>
+            <h4>{invoicesDestination}</h4>
           </FlexColContainer>
-          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateCurrentSavePath} drivesList={drivesList} />
+          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
         </div>
 
         <div className="h-full">
           <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Directories Destination</h3>
-            <h4>Temp</h4>
+            <h4>{directoriesDestination}</h4>
           </FlexColContainer>
+          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
         </div>
       </FlexRowContainer>
     </DialogContent>

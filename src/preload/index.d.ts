@@ -5,6 +5,7 @@ type FileSystemTypes = {
   getHomeDir: () => string;
   getAllDrives: () => Promise<string[]>;
   joinPaths: (...dirPaths: string[]) => string;
+  validateDirectoryPath: (dirPath: string) => Promise<boolean>;
 };
 
 type InitializationTypes = {

@@ -34,3 +34,12 @@ export function joinPaths(parentDir: string, childDir: string): string {
   const newDirPath = window.api.file_system.joinPaths(parentDir, childDir);
   return newDirPath;
 }
+
+export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
+  try {
+    const isValidPath = await window.api.file_system.validateDirectoryPath(dirPath);
+    return isValidPath;
+  } catch (error: unknown) {
+    console.error(error);
+  }
+}

@@ -1,6 +1,6 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { getAllDrives, getDirectories, getHomeDir, joinPaths } from './file-system';
+import { getAllDrives, getDirectories, getHomeDir, joinPaths, validateDirectoryPath } from './file-system';
 import { storeUserDrives } from './system-storage';
 
 // Custom APIs for renderer
@@ -9,7 +9,8 @@ const api = {
     getDirectories,
     getHomeDir,
     getAllDrives,
-    joinPaths
+    joinPaths,
+    validateDirectoryPath
   },
   initialization: {
     storeUserDrives

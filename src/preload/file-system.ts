@@ -37,3 +37,14 @@ export async function getAllDrives(): Promise<string[]> {
     return [];
   }
 }
+
+export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
+  try {
+    //* Attempts to check the user's permissions for a file or directory, and if it can read the permissions from said file or directory it exists.
+    await fs.access(dirPath);
+    return true;
+  } catch {
+    //* If an error occurs due to the path not leading to any file or directory, then the file does not exist.
+    return false;
+  }
+}
