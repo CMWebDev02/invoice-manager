@@ -15,7 +15,7 @@ interface DirectorySelectorProps {
 
 export default function DirectorySelector({ updateSavedPath, drivesList, className }: DirectorySelectorProps): React.JSX.Element {
   const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(userHomeDir);
-  const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string>(userHomeDir);
+  const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string>('');
 
   const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: getDirectories, updateTrigger: currentDirectoryPath });
 
@@ -23,7 +23,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
     setCurrentDirectoryPath(dirPath);
   }
 
-  function selectDirectoryPath(dirPath: string): void {
+  function updateDirectoryPath(dirPath: string): void {
     // Finish adding logic to denote if a path is currently selected or not, by having the path be colored red or the board becoming red
     // also add in the save option to use the selected directory
     setSelectedDirectoryPath(dirPath);
@@ -48,7 +48,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
         <h2 className="w-full">{currentDirectoryPath}</h2>
       </FlexRowContainer>
       {/* Add an actual loading icon */}
-      {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectDirectoryPath={selectDirectoryPath} reversePathTraversal={reversePathTraversal} />}
+      {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
     </div>
   );
 }

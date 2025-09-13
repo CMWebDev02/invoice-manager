@@ -16,7 +16,9 @@ interface SortersModalProps {
 
 export default function SortersModal({ drivesList }: SortersModalProps): React.JSX.Element {
   function updateCurrentSavePath(dirPath: string): void {
-    console.log(dirPath);
+    if (dirPath !== '') {
+      console.log(dirPath);
+    }
   }
 
   return (

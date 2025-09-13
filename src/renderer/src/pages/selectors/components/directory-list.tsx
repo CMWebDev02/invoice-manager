@@ -7,35 +7,13 @@ interface DirectoryListProps {
   directoriesArray: Dirent[];
   asyncFetchError: unknown;
   updateCurrentDirectoryPath: (dirPath: string) => void;
-  selectDirectoryPath: (dirPath: string) => void;
+  selectedDirectoryPath: string;
+  updateSelectDirectoryPath: (dirPath: string) => void;
   reversePathTraversal: () => void;
   className?: string;
 }
 
-// Have each list item be selectable
-// Once a user clicks the item
-// It highlights red to indicate it currently selected
-// Once the user clicks save, then the dir.name is used to update the selected directory path var
-
-// Directory Selection
-// INIT selectedDirectory
-// Get selectedDirectory // once a user clicks a directory, use its dir.name value to store in selectedDirectory
-// For each div in directoriesArray
-//  IF dir.name === selectedDirectory THEN
-//  "text-red"
-//  ELSE
-//  "text-primary"
-//  ENDIF
-// ENDFOR
-
-// Directory Saving
-// ON user clicking Save Button
-// Call saveSelectedDirectory(dir: string)
-// FUNCTION saveSelectedDirectory
-//  
-// ENDFUNCTION
-
-export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
+export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -50,38 +28,31 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
       <h1>{JSON.stringify(asyncFetchError)}</h1>
     );
 
-  function updateDirectoryPath(dirParentPath: string, dirName: string, updateHandler: 'selection' | 'navigation'): void {
-    const childDirPath = joinPaths(dirParentPath, dirName);
+  const values = directoriesArray.map((dir: Dirent) => {
+    const childDirPath = joinPaths(dir.parentPath, dir.name);
 
-    // Checks if the child path updates the navigation directory path or the selected directory path
-    if (updateHandler === 'selection') {
-      selectDirectoryPath(childDirPath);
-    } else {
-      updateCurrentDirectoryPath(childDirPath);
-    }
-  }
-
-  const values = directoriesArray.map((dir: Dirent) => (
-    <div key={dir.name} className="flex w-full bg-primary">
-      <div
-        className={`w-3/4 flex items-center select-none ${dir.name === selectDirectoryPath}`}
-        id={dir.name}
-        onClick={() => {
-          updateDirectoryPath(dir.parentPath, dir.name, 'selection');
-        }}
-      >
-        {dir.name}
+    return (
+      <div key={dir.name} className="flex w-full bg-primary">
+        <div
+          className={`w-3/4 flex items-center select-none ${childDirPath === selectedDirectoryPath ? 'text-blue-950' : 'text-foreground'}`}
+          id={dir.name}
+          onClick={() => {
+            updateSelectDirectoryPath(childDirPath);
+          }}
+        >
+          {dir.name}
+        </div>
+        <Button
+          onClick={() => {
+            updateCurrentDirectoryPath(childDirPath);
+          }}
+          className="w-1/4"
+        >
+          -{'>'}
+        </Button>
       </div>
-      <Button
-        onClick={() => {
-          updateDirectoryPath(dir.parentPath, dir.name, 'navigation');
-        }}
-        className="w-1/4"
-      >
-        -{'>'}
-      </Button>
-    </div>
-  ));
+    );
+  });
 
   return (
     <div className={cn('w-full', className)}>
