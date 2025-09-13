@@ -34,7 +34,7 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
     return (
       <div key={dir.name} className="flex w-full bg-primary">
         <div
-          className={`w-3/4 flex items-center select-none ${childDirPath === selectedDirectoryPath ? 'text-blue-950' : 'text-foreground'}`}
+          className={`w-3/4 flex items-center select-none ${childDirPath === selectedDirectoryPath ? 'text-white' : 'text-foreground'}`}
           id={dir.name}
           onClick={() => {
             updateSelectDirectoryPath(childDirPath);
