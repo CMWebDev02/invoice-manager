@@ -30,7 +30,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     getUserDrives();
   }, []);
 
-  const SortersButtons = savedSorters.map((sorterName) => {
+  const SelectorsButtons = savedSorters.map((sorterName) => {
     return (
       <div key={sorterName} className="bg-primary w-full flex flex-row justify-center p-1">
         {editingMode && (
@@ -77,7 +77,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
             className="flex flex-col items-center h-full max-h-full overflow-x-hidden overflow-y-auto scrollbar border-2 border-background p-0
         "
           >
-            {SortersButtons}
+            {SelectorsButtons}
           </CardContent>
         </Card>
 

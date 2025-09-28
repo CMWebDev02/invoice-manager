@@ -19,6 +19,7 @@ interface SortersModalProps {
 export default function SortersModal({ drivesList }: SortersModalProps): React.JSX.Element {
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
   const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
+  const [sorterTitle, setSorterTitle] = useState<string>('');
 
   async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
     if (dirPath !== '') {
@@ -72,7 +73,7 @@ export default function SortersModal({ drivesList }: SortersModalProps): React.J
           >
             Sorter Title:
           </Label>
-          <Input className="w-3/4 md:w-2/3" id="sorter-title" />
+          <Input className="w-3/4 md:w-2/3" id="sorter-title" value={sorterTitle} onChange={(e) => setSorterTitle(e.target.value)} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
