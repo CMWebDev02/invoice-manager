@@ -8,8 +8,9 @@ type FileSystemTypes = {
   validateDirectoryPath: (dirPath: string) => Promise<boolean>;
 };
 
-type InitializationTypes = {
+type StorageTypes = {
   storeUserDrives: () => Promise<void>;
+  storeNewSorter: (newSorter: SorterDetails) => boolean;
 };
 
 declare global {
@@ -17,7 +18,7 @@ declare global {
     electron: ElectronAPI;
     api: {
       file_system: FileSystemTypes;
-      initialization: InitializationTypes;
+      storage: StorageTypes;
     };
   }
 }

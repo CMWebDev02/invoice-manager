@@ -1,5 +1,5 @@
-import { Button, buttonVariants } from '@renderer/components/ui/button';
-import { DialogContent, DialogHeader, DialogTrigger } from '@renderer/components/ui/dialog';
+import { Button } from '@renderer/components/ui/button';
+import { DialogContent, DialogHeader } from '@renderer/components/ui/dialog';
 import { Input } from '@renderer/components/ui/input';
 import { Label } from '@renderer/components/ui/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,16 +10,45 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { validateDirectoryPath } from '@renderer/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { SelectorDetails, storeNewSelector } from '@renderer/lib/store';
 
 interface SortersModalProps {
   drivesList: string[];
+  isOpen: boolean;
+  toggleModal: () => void;
 }
 
-export default function SortersModal({ drivesList }: SortersModalProps): React.JSX.Element {
+export default function SortersModal({ drivesList, isOpen, toggleModal }: SortersModalProps): React.JSX.Element {
+  const [sorterTitle, setSorterTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
   const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
-  const [sorterTitle, setSorterTitle] = useState<string>('');
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSorterTitle('');
+      setInvoicesDestination('');
+      setDirectoriesDestination('');
+    }
+  }, [isOpen]);
+
+  // Have this display an error message on screen
+  function validateChanges(): void {
+    if (sorterTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
+      saveChanges();
+    }
+  }
+
+  async function saveChanges(): Promise<void> {
+    const sorterObject: SelectorDetails = {
+      selectorTitle: sorterTitle,
+      directoriesDestination: directoriesDestination,
+      invoicesDestination
+    };
+
+    // left off checking if this save works
+    storeNewSelector('sorters', sorterObject);
+  }
 
   async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
     if (dirPath !== '') {
@@ -47,11 +76,13 @@ export default function SortersModal({ drivesList }: SortersModalProps): React.J
     h-10/12 md:h-5/6 lg:h-4/5
     flex flex-col justify-around
     "
+      // Close modal if user clicks outside
+      onPointerDownOutside={toggleModal}
       showCloseButton={false}
     >
       <DialogHeader className="flex flex-col h-20">
         <FlexRowContainer className="w-full justify-between">
-          <Button>Save</Button>
+          <Button onClick={toggleModal}>Save</Button>
           <DialogTitle
             className="
           text-lg md:text-2xl lg:text-3xl
@@ -60,9 +91,9 @@ export default function SortersModal({ drivesList }: SortersModalProps): React.J
           >
             Editor
           </DialogTitle>
-          <DialogTrigger className={buttonVariants({ variant: 'default' })}>
+          <Button onClick={toggleModal}>
             <FontAwesomeIcon icon={faXmark} size="lg" />
-          </DialogTrigger>
+          </Button>
         </FlexRowContainer>
         <FlexRowContainer className="gap-4 items-center">
           <Label

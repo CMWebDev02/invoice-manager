@@ -2,24 +2,24 @@ import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
 import { Dialog, DialogTrigger } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
-import { getAllDrives, getUserSaveData } from '@renderer/lib/utils';
+import { getAllDrives } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
 import { buttonVariants } from '@renderer/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { getUserSaveData } from '@renderer/lib/store';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
 }
 
 export default function SelectorsPage({ selectorType }: SelectorsPageProps): React.JSX.Element {
-  const [editingMode, setEditingMode] = useState<boolean>(false);
   const savedSorters = getUserSaveData(selectorType);
   const [drivesList, setDrivesList] = useState<string[]>([]);
-
-  const toggleEditingMode = (): void => setEditingMode(!editingMode);
+  const [editingMode, setEditingMode] = useState<boolean>(false);
+  const [isModalOpen, setIsModalClosed] = useState<boolean>(false);
 
   useEffect(() => {
     async function getUserDrives(): Promise<void> {
@@ -30,13 +30,17 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     getUserDrives();
   }, []);
 
+  const toggleEditingMode = (): void => setEditingMode(!editingMode);
+
+  const toggleModal = (): void => setIsModalClosed(!isModalOpen);
+
   const SelectorsButtons = savedSorters.map((sorterName) => {
     return (
       <div key={sorterName} className="bg-primary w-full flex flex-row justify-center p-1">
         {editingMode && (
-          <DialogTrigger className={buttonVariants({ variant: 'default' }) + ' w-1/6'}>
+          <Button className="w-1/6" onClick={toggleModal}>
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
-          </DialogTrigger>
+          </Button>
         )}
         <Button
           disabled={editingMode}
@@ -50,9 +54,9 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           {sorterName}
         </Button>
         {editingMode && (
-          <DialogTrigger className={buttonVariants({ variant: 'destructive' }) + ' w-1/6'}>
+          <Button variant="destructive" className="w-1/6">
             <FontAwesomeIcon icon={faXmark} size="lg" />
-          </DialogTrigger>
+          </Button>
         )}
       </div>
     );
@@ -60,9 +64,9 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
-      <Dialog>
+      <Dialog open={isModalOpen}>
         {/* Modal for the associated selector */}
-        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} /> : <ViewersModal drivesList={drivesList} />}
+        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} isOpen={isModalOpen} toggleModal={toggleModal} /> : <ViewersModal drivesList={drivesList} />}
 
         {/* Main card displayed on the page */}
         <Card

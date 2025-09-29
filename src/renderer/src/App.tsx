@@ -12,7 +12,7 @@ export default function App(): React.JSX.Element {
 
   useEffect(() => {
     async function pullUserDrives(): Promise<void> {
-      await window.api.initialization.storeUserDrives();
+      await window.api.storage.storeUserDrives();
       setIsLoading(false);
     }
 

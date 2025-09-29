@@ -8,16 +8,6 @@ export function cn(...inputs: ClassValue[]): string {
 
 export const userHomeDir = window.api.file_system.getHomeDir();
 
-export function getUserSaveData(page: 'sorters' | 'viewers'): string[] {
-  if (page === 'sorters') {
-    return ['Customer Documents', 'Payables'];
-  } else if (page === 'viewers') {
-    return ['Finances', 'Handbook'];
-  } else {
-    return [];
-  }
-}
-
 export async function getAllDrives(): Promise<string[]> {
   const allDrives = await window.api.file_system.getAllDrives();
   return allDrives;
@@ -41,5 +31,6 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     return isValidPath;
   } catch (error: unknown) {
     console.error(error);
+    return false;
   }
 }
