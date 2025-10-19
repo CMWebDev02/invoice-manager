@@ -1,12 +1,11 @@
 import { Button } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
-import { Dialog, DialogTrigger } from '@renderer/components/ui/dialog';
+import { Dialog } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
 import { getAllDrives } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
-import { buttonVariants } from '@renderer/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { getSelectors } from '@renderer/lib/store';

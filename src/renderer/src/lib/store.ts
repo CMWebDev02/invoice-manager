@@ -15,8 +15,9 @@ export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
   }
 }
 
-export async function storeNewSelector(page: 'sorters' | 'viewers', newSelector: SelectorDetails): Promise<boolean> {
+export async function storeSelector(page: 'sorters' | 'viewers', newSelector: SelectorDetails): Promise<boolean> {
   if (page === 'sorters') {
+    // TODO: Add a check to test if the sorter is already within the current sorters array.
     const isAdded = window.api.storage.storeNewSorter(newSelector);
     if (isAdded) return true;
   } else if (page === 'viewers') {

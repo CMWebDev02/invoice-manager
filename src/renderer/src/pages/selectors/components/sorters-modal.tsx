@@ -11,7 +11,7 @@ import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
-import { SelectorDetails, storeNewSelector } from '@renderer/lib/store';
+import { SelectorDetails, storeSelector } from '@renderer/lib/store';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -48,7 +48,7 @@ export default function SortersModal({ drivesList, isOpen, toggleModal }: Sorter
     };
 
     // left off checking if this save works
-    const isStored = await storeNewSelector('sorters', sorterObject);
+    const isStored = await storeSelector('sorters', sorterObject);
     if (isStored) {
       toggleModal();
     }
