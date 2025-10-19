@@ -9,14 +9,14 @@ import ViewersModal from './components/viewers-modal';
 import { buttonVariants } from '@renderer/components/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { getUserSaveData } from '@renderer/lib/store';
+import { getSelectors } from '@renderer/lib/store';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
 }
 
 export default function SelectorsPage({ selectorType }: SelectorsPageProps): React.JSX.Element {
-  const savedSorters = getUserSaveData(selectorType);
+  const savedSorters = getSelectors(selectorType);
   const [drivesList, setDrivesList] = useState<string[]>([]);
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalClosed] = useState<boolean>(false);
@@ -24,7 +24,6 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   useEffect(() => {
     async function getUserDrives(): Promise<void> {
       const userDrives = await getAllDrives();
-      console.log(userDrives);
       setDrivesList(userDrives);
     }
     getUserDrives();
@@ -34,9 +33,9 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   const toggleModal = (): void => setIsModalClosed(!isModalOpen);
 
-  const SelectorsButtons = savedSorters.map((sorterName) => {
+  const SelectorsButtons = savedSorters.map(({ selectorTitle }) => {
     return (
-      <div key={sorterName} className="bg-primary w-full flex flex-row justify-center p-1">
+      <div key={selectorTitle} className="bg-primary w-full flex flex-row justify-center p-1">
         {editingMode && (
           <Button className="w-1/6" onClick={toggleModal}>
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
@@ -51,7 +50,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
             lg:text-2xl
             `}
         >
-          {sorterName}
+          {selectorTitle}
         </Button>
         {editingMode && (
           <Button variant="destructive" className="w-1/6">
@@ -94,7 +93,9 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
         >
           {editingMode ? (
             <>
-              <DialogTrigger className={buttonVariants({ variant: 'default' })}>New</DialogTrigger>
+              <Button className="w-1/6" onClick={toggleModal}>
+                New
+              </Button>
               <Button onClick={toggleEditingMode}>Save</Button>
             </>
           ) : (

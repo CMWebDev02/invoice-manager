@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import { getUserDrives } from './system-storage';
 import path from 'path';
 
 const userHomeDir = os.homedir();
@@ -26,16 +25,6 @@ export async function getDirectories(dirPath: string): Promise<Dirent<string>[]>
 
 export function getHomeDir(): string {
   return userHomeDir;
-}
-
-export async function getAllDrives(): Promise<string[]> {
-  try {
-    // pull the current drives from the computer and return them to the user
-    return getUserDrives();
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
 }
 
 export async function validateDirectoryPath(dirPath: string): Promise<boolean> {

@@ -6,10 +6,16 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+export function getUniqueID(): string {
+  // Credit: MrCano369x
+  // https://stackoverflow.com/questions/3231459/how-can-i-create-unique-ids-with-javascript
+  return crypto.randomUUID();
+}
+
 export const userHomeDir = window.api.file_system.getHomeDir();
 
 export async function getAllDrives(): Promise<string[]> {
-  const allDrives = await window.api.file_system.getAllDrives();
+  const allDrives = await window.api.storage.getUserDrives();
   return allDrives;
 }
 

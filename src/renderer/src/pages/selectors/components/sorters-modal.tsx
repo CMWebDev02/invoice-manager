@@ -9,7 +9,7 @@ import DirectorySelector from './directory-selector';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
-import { validateDirectoryPath } from '@renderer/lib/utils';
+import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import { SelectorDetails, storeNewSelector } from '@renderer/lib/store';
 
@@ -41,13 +41,17 @@ export default function SortersModal({ drivesList, isOpen, toggleModal }: Sorter
 
   async function saveChanges(): Promise<void> {
     const sorterObject: SelectorDetails = {
+      selectorId: getUniqueID(),
       selectorTitle: sorterTitle,
       directoriesDestination: directoriesDestination,
       invoicesDestination
     };
 
     // left off checking if this save works
-    storeNewSelector('sorters', sorterObject);
+    const isStored = await storeNewSelector('sorters', sorterObject);
+    if (isStored) {
+      toggleModal();
+    }
   }
 
   async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
@@ -82,7 +86,7 @@ export default function SortersModal({ drivesList, isOpen, toggleModal }: Sorter
     >
       <DialogHeader className="flex flex-col h-20">
         <FlexRowContainer className="w-full justify-between">
-          <Button onClick={toggleModal}>Save</Button>
+          <Button onClick={validateChanges}>Save</Button>
           <DialogTitle
             className="
           text-lg md:text-2xl lg:text-3xl

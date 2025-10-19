@@ -3,14 +3,15 @@ import { ElectronAPI } from '@electron-toolkit/preload';
 type FileSystemTypes = {
   getDirectories: (dirPath: string) => Promise<Dirent<string>[]>;
   getHomeDir: () => string;
-  getAllDrives: () => Promise<string[]>;
   joinPaths: (...dirPaths: string[]) => string;
   validateDirectoryPath: (dirPath: string) => Promise<boolean>;
 };
 
 type StorageTypes = {
-  storeUserDrives: () => Promise<void>;
+  storeUserDrives: () => Promise<boolean>;
+  getUserDrives: () => Promise<string[]>;
   storeNewSorter: (newSorter: SorterDetails) => boolean;
+  getSorters: () => SorterDetails[];
 };
 
 declare global {

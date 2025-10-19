@@ -1,14 +1,15 @@
 export type SelectorDetails = {
+  selectorId: string;
   selectorTitle: string;
   directoriesDestination: string;
   invoicesDestination?: string;
 };
 
-export function getSelectors(page: 'sorters' | 'viewers'): string[] {
+export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
   if (page === 'sorters') {
-    return ['Customer Documents', 'Payables'];
+    return window.api.storage.getSorters();
   } else if (page === 'viewers') {
-    return ['Finances', 'Handbook'];
+    return [];
   } else {
     return [];
   }
