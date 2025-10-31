@@ -11,26 +11,39 @@ import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
-import { SelectorDetails, storeSelector } from '@renderer/lib/store';
+import { searchSelector, SelectorDetails, storeSelector } from '@renderer/lib/store';
 
 interface SortersModalProps {
   drivesList: string[];
   isOpen: boolean;
   toggleModal: () => void;
+  existingSelectorId: string;
 }
 
-export default function SortersModal({ drivesList, isOpen, toggleModal }: SortersModalProps): React.JSX.Element {
+export default function SortersModal({ drivesList, isOpen, toggleModal, existingSelectorId }: SortersModalProps): React.JSX.Element {
+  const [sorterId, setSorterId] = useState<string>('');
   const [sorterTitle, setSorterTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
   const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
 
   useEffect(() => {
     if (!isOpen) {
+      setSorterId('');
       setSorterTitle('');
       setInvoicesDestination('');
       setDirectoriesDestination('');
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (existingSelectorId != '') {
+      const existingSorter = searchSelector('sorters', existingSelectorId);
+      setSorterId(existingSorter.selectorId);
+      setSorterTitle(existingSorter.selectorTitle);
+      setInvoicesDestination(existingSorter.invoicesDestination ?? '');
+      setDirectoriesDestination(existingSorter.directoriesDestination);
+    }
+  }, [existingSelectorId]);
 
   // Have this display an error message on screen
   function validateChanges(): void {
@@ -40,17 +53,29 @@ export default function SortersModal({ drivesList, isOpen, toggleModal }: Sorter
   }
 
   async function saveChanges(): Promise<void> {
+    let isStored: boolean;
+
     const sorterObject: SelectorDetails = {
-      selectorId: getUniqueID(),
+      selectorId: sorterId,
       selectorTitle: sorterTitle,
       directoriesDestination: directoriesDestination,
       invoicesDestination
     };
+    // Checks if a new sorter is being saved
+    if (sorterId == '') {
+      // Creates a new id for the new selector
+      sorterObject.selectorId = getUniqueID();
+
+      isStored = await storeSelector('sorters', sorterObject, true);
+    } else {
+      isStored = await storeSelector('sorters', sorterObject, false);
+    }
 
     // left off checking if this save works
-    const isStored = await storeSelector('sorters', sorterObject);
     if (isStored) {
       toggleModal();
+    } else {
+      console.log(sorterObject);
     }
   }
 

@@ -19,6 +19,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   const [drivesList, setDrivesList] = useState<string[]>([]);
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalClosed] = useState<boolean>(false);
+  const [currentSelectorId, setCurrentSelectorId] = useState<string>('');
 
   useEffect(() => {
     async function getUserDrives(): Promise<void> {
@@ -32,11 +33,17 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   const toggleModal = (): void => setIsModalClosed(!isModalOpen);
 
-  const SelectorsButtons = savedSorters.map(({ selectorTitle }) => {
+  // TODO: Update this to pass in the selector object being changed if editing a new selector
+  function editExistingSelector(selectorId: string): void {
+    setCurrentSelectorId(selectorId);
+    toggleModal();
+  }
+
+  const SelectorsButtons = savedSorters.map(({ selectorTitle, selectorId }) => {
     return (
-      <div key={selectorTitle} className="bg-primary w-full flex flex-row justify-center p-1">
+      <div key={selectorId} className="bg-primary w-full flex flex-row justify-center p-1">
         {editingMode && (
-          <Button className="w-1/6" onClick={toggleModal}>
+          <Button className="w-1/6" onClick={() => editExistingSelector(selectorId)}>
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
           </Button>
         )}
@@ -64,7 +71,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
       <Dialog open={isModalOpen}>
         {/* Modal for the associated selector */}
-        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} isOpen={isModalOpen} toggleModal={toggleModal} /> : <ViewersModal drivesList={drivesList} />}
+        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} isOpen={isModalOpen} toggleModal={toggleModal} existingSelectorId={currentSelectorId} /> : <ViewersModal drivesList={drivesList} />}
 
         {/* Main card displayed on the page */}
         <Card

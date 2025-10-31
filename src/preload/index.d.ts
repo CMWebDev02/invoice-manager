@@ -11,6 +11,8 @@ type StorageTypes = {
   storeUserDrives: () => Promise<boolean>;
   getUserDrives: () => Promise<string[]>;
   storeNewSorter: (newSorter: SorterDetails) => boolean;
+  updateSorter: (changedSorter: SorterDetails) => boolean;
+  searchSorters: (sorterId: string) => SorterDetails;
   getSorters: () => SorterDetails[];
 };
 

@@ -46,6 +46,48 @@ export function storeNewSorter(newSorter: SorterDetails): boolean {
   }
 }
 
+export function updateSorter(changedSorter: SorterDetails): boolean {
+  try {
+    // Will indicate if the selected sorter was found and updated
+    let hasUpdateOccurred = false;
+
+    const currentSorters = getSorters();
+    for (const index in currentSorters) {
+      if (currentSorters[index].selectorId == changedSorter.selectorId) {
+        currentSorters[index] = changedSorter;
+        hasUpdateOccurred = true;
+      }
+    }
+    store.set('sortersArray', JSON.stringify(currentSorters));
+    return hasUpdateOccurred;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export function searchSorters(sorterId: string): SorterDetails {
+  try {
+    const currentSorters = getSorters();
+    for (const index in currentSorters) {
+      if (currentSorters[index].selectorId == sorterId) {
+        return currentSorters[index];
+      }
+    }
+
+    throw new Error('Sorter not found!');
+  } catch (error) {
+    console.error(error);
+    const temp: SorterDetails = {
+      selectorId: '',
+      selectorTitle: '',
+      directoriesDestination: '',
+      invoicesDestination: ''
+    };
+    return temp;
+  }
+}
+
 export function getSorters(): SorterDetails[] {
   try {
     const currentSorters = store.get('sortersArray') ?? [];
