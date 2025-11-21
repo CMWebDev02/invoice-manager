@@ -12,6 +12,8 @@ import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import { searchSelector, SelectorDetails, storeSelector } from '@renderer/lib/store';
+import { titleCharactersWhiteList } from '@renderer/lib/patterns';
+import WhiteListInput from '@renderer/components/user/white-list-input';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -133,7 +135,7 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
           >
             Sorter Title:
           </Label>
-          <Input className="w-3/4 md:w-2/3" id="sorter-title" value={sorterTitle} onChange={(e) => setSorterTitle(e.target.value)} />
+          <WhiteListInput className="w-3/4 md:w-2/3" id="sorter-title" value={sorterTitle} onChange={(e) => setSorterTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
