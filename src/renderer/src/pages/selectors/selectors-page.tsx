@@ -4,11 +4,10 @@ import { Dialog } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
 import { getAllDrives } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
-import SortersModal from './components/sorters-modal';
-import ViewersModal from './components/viewers-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { getSelectors, removeSelector, type SelectorDetails } from '@renderer/lib/store';
+import SelectorsModal from './components/selectors-modal';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -85,7 +84,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
       <Dialog open={isModalOpen}>
         {/* Modal for the associated selector */}
-        {selectorType === 'sorters' ? <SortersModal drivesList={drivesList} isOpen={isModalOpen} toggleModal={toggleModal} existingSelectorId={currentSelectorId} /> : <ViewersModal drivesList={drivesList} />}
+        <SelectorsModal drivesList={drivesList} toggleModal={toggleModal} existingSelectorId={currentSelectorId} selectorType={selectorType} />
 
         {/* Main card displayed on the page */}
         <Card

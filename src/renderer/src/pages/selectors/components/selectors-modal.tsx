@@ -17,12 +17,12 @@ import WhiteListInput from '@renderer/components/user/white-list-input';
 
 interface SortersModalProps {
   drivesList: string[];
-  isOpen: boolean;
   toggleModal: () => void;
   existingSelectorId: string;
+  selectorType: 'sorters' | 'viewers';
 }
 
-export default function SortersModal({ drivesList, isOpen, toggleModal, existingSelectorId }: SortersModalProps): React.JSX.Element {
+export default function SelectorsModal({ drivesList, toggleModal, existingSelectorId, selectorType }: SortersModalProps): React.JSX.Element {
   const [sorterId, setSorterId] = useState<string>('');
   const [sorterTitle, setSorterTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
@@ -30,7 +30,7 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
 
   useEffect(() => {
     if (existingSelectorId != '') {
-      const existingSorter = searchSelector('sorters', existingSelectorId);
+      const existingSorter = searchSelector(selectorType, existingSelectorId);
       setSorterId(existingSorter.selectorId);
       setSorterTitle(existingSorter.selectorTitle);
       setInvoicesDestination(existingSorter.invoicesDestination ?? '');
@@ -41,38 +41,48 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
       setInvoicesDestination('');
       setDirectoriesDestination('');
     }
-  }, [existingSelectorId]);
+  }, [existingSelectorId, selectorType]);
 
   // Have this display an error message on screen
   function validateChanges(): void {
-    if (sorterTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
-      saveChanges();
+    // Have validate changes validate the title string, check for invalid characters
+    // and validate the directory and invoice destinations
+
+    if (selectorType === 'sorters') {
+      if (sorterTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
+        saveChanges();
+        return;
+      }
+    } else if (selectorType === 'viewers') {
+      if (sorterTitle !== '' && directoriesDestination !== '') {
+        saveChanges();
+        return;
+      }
     }
+
+    console.error(`Invalid ${selectorType} settings!`);
   }
 
   async function saveChanges(): Promise<void> {
-    let isStored: boolean;
-
     const sorterObject: SelectorDetails = {
       selectorId: sorterId,
       selectorTitle: sorterTitle,
       directoriesDestination: directoriesDestination,
       invoicesDestination
     };
+
     // Checks if a new sorter is being saved
     if (sorterId == '') {
       // Creates a new id for the new selector
       sorterObject.selectorId = getUniqueID();
-
-      isStored = await storeSelector('sorters', sorterObject, true);
-    } else {
-      isStored = await storeSelector('sorters', sorterObject, false);
     }
+
+    const isStored = await storeSelector(selectorType, sorterObject, true);
 
     if (isStored) {
       toggleModal();
     } else {
-      console.log(sorterObject);
+      console.error(`Failed to save new ${selectorType}!`);
     }
   }
 
@@ -134,13 +144,16 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
-        <div className="h-full">
-          <FlexColContainer className="h-16">
-            <h3 className="md:text-lg">Invoices Destination</h3>
-            <h4>{invoicesDestination}</h4>
-          </FlexColContainer>
-          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
-        </div>
+        {/* //?Invoices directory selector only displays for sorters page */}
+        {selectorType === 'sorters' && (
+          <div className="h-full">
+            <FlexColContainer className="h-16">
+              <h3 className="md:text-lg">Invoices Destination</h3>
+              <h4>{invoicesDestination}</h4>
+            </FlexColContainer>
+            <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
+          </div>
+        )}
 
         <div className="h-full">
           <FlexColContainer className="h-16">

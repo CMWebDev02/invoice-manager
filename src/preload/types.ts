@@ -1,11 +1,6 @@
-export type SorterDetails = {
+export type SelectorDetails = {
   selectorId: string;
   selectorTitle: string;
   directoriesDestination: string;
   invoicesDestination?: string;
-};
-
-export type ViewerDetails = {
-  selectorTitle: string;
-  directoriesDestination: string;
 };

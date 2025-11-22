@@ -10,11 +10,11 @@ type FileSystemTypes = {
 type StorageTypes = {
   storeUserDrives: () => Promise<boolean>;
   getUserDrives: () => Promise<string[]>;
-  storeNewSorter: (newSorter: SorterDetails) => boolean;
-  updateSorter: (changedSorter: SorterDetails) => boolean;
-  searchSorters: (sorterId: string) => SorterDetails;
-  removeSorter: (sorterId: string) => boolean;
-  getSorters: () => SorterDetails[];
+  storeNewSelector: (selectorType: 'sorters' | 'viewers', newSorter: SelectorDetails) => boolean;
+  updateSelector: (selectorType: 'sorters' | 'viewers', changedSorter: SelectorDetails) => boolean;
+  searchSelector: (selectorType: 'sorters' | 'viewers', sorterId: string) => SelectorDetails;
+  removeSelector: (selectorType: 'sorters' | 'viewers', sorterId: string) => boolean;
+  getSelectors: (selectorType: 'sorters' | 'viewers') => SorterDetails[];
 };
 
 declare global {

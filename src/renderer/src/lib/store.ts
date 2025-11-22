@@ -6,10 +6,8 @@ export type SelectorDetails = {
 };
 
 export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
-  if (page === 'sorters') {
-    return window.api.storage.getSorters();
-  } else if (page === 'viewers') {
-    return [];
+  if (page === 'sorters' || page === 'viewers') {
+    return window.api.storage.getSelectors(page);
   } else {
     return [];
   }
@@ -17,7 +15,7 @@ export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
 
 export function searchSelector(page: 'sorters' | 'viewers', selectorId: string): SelectorDetails {
   if (page === 'sorters') {
-    return window.api.storage.searchSorters(selectorId);
+    return window.api.storage.searchSelector(page, selectorId);
   } else if (page === 'viewers') {
     const temp: SelectorDetails = {
       selectorId: '',
@@ -39,13 +37,13 @@ export function searchSelector(page: 'sorters' | 'viewers', selectorId: string):
 
 export function removeSelector(page: 'sorters' | 'viewers', selectorId: string): boolean {
   try {
-    if (page === 'sorters') {
-      const isRemovalSuccessful = window.api.storage.removeSorter(selectorId);
+    const isRemovalSuccessful = window.api.storage.removeSelector(page, selectorId);
+
+    if (!isRemovalSuccessful) {
+      throw new Error(`Failed to remove element from ${page} array!`);
+    } else {
       return true;
-    } else if (page === 'viewers') {
-      return false;
     }
-    return false;
   } catch (error) {
     console.error(error);
     return false;
@@ -53,19 +51,26 @@ export function removeSelector(page: 'sorters' | 'viewers', selectorId: string):
 }
 
 export async function storeSelector(page: 'sorters' | 'viewers', newSelector: SelectorDetails, isNew: boolean): Promise<boolean> {
-  let isAdded: boolean;
+  try {
+    let isAdded: boolean;
 
-  if (page === 'sorters') {
-    if (isNew) {
-      isAdded = window.api.storage.storeNewSorter(newSelector);
-    } else {
-      isAdded = window.api.storage.updateSorter(newSelector);
+    if (page === 'sorters' || page === 'viewers') {
+      if (isNew) {
+        isAdded = window.api.storage.storeNewSelector(page, newSelector);
+      } else {
+        isAdded = window.api.storage.updateSelector(page, newSelector);
+      }
+
+      if (isAdded) {
+        return true;
+      } else {
+        throw new Error(`Failed to save new element to ${page} array`);
+      }
     }
-    // TODO: Add a check to test if the sorter is already within the current sorters array.
-    if (isAdded) return true;
-  } else if (page === 'viewers') {
+
+    throw new Error('Invalid page type!');
+  } catch (error) {
+    console.error(error);
     return false;
   }
-
-  return false;
 }

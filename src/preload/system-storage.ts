@@ -1,6 +1,6 @@
 import Store from 'electron-store';
 import { pullUserDrives } from './powershell';
-import type { SorterDetails, ViewerDetails } from './types';
+import type { SelectorDetails } from './types';
 
 type StoreTypes = {
   userData: boolean;
@@ -34,11 +34,11 @@ export function getUserDrives(): string[] {
   }
 }
 
-export function storeNewSorter(newSorter: SorterDetails): boolean {
+export function storeNewSelector(selectorType: 'sorters' | 'viewers', newSorter: SelectorDetails): boolean {
   try {
-    const currentSorters = getSorters();
+    const currentSorters = getSelectors(selectorType);
     currentSorters.push(newSorter);
-    store.set('sortersArray', JSON.stringify(currentSorters));
+    setSelectors(selectorType, currentSorters);
     return true;
   } catch (error) {
     console.error(error);
@@ -46,19 +46,19 @@ export function storeNewSorter(newSorter: SorterDetails): boolean {
   }
 }
 
-export function updateSorter(changedSorter: SorterDetails): boolean {
+export function updateSelector(selectorType: 'sorters' | 'viewers', changedSorter: SelectorDetails): boolean {
   try {
     // Will indicate if the selected sorter was found and updated
     let hasUpdateOccurred = false;
 
-    const currentSorters = getSorters();
+    const currentSorters = getSelectors(selectorType);
     for (const index in currentSorters) {
       if (currentSorters[index].selectorId == changedSorter.selectorId) {
         currentSorters[index] = changedSorter;
         hasUpdateOccurred = true;
       }
     }
-    store.set('sortersArray', JSON.stringify(currentSorters));
+    setSelectors(selectorType, currentSorters);
     return hasUpdateOccurred;
   } catch (error) {
     console.error(error);
@@ -66,19 +66,19 @@ export function updateSorter(changedSorter: SorterDetails): boolean {
   }
 }
 
-export function searchSorters(sorterId: string): SorterDetails {
+export function searchSelector(selectorType: 'sorters' | 'viewers', sorterId: string): SelectorDetails {
   try {
-    const currentSorters = getSorters();
-    for (let index = 0; index < currentSorters.length; index++) {
-      if (currentSorters[index].selectorId == sorterId) {
-        return currentSorters[index];
+    const currentSelectors = getSelectors(selectorType);
+    for (let index = 0; index < currentSelectors.length; index++) {
+      if (currentSelectors[index].selectorId == sorterId) {
+        return currentSelectors[index];
       }
     }
 
     throw new Error('Sorter not found!');
   } catch (error) {
     console.error(error);
-    const temp: SorterDetails = {
+    const temp: SelectorDetails = {
       selectorId: '',
       selectorTitle: '',
       directoriesDestination: '',
@@ -88,14 +88,14 @@ export function searchSorters(sorterId: string): SorterDetails {
   }
 }
 
-export function removeSorter(sorterId: string): boolean {
+export function removeSelector(selectorType: 'sorters' | 'viewers', sorterId: string): boolean {
   try {
-    const currentSorters = getSorters();
+    const currentSelectors: SelectorDetails[] = getSelectors(selectorType);
 
-    for (let index = 0; index < currentSorters.length; index++) {
-      if (currentSorters[index].selectorId == sorterId) {
-        currentSorters.splice(index, 1);
-        store.set('sortersArray', JSON.stringify(currentSorters));
+    for (let index = 0; index < currentSelectors.length; index++) {
+      if (currentSelectors[index].selectorId == sorterId) {
+        currentSelectors.splice(index, 1);
+        setSelectors(selectorType, currentSelectors);
         return true;
       }
     }
@@ -107,11 +107,36 @@ export function removeSorter(sorterId: string): boolean {
   }
 }
 
-export function getSorters(): SorterDetails[] {
+function setSelectors(selectorType: 'sorters' | 'viewers', selectorsArray: SelectorDetails[]): boolean {
   try {
-    const currentSorters = store.get('sortersArray') ?? [];
-    const currentSortersArray = JSON.parse(currentSorters);
-    return currentSortersArray;
+    if (selectorType === 'sorters') {
+      store.set('sortersArray', JSON.stringify(selectorsArray));
+      return true;
+    } else if (selectorType === 'viewers') {
+      store.set('viewersArray', JSON.stringify(selectorsArray));
+      return true;
+    }
+
+    throw new Error(`Failed to save selectors!`);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export function getSelectors(selectorType: 'sorters' | 'viewers'): SelectorDetails[] {
+  try {
+    if (selectorType === 'sorters') {
+      const currentSorters = store.get('sortersArray') ?? [];
+      const currentSortersArray = JSON.parse(currentSorters);
+      return currentSortersArray;
+    } else if (selectorType === 'viewers') {
+      const currentViewers = store.get('viewersArray') ?? [];
+      const currentViewersArray = JSON.parse(currentViewers);
+      return currentViewersArray;
+    }
+
+    throw new Error('Invalid selector type!');
   } catch (error) {
     console.error(error);
     return [];
