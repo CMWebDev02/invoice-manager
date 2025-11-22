@@ -13,6 +13,7 @@ type StorageTypes = {
   storeNewSorter: (newSorter: SorterDetails) => boolean;
   updateSorter: (changedSorter: SorterDetails) => boolean;
   searchSorters: (sorterId: string) => SorterDetails;
+  removeSorter: (sorterId: string) => boolean;
   getSorters: () => SorterDetails[];
 };
 

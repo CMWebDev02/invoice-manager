@@ -8,7 +8,7 @@ import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { getSelectors } from '@renderer/lib/store';
+import { getSelectors, removeSelector } from '@renderer/lib/store';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -31,12 +31,25 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   const toggleEditingMode = (): void => setEditingMode(!editingMode);
 
-  const toggleModal = (): void => setIsModalClosed(!isModalOpen);
+  const toggleModal = (): void => {
+    if (isModalOpen) {
+      setCurrentSelectorId('');
+    }
+    setIsModalClosed(!isModalOpen);
+  };
 
-  // TODO: Update this to pass in the selector object being changed if editing a new selector
   function editExistingSelector(selectorId: string): void {
     setCurrentSelectorId(selectorId);
     toggleModal();
+  }
+
+  function removeExistingSelector(selectorId: string): void {
+    //TODO: Add confirmation popup
+    console.log('create confirmation');
+    const isSuccessful: boolean = removeSelector(selectorType, selectorId);
+    if (isSuccessful) {
+      
+    }
   }
 
   const SelectorsButtons = savedSorters.map(({ selectorTitle, selectorId }) => {
@@ -59,7 +72,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           {selectorTitle}
         </Button>
         {editingMode && (
-          <Button variant="destructive" className="w-1/6">
+          <Button variant="destructive" className="w-1/6" onClick={() => removeExistingSelector(selectorId)}>
             <FontAwesomeIcon icon={faXmark} size="lg" />
           </Button>
         )}

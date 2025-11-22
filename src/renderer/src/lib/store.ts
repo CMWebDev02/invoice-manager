@@ -37,6 +37,21 @@ export function searchSelector(page: 'sorters' | 'viewers', selectorId: string):
   }
 }
 
+export function removeSelector(page: 'sorters' | 'viewers', selectorId: string): boolean {
+  try {
+    if (page === 'sorters') {
+      const isRemovalSuccessful = window.api.storage.removeSorter(selectorId);
+      return true;
+    } else if (page === 'viewers') {
+      return false;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
 export async function storeSelector(page: 'sorters' | 'viewers', newSelector: SelectorDetails, isNew: boolean): Promise<boolean> {
   let isAdded: boolean;
 

@@ -69,7 +69,7 @@ export function updateSorter(changedSorter: SorterDetails): boolean {
 export function searchSorters(sorterId: string): SorterDetails {
   try {
     const currentSorters = getSorters();
-    for (const index in currentSorters) {
+    for (let index = 0; index < currentSorters.length; index++) {
       if (currentSorters[index].selectorId == sorterId) {
         return currentSorters[index];
       }
@@ -85,6 +85,25 @@ export function searchSorters(sorterId: string): SorterDetails {
       invoicesDestination: ''
     };
     return temp;
+  }
+}
+
+export function removeSorter(sorterId: string): boolean {
+  try {
+    const currentSorters = getSorters();
+
+    for (let index = 0; index < currentSorters.length; index++) {
+      if (currentSorters[index].selectorId == sorterId) {
+        currentSorters.splice(index, 1);
+        store.set('sortersArray', JSON.stringify(currentSorters));
+        return true;
+      }
+    }
+
+    throw new Error('Sorter not found!');
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 }
 

@@ -29,21 +29,17 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
   const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
 
   useEffect(() => {
-    if (!isOpen) {
-      setSorterId('');
-      setSorterTitle('');
-      setInvoicesDestination('');
-      setDirectoriesDestination('');
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
     if (existingSelectorId != '') {
       const existingSorter = searchSelector('sorters', existingSelectorId);
       setSorterId(existingSorter.selectorId);
       setSorterTitle(existingSorter.selectorTitle);
       setInvoicesDestination(existingSorter.invoicesDestination ?? '');
       setDirectoriesDestination(existingSorter.directoriesDestination);
+    } else {
+      setSorterId('');
+      setSorterTitle('');
+      setInvoicesDestination('');
+      setDirectoriesDestination('');
     }
   }, [existingSelectorId]);
 
@@ -73,7 +69,6 @@ export default function SortersModal({ drivesList, isOpen, toggleModal, existing
       isStored = await storeSelector('sorters', sorterObject, false);
     }
 
-    // left off checking if this save works
     if (isStored) {
       toggleModal();
     } else {
