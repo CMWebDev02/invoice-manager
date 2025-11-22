@@ -8,14 +8,14 @@ import SortersModal from './components/sorters-modal';
 import ViewersModal from './components/viewers-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { getSelectors, removeSelector } from '@renderer/lib/store';
+import { getSelectors, removeSelector, type SelectorDetails } from '@renderer/lib/store';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
 }
 
 export default function SelectorsPage({ selectorType }: SelectorsPageProps): React.JSX.Element {
-  const savedSorters = getSelectors(selectorType);
+  const [savedSorters, setSavedSorters] = useState<SelectorDetails[]>(getSelectors(selectorType));
   const [drivesList, setDrivesList] = useState<string[]>([]);
   const [editingMode, setEditingMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalClosed] = useState<boolean>(false);
@@ -36,6 +36,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
       setCurrentSelectorId('');
     }
     setIsModalClosed(!isModalOpen);
+    setSavedSorters(getSelectors(selectorType));
   };
 
   function editExistingSelector(selectorId: string): void {
@@ -48,7 +49,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     console.log('create confirmation');
     const isSuccessful: boolean = removeSelector(selectorType, selectorId);
     if (isSuccessful) {
-      
+      setSavedSorters(getSelectors(selectorType));
     }
   }
 
