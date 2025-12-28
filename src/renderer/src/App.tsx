@@ -33,6 +33,7 @@ export default function App(): React.JSX.Element {
             <Route path="/selector-viewers" element={<SelectorsPage selectorType="viewers" />} />
             <Route path="/selector-sorters" element={<SelectorsPage selectorType="sorters" />} />
             <Route path="/sorters/:sorterId" element={<SortersPage />} />
+            {/* <Route path="/viewers/:sorterId" element={<SortersPage />} /> Add once viewers page is initialized*/}
             <Route path="/changelogs" element={<ChangeLogsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>

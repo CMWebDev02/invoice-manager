@@ -61,7 +61,8 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
           </Button>
         )}
-        <Link to={`/selectors/${selectorId}`}>
+        {/* Navigation link to respective sorter or viewer with selector id passed as a url parameter */}
+        <Link to={`/${selectorType}/${selectorId}`}>
           <Button
             disabled={editingMode}
             className={`
