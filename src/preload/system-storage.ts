@@ -128,7 +128,8 @@ export function getSelectors(selectorType: 'sorters' | 'viewers'): SelectorDetai
   try {
     if (selectorType === 'sorters') {
       const currentSorters = store.get('sortersArray', '');
-      const currentSortersArray = currentSorters === '' ? JSON.parse(currentSorters) : [];
+      // Checks if there is a stored viewersArray, else return an empty array.
+      const currentSortersArray = currentSorters !== '' ? JSON.parse(currentSorters) : [];
       return currentSortersArray;
     } else if (selectorType === 'viewers') {
       const currentViewers = store.get('viewersArray', '');

@@ -1,9 +1,4 @@
-export type SelectorDetails = {
-  selectorId: string;
-  selectorTitle: string;
-  directoriesDestination: string;
-  invoicesDestination?: string;
-};
+import type { SelectorDetails } from './types';
 
 export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
   if (page === 'sorters' || page === 'viewers') {

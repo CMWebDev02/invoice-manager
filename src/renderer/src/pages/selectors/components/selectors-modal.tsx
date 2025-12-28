@@ -10,7 +10,8 @@ import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
-import { searchSelector, SelectorDetails, storeSelector } from '@renderer/lib/store';
+import { searchSelector, storeSelector } from '@renderer/lib/store';
+import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 

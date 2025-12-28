@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { getSelectors, removeSelector, type SelectorDetails } from '@renderer/lib/store';
 import SelectorsModal from './components/selectors-modal';
+import { Link } from 'react-router';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -60,17 +61,19 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
           </Button>
         )}
-        <Button
-          disabled={editingMode}
-          className={`
+        <Link to={`/selectors/${selectorId}`}>
+          <Button
+            disabled={editingMode}
+            className={`
             ${editingMode ? 'w-4/6' : 'w-full'}
             text-lg
             md:text-xl
             lg:text-2xl
             `}
-        >
-          {selectorTitle}
-        </Button>
+          >
+            {selectorTitle}
+          </Button>
+        </Link>
         {editingMode && (
           <Button variant="destructive" className="w-1/6" onClick={() => removeExistingSelector(selectorId)}>
             <FontAwesomeIcon icon={faXmark} size="lg" />

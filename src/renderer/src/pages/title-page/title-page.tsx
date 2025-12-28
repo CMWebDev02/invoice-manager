@@ -17,8 +17,8 @@ export default function TitlePage(): React.JSX.Element {
         md:gap-y-8
         "
         >
-          <TitleLink linkHref="./sorters">Sorters</TitleLink>
-          <TitleLink linkHref="./viewers">Viewers</TitleLink>
+          <TitleLink linkHref="./selector-sorters">Sorters</TitleLink>
+          <TitleLink linkHref="./selector-viewers">Viewers</TitleLink>
           <TitleLink linkHref="./changelogs">Changelogs</TitleLink>
           <TitleLink linkHref="./settings">Settings</TitleLink>
         </CardContent>
