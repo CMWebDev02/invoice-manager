@@ -127,12 +127,13 @@ function setSelectors(selectorType: 'sorters' | 'viewers', selectorsArray: Selec
 export function getSelectors(selectorType: 'sorters' | 'viewers'): SelectorDetails[] {
   try {
     if (selectorType === 'sorters') {
-      const currentSorters = store.get('sortersArray') ?? [];
-      const currentSortersArray = JSON.parse(currentSorters);
+      const currentSorters = store.get('sortersArray', '');
+      const currentSortersArray = currentSorters === '' ? JSON.parse(currentSorters) : [];
       return currentSortersArray;
     } else if (selectorType === 'viewers') {
-      const currentViewers = store.get('viewersArray') ?? [];
-      const currentViewersArray = JSON.parse(currentViewers);
+      const currentViewers = store.get('viewersArray', '');
+      // Checks if there is a stored viewersArray, else return an empty array.
+      const currentViewersArray = currentViewers !== '' ? JSON.parse(currentViewers) : [];
       return currentViewersArray;
     }
 
