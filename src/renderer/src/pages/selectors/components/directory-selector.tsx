@@ -1,5 +1,5 @@
 import { cn, getDirectories, joinPaths, userHomeDir } from '@renderer/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
 import useAsyncUpdate from '../hooks/useAsyncUpdate';

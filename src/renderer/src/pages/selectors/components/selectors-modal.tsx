@@ -1,6 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
 import { DialogContent, DialogHeader } from '@renderer/components/ui/dialog';
-import { Input } from '@renderer/components/ui/input';
 import { Label } from '@renderer/components/ui/label';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
