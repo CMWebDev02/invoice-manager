@@ -6,9 +6,10 @@ import { getAllDrives } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { getSelectors, removeSelector, type SelectorDetails } from '@renderer/lib/store';
+import { getSelectors, removeSelector } from '@renderer/lib/store';
 import SelectorsModal from './components/selectors-modal';
 import { Link } from 'react-router';
+import type { SelectorDetails } from '@renderer/lib/types';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
