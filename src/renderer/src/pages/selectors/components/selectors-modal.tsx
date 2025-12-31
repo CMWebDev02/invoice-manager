@@ -139,11 +139,11 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
             className="w-1/4 md:w-1/3
           text-lg md:text-2xl
         "
-            htmlFor="sorter-title"
+            htmlFor="selector-title"
           >
-            Sorter Title:
+            Title:
           </Label>
-          <WhiteListInput className="w-3/4 md:w-2/3" id="sorter-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
+          <WhiteListInput className="w-3/4 md:w-2/3" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
