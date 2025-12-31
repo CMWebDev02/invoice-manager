@@ -23,21 +23,21 @@ interface SortersModalProps {
 }
 
 export default function SelectorsModal({ drivesList, toggleModal, existingSelectorId, selectorType }: SortersModalProps): React.JSX.Element {
-  const [sorterId, setSorterId] = useState<string>('');
-  const [sorterTitle, setSorterTitle] = useState<string>('');
+  const [selectorId, setSelectorId] = useState<string>('');
+  const [selectorTitle, setSelectorTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
   const [directoriesDestination, setDirectoriesDestination] = useState<string>('');
 
   useEffect(() => {
     if (existingSelectorId != '') {
       const existingSorter = searchSelector(selectorType, existingSelectorId);
-      setSorterId(existingSorter.selectorId);
-      setSorterTitle(existingSorter.selectorTitle);
+      setSelectorId(existingSorter.selectorId);
+      setSelectorTitle(existingSorter.selectorTitle);
       setInvoicesDestination(existingSorter.invoicesDestination ?? '');
       setDirectoriesDestination(existingSorter.directoriesDestination);
     } else {
-      setSorterId('');
-      setSorterTitle('');
+      setSelectorId('');
+      setSelectorTitle('');
       setInvoicesDestination('');
       setDirectoriesDestination('');
     }
@@ -49,12 +49,12 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     // and validate the directory and invoice destinations
 
     if (selectorType === 'sorters') {
-      if (sorterTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
+      if (selectorTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
         saveChanges();
         return;
       }
     } else if (selectorType === 'viewers') {
-      if (sorterTitle !== '' && directoriesDestination !== '') {
+      if (selectorTitle !== '' && directoriesDestination !== '') {
         saveChanges();
         return;
       }
@@ -65,8 +65,8 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
 
   async function saveChanges(): Promise<void> {
     const sorterObject: SelectorDetails = {
-      selectorId: sorterId,
-      selectorTitle: sorterTitle,
+      selectorId: selectorId,
+      selectorTitle: selectorTitle,
       directoriesDestination: directoriesDestination,
       invoicesDestination
     };
@@ -74,7 +74,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     let isNewSelector = false;
 
     // Checks if a new selector is being saved
-    if (sorterId == '') {
+    if (selectorId == '') {
       // Creates a new id for the new selector
       sorterObject.selectorId = getUniqueID();
       isNewSelector = true;
@@ -143,7 +143,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           >
             Sorter Title:
           </Label>
-          <WhiteListInput className="w-3/4 md:w-2/3" id="sorter-title" value={sorterTitle} onChange={(e) => setSorterTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
+          <WhiteListInput className="w-3/4 md:w-2/3" id="sorter-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
