@@ -70,14 +70,17 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       directoriesDestination: directoriesDestination,
       invoicesDestination
     };
+    // Indicates if the selector is new or being updated
+    let isNewSelector = false;
 
-    // Checks if a new sorter is being saved
+    // Checks if a new selector is being saved
     if (sorterId == '') {
       // Creates a new id for the new selector
       sorterObject.selectorId = getUniqueID();
+      isNewSelector = true;
     }
 
-    const isStored = await storeSelector(selectorType, sorterObject, true);
+    const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
 
     if (isStored) {
       toggleModal();

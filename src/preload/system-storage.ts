@@ -53,7 +53,7 @@ export function updateSelector(selectorType: 'sorters' | 'viewers', changedSorte
 
     const currentSorters = getSelectors(selectorType);
     for (const index in currentSorters) {
-      if (currentSorters[index].selectorId == changedSorter.selectorId) {
+      if (currentSorters[index].selectorId === changedSorter.selectorId) {
         currentSorters[index] = changedSorter;
         hasUpdateOccurred = true;
       }

@@ -9,16 +9,8 @@ export function getSelectors(page: 'sorters' | 'viewers'): SelectorDetails[] {
 }
 
 export function searchSelector(page: 'sorters' | 'viewers', selectorId: string): SelectorDetails {
-  if (page === 'sorters') {
+  if (page === 'sorters' || page === 'viewers') {
     return window.api.storage.searchSelector(page, selectorId);
-  } else if (page === 'viewers') {
-    const temp: SelectorDetails = {
-      selectorId: '',
-      selectorTitle: '',
-      directoriesDestination: '',
-      invoicesDestination: ''
-    };
-    return temp;
   } else {
     const temp: SelectorDetails = {
       selectorId: '',
