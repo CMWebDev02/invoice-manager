@@ -10,7 +10,6 @@ import SortersPage from './pages/sorters/sorters-page';
 
 export default function App(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [navContent, setNavContent] = useState<React.JSX.Element>(<></>);
 
   useEffect(() => {
     async function pullUserDrives(): Promise<void> {
@@ -26,7 +25,7 @@ export default function App(): React.JSX.Element {
 
   return (
     <>
-      <NavBar displayElements={navContent} />
+      <NavBar />
       <main className="h-[calc(100vh-2.5rem)] w-screen bg-background">
         <BrowserRouter>
           <Routes>
