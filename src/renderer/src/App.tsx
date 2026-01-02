@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import './styles/styles.css';
 import TitlePage from './pages/title-page/title-page';
-import NavBar from './components/user/nav-bar';
 import SettingsPage from './pages/settings/settings-page';
 import ChangeLogsPage from './pages/changelogs/changelogs-pages';
 import SelectorsPage from './pages/selectors/selectors-page';
@@ -35,6 +34,7 @@ export default function App(): React.JSX.Element {
             <Route path="/changelogs" element={<ChangeLogsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
+
           <Route path="/sorters/:sorterId" element={<SortersPage />} />
           {/* <Route path="/viewers/:sorterId" element={<SortersPage />} /> Add once viewers page is initialized*/}
         </Routes>
