@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import FileDisplay from './file-display';
 import { getCurrentInvoice, getLetterFolderDirectories } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import { Dirent } from 'fs';
-import { Button } from '@renderer/components/ui/button';
 
 interface SortersContainerProps {
   sorterTitle: string;
