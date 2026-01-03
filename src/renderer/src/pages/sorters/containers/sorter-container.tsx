@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import FileDisplay from './file-display';
-import { getInvoicesDirectoryContent, getLetterFolderDirectories } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories } from '@renderer/lib/utils';
 import type { Dirent } from 'fs';
 
 interface SortersContainerProps {
@@ -15,14 +15,14 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasErrored, setHasErrored] = useState<boolean>(false);
   const [directoriesArrays, setDirectoriesArrays] = useState<Dirent<string>[][]>([]);
-  const [invoicesArray, setInvoicesArray] = useState<Dirent<string>[]>([]);
+  const [currentInvoice, setCurrentInvoice] = useState<string>('');
 
   useEffect(() => {
     try {
       async function validateSorter(): Promise<void> {
         // Add an error check for the returned content
-        const invoicesContents = await getInvoicesDirectoryContent(invoicesDestination);
-        setInvoicesArray(invoicesContents);
+        const invoice = await getCurrentInvoice(invoicesDestination);
+        setCurrentInvoice(invoice);
 
         const directoriesContents = await getLetterFolderDirectories(directoriesDestination);
         setDirectoriesArrays(directoriesContents);
@@ -52,7 +52,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         <div className="w-full h-full flex flex-row p-2">
           <DirectoryNavigation />
 
-          <FileDisplay />
+          <FileDisplay currentInvoice={currentInvoice} />
         </div>
       </main>
     </>

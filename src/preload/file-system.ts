@@ -36,6 +36,16 @@ export async function getFiles(dirPath: string): Promise<Dirent<string>[]> {
   }
 }
 
+export async function readFile(filePath: string): Promise<string> {
+  try {
+    const file = await fs.readFile(filePath, { encoding: 'base64' });
+    return file;
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+}
+
 export function getHomeDir(): string {
   return userHomeDir;
 }

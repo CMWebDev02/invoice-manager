@@ -57,25 +57,30 @@ export async function getLetterFolderDirectories(directoriesDestination: string)
     const isDirValid = await validateDirectoryPath(directoriesDestination);
     if (!isDirValid) throw new Error('Directories Destination is invalid!');
 
-    const areLetterDirsValid = await window.api.file_system.getLetterFolderDirectories(directoriesDestination);
+    const letterFolderDirectories = await window.api.file_system.getLetterFolderDirectories(directoriesDestination);
 
-    return areLetterDirsValid;
+    return letterFolderDirectories;
   } catch (error) {
     console.error(error);
     return [];
   }
 }
 
-export async function getInvoicesDirectoryContent(invoicesDestination: string): Promise<Dirent<string>[]> {
+export async function getCurrentInvoice(invoicesDestination: string): Promise<string> {
   try {
     const isInvoiceDirValid = await validateDirectoryPath(invoicesDestination);
     if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!');
 
     const invoicesDirectoryContent = await window.api.file_system.getFiles(invoicesDestination);
 
-    return invoicesDirectoryContent;
+    const firstFile: Dirent = invoicesDirectoryContent.at(0);
+    const firstFilePath = joinPaths(firstFile.parentPath, firstFile.name);
+
+    const currentInvoice = await window.api.file_system.readFile(firstFilePath);
+
+    return currentInvoice;
   } catch (error) {
     console.error(error);
-    return [];
+    return '';
   }
 }
