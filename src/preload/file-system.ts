@@ -37,3 +37,41 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     return false;
   }
 }
+
+export async function initializeNewDir(dir: string): Promise<boolean> {
+  try {
+    const value = await fs.mkdir(dir, { recursive: true });
+    if (value === undefined) {
+      throw new Error(`Failed to create directory: ${dir}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export async function validateLetterFolders(dir: string): Promise<boolean> {
+  try {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letterFoldersArray = letters.split('').map((letter) => joinPaths(dir, letter));
+
+    //TODO: Have this reconfirm that the path is valid after creating it
+    for (const letterFolder of letterFoldersArray) {
+      const isValid = await validateDirectoryPath(letterFolder);
+
+      if (!isValid) {
+        const isCreated = await initializeNewDir(letterFolder);
+        if (!isCreated) {
+          throw new Error(`Failed to validate all letter folders, error caused by ${letterFolder}`);
+        }
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

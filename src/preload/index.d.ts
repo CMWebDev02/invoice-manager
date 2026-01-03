@@ -5,6 +5,7 @@ type FileSystemTypes = {
   getHomeDir: () => string;
   joinPaths: (...dirPaths: string[]) => string;
   validateDirectoryPath: (dirPath: string) => Promise<boolean>;
+  validateLetterFolders: (dir: string) => Promise<boolean>;
 };
 
 type StorageTypes = {

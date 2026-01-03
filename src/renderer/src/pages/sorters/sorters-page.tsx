@@ -1,42 +1,31 @@
 import { searchSelector } from '@renderer/lib/store';
+import SorterContainer from './containers/sorter-container';
 import { useParams } from 'react-router';
-import SortersNavBar from './components/sorters-navbar';
-import { Input } from '@renderer/components/ui/input';
-import { Button } from '@renderer/components/ui/button';
+
+// Get the sorterId upon loading the page,
+// validate the id,
+// if not valid return an error
+// else search for the selector and get its associated information
+// validate the invoices destination and the directories destination,
+// validate the letter folders within the directories destination
+// gather the file names within each letter folder
+// gather the current invoice within the invoice destination, each time a transfer occurs reacquire the current file value
+// filter the current directories available to the user based on their search, match from start only
+// highlight and store the current directory the user selects
+// transfer the current invoice to the currently selected directory
 
 export default function SortersPage(): React.JSX.Element {
   const { sorterId } = useParams();
   const selectorType = 'sorters';
 
-  if (!sorterId) {
-    return <h1>Error!</h1>;
+  if (sorterId) {
+    const { selectorTitle, directoriesDestination, invoicesDestination } = searchSelector(selectorType, sorterId);
+
+    // Have this check that a valid directory was pulled after searching
+    if (selectorTitle !== '' && directoriesDestination !== '' && invoicesDestination !== undefined) {
+      return <SorterContainer sorterTitle={selectorTitle} directoriesDestination={directoriesDestination} invoicesDestination={invoicesDestination} />;
+    }
   }
 
-  const { selectorId, selectorTitle, directoriesDestination, invoicesDestination } = searchSelector(selectorType, sorterId);
-
-  return (
-    <>
-      <SortersNavBar sorterTitle={selectorTitle} />
-      <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
-        <div className="w-full h-full flex flex-row p-2">
-          <div className="w-1/3">
-            <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-              <h2 className="w-1/3">Search:</h2>
-              <Input placeholder="Search..." />
-            </div>
-            <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
-              <div className="w-full">
-                <Button className="w-5/6">Directory</Button>
-                <Button className="w-1/6">-{'>'}</Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-2/3 h-full p-2">
-            <div className="bg-secondary w-full h-full" />
-          </div>
-        </div>
-      </main>
-    </>
-  );
+  return <h1>Error</h1>;
 }

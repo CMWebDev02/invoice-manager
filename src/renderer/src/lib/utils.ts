@@ -51,3 +51,21 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     return false;
   }
 }
+
+export async function initializeSorter(directoriesDestination: string, invoicesDestination: string): Promise<boolean> {
+  try {
+    const isDirValid = await validateDirectoryPath(directoriesDestination);
+    if (!isDirValid) throw new Error('Directories Destination is invalid!');
+
+    const areLetterDirsValid = await window.api.file_system.validateLetterFolders(directoriesDestination);
+    if (!areLetterDirsValid) throw new Error('Letter folders are invalid!');
+
+    const isInvoiceDirValid = await validateDirectoryPath(invoicesDestination);
+    if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!');
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
