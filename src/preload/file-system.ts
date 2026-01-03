@@ -16,11 +16,24 @@ export function joinPaths(...dirPaths: string[]): string {
 }
 
 export async function getDirectories(dirPath: string): Promise<Dirent<string>[]> {
-  const allFolders = await fs.readdir(dirPath, { withFileTypes: true });
+  const allContents = await fs.readdir(dirPath, { withFileTypes: true });
 
   //   Checks if the dirent is a directory but not a not a hidden directory, the system information directory, or the Recycle bin directory.
-  const filteredFolders = allFolders.filter((item) => item.isDirectory() && item.name[0] !== '.' && item.name.toLocaleLowerCase() !== `$RECYCLE.BIN`.toLocaleLowerCase() && item.name.toLocaleLowerCase() !== 'System Volume Information'.toLocaleLowerCase());
+  const filteredFolders = allContents.filter((item) => item.isDirectory() && item.name[0] !== '.' && item.name.toLocaleLowerCase() !== `$RECYCLE.BIN`.toLocaleLowerCase() && item.name.toLocaleLowerCase() !== 'System Volume Information'.toLocaleLowerCase());
   return filteredFolders;
+}
+
+export async function getFiles(dirPath: string): Promise<Dirent<string>[]> {
+  try {
+    const allContents = await fs.readdir(dirPath, { withFileTypes: true });
+
+    // TODO: Have this check if the file is a pdf or png file.
+    const filteredFolder = allContents.filter((item) => item.isFile());
+    return filteredFolder;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 export function getHomeDir(): string {
@@ -52,11 +65,13 @@ export async function initializeNewDir(dir: string): Promise<boolean> {
   }
 }
 
-export async function validateLetterFolders(dir: string): Promise<boolean> {
+export async function getLetterFolderDirectories(dir: string): Promise<Dirent<string>[][]> {
   try {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const letterFoldersArray = letters.split('').map((letter) => joinPaths(dir, letter));
+    const letterFoldersDirectoriesArray: Dirent<string>[][] = [];
 
+    // Validates the various letter folders
     //TODO: Have this reconfirm that the path is valid after creating it
     for (const letterFolder of letterFoldersArray) {
       const isValid = await validateDirectoryPath(letterFolder);
@@ -69,9 +84,14 @@ export async function validateLetterFolders(dir: string): Promise<boolean> {
       }
     }
 
-    return true;
+    for (const letterFolder of letterFoldersArray) {
+      const letterFolderDirectories = await getDirectories(letterFolder);
+      letterFoldersDirectoriesArray.push(letterFolderDirectories);
+    }
+
+    return letterFoldersDirectoriesArray;
   } catch (error) {
     console.error(error);
-    return false;
+    return [];
   }
 }

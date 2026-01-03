@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import FileDisplay from './file-display';
-import { initializeSorter } from '@renderer/lib/utils';
+import { getInvoicesDirectoryContent, getLetterFolderDirectories } from '@renderer/lib/utils';
+import type { Dirent } from 'fs';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -13,12 +14,18 @@ interface SortersContainerProps {
 export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasErrored, setHasErrored] = useState<boolean>(false);
+  const [directoriesArrays, setDirectoriesArrays] = useState<Dirent<string>[][]>([]);
+  const [invoicesArray, setInvoicesArray] = useState<Dirent<string>[]>([]);
 
   useEffect(() => {
     try {
       async function validateSorter(): Promise<void> {
-        const isValid = await initializeSorter(directoriesDestination, invoicesDestination);
-        if (!isValid) throw new Error('Sorter setting invalid!');
+        // Add an error check for the returned content
+        const invoicesContents = await getInvoicesDirectoryContent(invoicesDestination);
+        setInvoicesArray(invoicesContents);
+
+        const directoriesContents = await getLetterFolderDirectories(directoriesDestination);
+        setDirectoriesArrays(directoriesContents);
       }
 
       validateSorter();
