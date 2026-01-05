@@ -28,7 +28,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       <SortersNavBar sorterTitle={sorterTitle} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          <DirectoryNavigation />
+          <DirectoryNavigation directoriesArrays={directoriesArrays !== null ? directoriesArrays : []} />
 
           <FileDisplay currentInvoice={currentInvoice !== null ? currentInvoice : ''} />
         </div>
