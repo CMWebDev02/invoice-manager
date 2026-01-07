@@ -95,6 +95,7 @@ export async function getLetterFolderDirectories(dir: string): Promise<Dirent<st
     }
 
     for (const letterFolder of letterFoldersArray) {
+      // TODO: Change this to push a custom object containing the dirName and its path
       const letterFolderDirectories = await getDirectories(letterFolder);
       letterFoldersDirectoriesArray.push(letterFolderDirectories);
     }

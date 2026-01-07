@@ -12,6 +12,7 @@ interface SortersContainerProps {
 }
 
 export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
+  // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
   const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, Dirent[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
   const { fetchData: currentInvoice, error: hasInvoiceErrored, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, string>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
 
