@@ -2,9 +2,9 @@ import type { Dirent } from 'fs';
 import YearSelector from '../components/year-selector';
 import { useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
-import { Button } from '@renderer/components/ui/button';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
+import DirectoryOption from '../components/directory-option';
 
 interface DirectoryNavigationProps {
   directoriesArrays: Dirent<string>[][];
@@ -13,6 +13,8 @@ interface DirectoryNavigationProps {
 export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<Dirent<string>[]>([]);
+
+  const [selectedDirectory, setSelectedDirectory] = useState<string>('');
 
   function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
@@ -35,7 +37,11 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
     }
 
     // Regardless of value, the search string needs to be updated
-    setUserSearchString(e.target.value);
+    setUserSearchString(textInput);
+  }
+
+  function updateSelectedDirectory(dirName: string): void {
+    setSelectedDirectory(dirName);
   }
 
   return (
@@ -47,10 +53,8 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
           {filteredDirectories.map((dir) => (
-            <h1 key={dir.name}>{dir.name}</h1>
+            <DirectoryOption key={dir.name} dirName={dir.name} dirFilePath={dir.parentPath} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
           ))}
-          {/* <Button className="w-5/6">Directory</Button> */}
-          {/* <Button className="w-1/6">-{'>'}</Button> */}
         </div>
       </div>
     </div>

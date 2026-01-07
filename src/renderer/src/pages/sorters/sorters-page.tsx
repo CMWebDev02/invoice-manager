@@ -10,7 +10,7 @@ import { useParams } from 'react-router';
 //// validate the letter folders within the directories destination
 //// gather the file names within each letter folder
 //// gather the current invoice within the invoice destination, each time a transfer occurs reacquire the current file value
-// filter the current directories available to the user based on their search, match from start only
+//// filter the current directories available to the user based on their search, match from start only
 // highlight and store the current directory the user selects
 // transfer the current invoice to the currently selected directory
 
