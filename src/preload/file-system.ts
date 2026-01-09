@@ -3,6 +3,7 @@ import os from 'os';
 import { type Dirent } from 'fs';
 import path, { join } from 'path';
 import type { DirectoryExport } from './types';
+import { error } from 'console';
 
 const userHomeDir = os.homedir();
 
@@ -19,7 +20,7 @@ export function joinPaths(...dirPaths: string[]): string {
 export async function getDirectories(dirPath: string): Promise<Dirent<string>[]> {
   const allContents = await fs.readdir(dirPath, { withFileTypes: true });
 
-  //   Checks if the dirent is a directory but not a not a hidden directory, the system information directory, or the Recycle bin directory.
+  // Checks if the dirent is a directory but not a not a hidden directory, the system information directory, or the Recycle bin directory.
   const filteredFolders = allContents.filter((item) => item.isDirectory() && item.name[0] !== '.' && item.name.toLocaleLowerCase() !== `$RECYCLE.BIN`.toLocaleLowerCase() && item.name.toLocaleLowerCase() !== 'System Volume Information'.toLocaleLowerCase());
   return filteredFolders;
 }
@@ -111,3 +112,36 @@ export async function getLetterFolderDirectories(dir: string): Promise<Directory
     return [];
   }
 }
+
+export async function validateFileName(fileName: string, parentPath: string): Promise<string> {
+  try {
+    let currentFileName = fileName;
+    let isNameTaken = false;
+
+    do {
+      const newFilePath = join(parentPath, currentFileName);
+      console.log(newFilePath);
+      isNameTaken = await validateDirectoryPath(newFilePath);
+
+      if (isNameTaken) {
+        // Checks for the windows duplicate file pattern, (X)
+        // TODO: Update this to go up to two numbers only
+        const copyPattern = /\((\d+)\)/;
+
+        const hasPattern = copyPattern.test(currentFileName);
+        if (hasPattern) {
+          currentFileName = currentFileName.replace(copyPattern, (_, copyNumber) => `(${parseInt(copyNumber) + 1})`);
+        } else {
+          currentFileName = `${currentFileName.substring(0, currentFileName.lastIndexOf('.'))} (2).pdf`;
+        }
+      }
+    } while (isNameTaken);
+
+    return currentFileName;
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+}
+
+export async function transferFile(currentPath, newPath): Promise<boolean> {}

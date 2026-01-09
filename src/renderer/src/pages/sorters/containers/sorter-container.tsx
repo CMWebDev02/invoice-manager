@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import FileDisplay from './file-display';
-import { getCurrentInvoice, getLetterFolderDirectories } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories, transferFile } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -42,12 +42,13 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
       sortFile(selectedDirectory, selectedYear, invoiceObj);
     } catch (error) {
+      // TODO: Have this generate a pop up to indicate the error.
       console.error(error);
     }
   }
 
   function sortFile(dir: DirectoryExport, year: string, invoice: FileExport): void {
-    console.log(dir, year, invoice);
+    transferFile(invoice, dir, year);
   }
 
   return (

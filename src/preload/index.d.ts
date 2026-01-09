@@ -8,6 +8,7 @@ type FileSystemTypes = {
   getLetterFolderDirectories: (dir: string) => Promise<DirectoryExport[][]>;
   getFiles: (dirPath: string) => Promise<Dirent<string>[]>;
   readFile: (filePath: string) => Promise<string>;
+  validateFileName: (fileName: string, parentPath: string) => Promise<string>;
 };
 
 type StorageTypes = {

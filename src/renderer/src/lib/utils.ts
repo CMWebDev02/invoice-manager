@@ -91,3 +91,16 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<Fi
     return null;
   }
 }
+
+export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport, year: string): Promise<boolean> {
+  try {
+    const newFilePath = joinPaths(dirObj.dirPath, year);
+    const fileName = await window.api.file_system.validateFileName(fileObj.name, newFilePath);
+
+    console.log(fileName);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
