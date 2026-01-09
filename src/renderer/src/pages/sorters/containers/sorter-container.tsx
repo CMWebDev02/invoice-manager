@@ -13,7 +13,7 @@ interface SortersContainerProps {
 }
 
 export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
-  const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport>({ dirPath: '', name: '' });
+  const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
@@ -32,9 +32,27 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     setSelectedDirectory(dirObj);
   }
 
+  function validateCurrentSelections(): void {
+    try {
+      if (selectedDirectory === null) throw new Error('No Directory Selected');
+
+      if (selectedYear === '') throw new Error('No Year Selected');
+
+      if (invoiceObj === null) throw new Error('Invalid Invoice');
+
+      sortFile(selectedDirectory, selectedYear, invoiceObj);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function sortFile(dir: DirectoryExport, year: string, invoice: FileExport): void {
+    console.log(dir, year, invoice);
+  }
+
   return (
     <>
-      <SortersNavBar sorterTitle={sorterTitle} />
+      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           <DirectoryNavigation directoriesArrays={directoriesArrays !== null ? directoriesArrays : []} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />

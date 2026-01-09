@@ -8,7 +8,7 @@ import { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {
   directoriesArrays: DirectoryExport[][];
-  selectedDirectory: DirectoryExport;
+  selectedDirectory: DirectoryExport | null;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }

@@ -3,13 +3,13 @@ import type { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryOptionProps {
   directoryObject: DirectoryExport;
-  currentDirectory: DirectoryExport;
+  currentDirectory: DirectoryExport | null;
   updateCurrentDirectory: (dirName: DirectoryExport) => void;
 }
 
 export default function DirectoryOption({ directoryObject, currentDirectory, updateCurrentDirectory }: DirectoryOptionProps): React.JSX.Element {
-  const { name, dirPath } = directoryObject;
-  const backGroundColor = currentDirectory.name === name ? 'red-900' : 'background';
+  const { name } = directoryObject;
+  const backGroundColor = currentDirectory !== null && currentDirectory.name === name ? 'red-900' : 'background';
 
   return (
     <div>
