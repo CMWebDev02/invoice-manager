@@ -94,10 +94,28 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<Fi
 
 export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport, year: string): Promise<boolean> {
   try {
+    const isDirPathValid = await validateDirectoryPath(dirObj.dirPath);
+    if (!isDirPathValid) throw new Error('Invalid Directory Path');
+    const isFilePathValid = await validateDirectoryPath(fileObj.path);
+    if (!isFilePathValid) throw new Error('Invalid File Path');
+
     const newFilePath = joinPaths(dirObj.dirPath, year);
+
+    const isYearFolderValid = await validateDirectoryPath(newFilePath);
+    if (!isYearFolderValid) {
+      const isCreationSuccessful = await window.api.file_system.initializeNewDir(newFilePath);
+      if (!isCreationSuccessful) throw new Error('Failed to Create Folder for Associated Year');
+    }
+
     const fileName = await window.api.file_system.validateFileName(fileObj.name, newFilePath);
 
-    console.log(fileName);
+    const finalFilePath = joinPaths(newFilePath, fileName);
+
+    console.log(finalFilePath);
+
+    const isFileTransferred = await window.api.file_system.transferFile(fileObj.path, finalFilePath);
+
+    if (!isFileTransferred) throw new Error('Failed to transfer file');
     return true;
   } catch (error) {
     console.error(error);

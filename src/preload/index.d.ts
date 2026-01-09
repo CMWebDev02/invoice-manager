@@ -9,6 +9,8 @@ type FileSystemTypes = {
   getFiles: (dirPath: string) => Promise<Dirent<string>[]>;
   readFile: (filePath: string) => Promise<string>;
   validateFileName: (fileName: string, parentPath: string) => Promise<string>;
+  transferFile: (currentPath: string, newPath: string) => Promise<boolean>;
+  initializeNewDir: (dir: string) => Promise<boolean>;
 };
 
 type StorageTypes = {

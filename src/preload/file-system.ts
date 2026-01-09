@@ -1,9 +1,8 @@
-import fs from 'fs/promises';
+import fs, { constants } from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
 import path, { join } from 'path';
 import type { DirectoryExport } from './types';
-import { error } from 'console';
 
 const userHomeDir = os.homedir();
 
@@ -120,7 +119,6 @@ export async function validateFileName(fileName: string, parentPath: string): Pr
 
     do {
       const newFilePath = join(parentPath, currentFileName);
-      console.log(newFilePath);
       isNameTaken = await validateDirectoryPath(newFilePath);
 
       if (isNameTaken) {
@@ -144,4 +142,15 @@ export async function validateFileName(fileName: string, parentPath: string): Pr
   }
 }
 
-export async function transferFile(currentPath, newPath): Promise<boolean> {}
+export async function transferFile(currentPath: string, newPath: string): Promise<boolean> {
+  try {
+    await fs.copyFile(currentPath, newPath, constants.COPYFILE_EXCL);
+
+    await fs.rm(currentPath);
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
