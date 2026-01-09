@@ -20,10 +20,6 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
   const { fetchData: invoiceObj, error: hasInvoiceErrored, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
 
-  useEffect(() => {
-    console.log(selectedYear);
-  }, [selectedYear]);
-
   if (areDirectoriesLoading || isInvoiceLoading) {
     return <h1>Loading...</h1>;
   }
