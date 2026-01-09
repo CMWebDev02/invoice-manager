@@ -8,13 +8,13 @@ import { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {
   directoriesArrays: DirectoryExport[][];
+  selectedDirectory: DirectoryExport;
+  updateSelectedDirectory: (dirObj: DirectoryExport) => void;
 }
 
-export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectoryNavigation({ directoriesArrays, selectedDirectory, updateSelectedDirectory }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
-
-  const [selectedDirectory, setSelectedDirectory] = useState<string>('');
 
   function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
@@ -40,10 +40,6 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
     setUserSearchString(textInput);
   }
 
-  function updateSelectedDirectory(dirName: string): void {
-    setSelectedDirectory(dirName);
-  }
-
   return (
     <div className="w-1/3">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
@@ -52,8 +48,8 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
-          {filteredDirectories.map(({ name, dirPath }) => (
-            <DirectoryOption key={name} dirName={name} dirFilePath={dirPath} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
+          {filteredDirectories.map((dirObj) => (
+            <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
           ))}
         </div>
       </div>
