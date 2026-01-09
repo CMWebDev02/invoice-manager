@@ -23,7 +23,7 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
     const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
 
     // Checks that the textInput is populated
-    if (textInput !== '' || (subDirectoryIndex >= 0 && subDirectoryIndex < 26)) {
+    if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
       const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
         // Performs the necessary check of the directory name based on the user's capitalization setting,
         const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
