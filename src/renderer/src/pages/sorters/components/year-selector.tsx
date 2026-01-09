@@ -1,19 +1,34 @@
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@renderer/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from '@renderer/components/ui/select';
 
-interface YearSelectorProps {}
+interface YearSelectorProps {
+  updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
+}
 
-export default function YearSelector({}: YearSelectorProps): React.JSX.Element {
+export default function YearSelector({ updateCurrentYear }: YearSelectorProps): React.JSX.Element {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const years: number[] = [];
+
+  for (let i = -10; year + i <= year + 10; i++) {
+    years.push(year - i);
+  }
+
+  const YearsItems = years.map((year) => (
+    <SelectItem key={year} value={year.toString()}>
+      {year}
+    </SelectItem>
+  ));
+
   return (
-    <Select defaultValue="2026">
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Years</SelectLabel>
-          <SelectItem value="2026">2026</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <>
+      <Select onValueChange={updateCurrentYear}>
+        <SelectTrigger>
+          <SelectValue placeholder="XXXX" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>{YearsItems}</SelectGroup>
+        </SelectContent>
+      </Select>
+    </>
   );
 }

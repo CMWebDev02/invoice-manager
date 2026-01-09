@@ -10,9 +10,10 @@ interface DirectoryNavigationProps {
   directoriesArrays: DirectoryExport[][];
   selectedDirectory: DirectoryExport;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
+  updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function DirectoryNavigation({ directoriesArrays, selectedDirectory, updateSelectedDirectory }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectoryNavigation({ directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
 
@@ -44,7 +45,7 @@ export default function DirectoryNavigation({ directoriesArrays, selectedDirecto
     <div className="w-1/3">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
         <WhiteListInput regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
-        <YearSelector />
+        <YearSelector updateCurrentYear={updateCurrentYear} />
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
