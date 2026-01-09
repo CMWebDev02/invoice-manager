@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { type Dirent } from 'fs';
 import { twMerge } from 'tailwind-merge';
-import type { DirectoryExport } from './types';
+import type { DirectoryExport, FileExport } from './types';
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -67,7 +67,7 @@ export async function getLetterFolderDirectories(directoriesDestination: string)
   }
 }
 
-export async function getCurrentInvoice(invoicesDestination: string): Promise<string> {
+export async function getCurrentInvoice(invoicesDestination: string): Promise<FileExport> {
   try {
     const isInvoiceDirValid = await validateDirectoryPath(invoicesDestination);
     if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!');
@@ -77,11 +77,22 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<st
     const firstFile: Dirent = invoicesDirectoryContent.at(0);
     const firstFilePath = joinPaths(firstFile.parentPath, firstFile.name);
 
-    const currentInvoice = await window.api.file_system.readFile(firstFilePath);
+    const currentInvoiceData = await window.api.file_system.readFile(firstFilePath);
 
-    return currentInvoice;
+    const firstFileObj: FileExport = {
+      data: currentInvoiceData,
+      name: firstFile.name,
+      path: firstFilePath
+    };
+
+    return firstFileObj;
   } catch (error) {
     console.error(error);
-    return '';
+    const tempObj = {
+      data: '',
+      name: '',
+      path: ''
+    };
+    return tempObj;
   }
 }

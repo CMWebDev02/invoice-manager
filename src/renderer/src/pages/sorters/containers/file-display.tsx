@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 interface FileDisplayProps {
-  currentInvoice: string;
+  invoiceFileData: string;
 }
 
-export default function FileDisplay({ currentInvoice }: FileDisplayProps): React.JSX.Element {
+export default function FileDisplay({ invoiceFileData }: FileDisplayProps): React.JSX.Element {
   const [pdf, setPDF] = useState<string>('');
 
   useEffect(() => {
@@ -26,11 +26,11 @@ export default function FileDisplay({ currentInvoice }: FileDisplayProps): React
       return URL.createObjectURL(pdfBlob);
     }
 
-    if (currentInvoice !== '') {
-      const pdfUri = decodeBase64IntoBlob(currentInvoice);
+    if (invoiceFileData !== '') {
+      const pdfUri = decodeBase64IntoBlob(invoiceFileData);
       setPDF(pdfUri);
     }
-  }, [currentInvoice]);
+  }, [invoiceFileData]);
 
   return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} /> : <h1>Loading</h1>}</div>;
 }
