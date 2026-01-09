@@ -53,7 +53,7 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
   }
 }
 
-export async function getLetterFolderDirectories(directoriesDestination: string): Promise<DirectoryExport[][]> {
+export async function getLetterFolderDirectories(directoriesDestination: string): Promise<DirectoryExport[][] | null> {
   try {
     const isDirValid = await validateDirectoryPath(directoriesDestination);
     if (!isDirValid) throw new Error('Directories Destination is invalid!');
@@ -63,11 +63,11 @@ export async function getLetterFolderDirectories(directoriesDestination: string)
     return letterFolderDirectories;
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 }
 
-export async function getCurrentInvoice(invoicesDestination: string): Promise<FileExport> {
+export async function getCurrentInvoice(invoicesDestination: string): Promise<FileExport | null> {
   try {
     const isInvoiceDirValid = await validateDirectoryPath(invoicesDestination);
     if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!');
@@ -88,11 +88,6 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<Fi
     return firstFileObj;
   } catch (error) {
     console.error(error);
-    const tempObj = {
-      data: '',
-      name: '',
-      path: ''
-    };
-    return tempObj;
+    return null;
   }
 }

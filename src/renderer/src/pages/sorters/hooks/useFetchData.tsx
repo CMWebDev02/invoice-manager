@@ -8,7 +8,7 @@ type UseFetchData<UpdateType> = {
 };
 
 interface UseFetchDataProps<PropType, ReturnType> {
-  asyncFunction: (asyncFunctionProp: PropType) => Promise<ReturnType>;
+  asyncFunction: (asyncFunctionProp: PropType) => Promise<ReturnType | null>;
   asyncFunctionProp: PropType;
 }
 
@@ -24,6 +24,7 @@ export default function useFetchData<PropType, ReturnType>({ asyncFunction, asyn
     try {
       async function getData(): Promise<void> {
         const result = await asyncFunction(asyncFunctionProp);
+        if (result === null) throw new Error('Failed to collect data!');
         setFetchData(result);
       }
 
