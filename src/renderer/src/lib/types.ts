@@ -4,3 +4,8 @@ export type SelectorDetails = {
   directoriesDestination: string;
   invoicesDestination?: string;
 };
+
+export type DirectoryExport = {
+  name: string;
+  dirPath: string;
+};

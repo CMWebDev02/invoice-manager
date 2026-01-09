@@ -1,18 +1,18 @@
-import type { Dirent } from 'fs';
 import YearSelector from '../components/year-selector';
 import { useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
 import DirectoryOption from '../components/directory-option';
+import { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {
-  directoriesArrays: Dirent<string>[][];
+  directoriesArrays: DirectoryExport[][];
 }
 
 export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
-  const [filteredDirectories, setFilteredDirectories] = useState<Dirent<string>[]>([]);
+  const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
 
   const [selectedDirectory, setSelectedDirectory] = useState<string>('');
 
@@ -52,8 +52,8 @@ export default function DirectoryNavigation({ directoriesArrays }: DirectoryNavi
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
-          {filteredDirectories.map((dir) => (
-            <DirectoryOption key={dir.name} dirName={dir.name} dirFilePath={dir.parentPath} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
+          {filteredDirectories.map(({ name, dirPath }) => (
+            <DirectoryOption key={name} dirName={name} dirFilePath={dirPath} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
           ))}
         </div>
       </div>

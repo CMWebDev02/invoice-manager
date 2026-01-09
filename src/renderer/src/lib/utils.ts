@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { type Dirent } from 'fs';
 import { twMerge } from 'tailwind-merge';
+import type { DirectoryExport } from './types';
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -52,7 +53,7 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
   }
 }
 
-export async function getLetterFolderDirectories(directoriesDestination: string): Promise<Dirent<string>[][]> {
+export async function getLetterFolderDirectories(directoriesDestination: string): Promise<DirectoryExport[][]> {
   try {
     const isDirValid = await validateDirectoryPath(directoriesDestination);
     if (!isDirValid) throw new Error('Directories Destination is invalid!');

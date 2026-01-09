@@ -3,7 +3,7 @@ import DirectoryNavigation from './directory-navigation';
 import FileDisplay from './file-display';
 import { getCurrentInvoice, getLetterFolderDirectories } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
-import { Dirent } from 'fs';
+import { DirectoryExport } from '@renderer/lib/types';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -13,7 +13,7 @@ interface SortersContainerProps {
 
 export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
-  const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, Dirent[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
+  const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
   const { fetchData: currentInvoice, error: hasInvoiceErrored, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, string>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
 
   if (areDirectoriesLoading || isInvoiceLoading) {

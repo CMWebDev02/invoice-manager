@@ -1,7 +1,8 @@
 import fs from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import path from 'path';
+import path, { join } from 'path';
+import type { DirectoryExport } from './types';
 
 const userHomeDir = os.homedir();
 
@@ -75,11 +76,11 @@ export async function initializeNewDir(dir: string): Promise<boolean> {
   }
 }
 
-export async function getLetterFolderDirectories(dir: string): Promise<Dirent<string>[][]> {
+export async function getLetterFolderDirectories(dir: string): Promise<DirectoryExport[][]> {
   try {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const letterFoldersArray = letters.split('').map((letter) => joinPaths(dir, letter));
-    const letterFoldersDirectoriesArray: Dirent<string>[][] = [];
+    const letterFoldersDirectoriesArray: DirectoryExport[][] = [];
 
     // Validates the various letter folders
     //TODO: Have this reconfirm that the path is valid after creating it
@@ -96,8 +97,12 @@ export async function getLetterFolderDirectories(dir: string): Promise<Dirent<st
 
     for (const letterFolder of letterFoldersArray) {
       // TODO: Change this to push a custom object containing the dirName and its path
-      const letterFolderDirectories = await getDirectories(letterFolder);
-      letterFoldersDirectoriesArray.push(letterFolderDirectories);
+      const allDirectories = await getDirectories(letterFolder);
+      const letterFolderObjArray = allDirectories.map(({ name, parentPath }) => {
+        const dirPath = join(parentPath, name);
+        return { name, dirPath };
+      });
+      letterFoldersDirectoriesArray.push(letterFolderObjArray);
     }
 
     return letterFoldersDirectoriesArray;
