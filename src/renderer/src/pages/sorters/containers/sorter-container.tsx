@@ -18,8 +18,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [selectedYear, setSelectedYear] = useState<string>('');
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     console.log(invoiceObj);
@@ -80,7 +80,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         <div className="w-full h-full flex flex-row p-2">
           {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
 
-          {/* {invoiceObj !== undefined && invoiceObj !== null && <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />} */}
+          {invoiceObj !== undefined && invoiceObj !== null && <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
     </>
