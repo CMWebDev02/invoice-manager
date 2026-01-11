@@ -1,10 +1,11 @@
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from '@renderer/components/ui/select';
 
 interface YearSelectorProps {
+  disabled: boolean;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function YearSelector({ updateCurrentYear }: YearSelectorProps): React.JSX.Element {
+export default function YearSelector({ disabled, updateCurrentYear }: YearSelectorProps): React.JSX.Element {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const years: number[] = [];
@@ -21,7 +22,7 @@ export default function YearSelector({ updateCurrentYear }: YearSelectorProps): 
 
   return (
     <>
-      <Select onValueChange={updateCurrentYear}>
+      <Select onValueChange={updateCurrentYear} disabled={disabled}>
         <SelectTrigger>
           <SelectValue placeholder="XXXX" />
         </SelectTrigger>

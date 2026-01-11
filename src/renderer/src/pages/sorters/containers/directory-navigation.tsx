@@ -7,13 +7,14 @@ import DirectoryOption from '../components/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {
+  disabled: boolean;
   directoriesArrays: DirectoryExport[][];
   selectedDirectory: DirectoryExport | null;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function DirectoryNavigation({ directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectoryNavigation({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
 
@@ -44,13 +45,13 @@ export default function DirectoryNavigation({ directoriesArrays, selectedDirecto
   return (
     <div className="w-1/3">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <WhiteListInput regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
-        <YearSelector updateCurrentYear={updateCurrentYear} />
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
+        <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
           {filteredDirectories.map((dirObj) => (
-            <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} />
+            <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} disabled={disabled} />
           ))}
         </div>
       </div>

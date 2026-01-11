@@ -13,20 +13,20 @@ interface SortersContainerProps {
 }
 
 export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
+  const [isInteractionDisabled, setIsInteractionDisabled] = useState<boolean>(true);
   const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
-  const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
-  const { fetchData: invoiceObj, error: hasInvoiceErrored, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
 
-  if (areDirectoriesLoading || isInvoiceLoading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (hasDirectoriesErrored || hasInvoiceErrored) {
-    return <h1>Error Has Occurred</h1>;
-  }
+  useEffect(() => {
+    console.log(invoiceObj);
+    if (invoiceObj !== null && directoriesArrays !== null) {
+      setIsInteractionDisabled(false);
+    }
+  }, [invoiceObj, directoriesArrays]);
 
   function updateSelectedDirectory(dirObj: DirectoryExport): void {
     setSelectedDirectory(dirObj);
@@ -47,18 +47,32 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     }
   }
 
-  function sortFile(dir: DirectoryExport, year: string, invoice: FileExport): void {
-    transferFile(invoice, dir, year);
+  async function sortFile(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
+    try {
+      const isTransferSuccessful = await transferFile(invoice, dir, year);
+      if (!isTransferSuccessful) throw new Error('File Failed to Transfer');
+      refetchInvoice();
+    } catch (error) {
+      // TODO: Have this generate a pop up to indicate the error.
+      console.error(error);
+    }
   }
 
+  if (areDirectoriesLoading || isInvoiceLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (directoryError === '' || invoiceError === '') {
+    <h1>Error Has Occurred</h1>;
+  }
   return (
     <>
       <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          {directoriesArrays !== null && <DirectoryNavigation directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+          {directoriesArrays !== null && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
 
-          {invoiceObj !== null && <FileDisplay invoiceFileData={invoiceObj.data} />}
+          {invoiceObj !== null && <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
     </>

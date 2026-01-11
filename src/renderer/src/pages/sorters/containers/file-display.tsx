@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
 interface FileDisplayProps {
+  disabled: boolean;
   invoiceFileData: string;
 }
 
-export default function FileDisplay({ invoiceFileData }: FileDisplayProps): React.JSX.Element {
+export default function FileDisplay({ disabled, invoiceFileData }: FileDisplayProps): React.JSX.Element {
   const [pdf, setPDF] = useState<string>('');
 
   useEffect(() => {
@@ -32,5 +33,5 @@ export default function FileDisplay({ invoiceFileData }: FileDisplayProps): Reac
     }
   }, [invoiceFileData]);
 
-  return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} /> : <h1>Loading</h1>}</div>;
+  return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} aria-disabled={disabled} /> : <h1>Loading...</h1>}</div>;
 }

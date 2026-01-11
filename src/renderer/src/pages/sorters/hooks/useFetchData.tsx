@@ -15,7 +15,7 @@ interface UseFetchDataProps<PropType, ReturnType> {
 export default function useFetchData<PropType, ReturnType>({ asyncFunction, asyncFunctionProp }: UseFetchDataProps<PropType, ReturnType>): UseFetchData<ReturnType | null> {
   const [fetchData, setFetchData] = useState<ReturnType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<unknown>();
+  const [error, setError] = useState<string>('');
   const [isRefetching, setIsRefetching] = useState<boolean>(false);
 
   const triggerRefetching = (): void => setIsRefetching(true);
@@ -31,8 +31,15 @@ export default function useFetchData<PropType, ReturnType>({ asyncFunction, asyn
       setIsLoading(true);
       getData();
     } catch (error) {
+      // Credit: https://engineering.udacity.com/handling-errors-like-a-pro-in-typescript-d7a314ad4991
+      // Described the way to access errors when they are known instances of error objects and how to handle unknown errors
+      if (error instanceof Error) {
+        setError(`${error.name}: ${error.message}`);
+      } else {
+        setError(`Unknown Error has occurred!`);
+      }
       console.error(error);
-      setError(error);
+      setFetchData(null);
     } finally {
       setIsLoading(false);
       setIsRefetching(false);
