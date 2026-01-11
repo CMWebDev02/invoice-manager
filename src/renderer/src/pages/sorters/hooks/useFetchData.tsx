@@ -14,7 +14,7 @@ interface UseFetchDataProps<PropType, ReturnType> {
 }
 
 export default function useFetchData<PropType, ReturnType>({ asyncFunction, asyncFunctionProp, asyncFunctionKey }: UseFetchDataProps<PropType, ReturnType>): UseFetchData<ReturnType> {
-  const { data, error, isLoading, refetch } = useQuery({ queryKey: [asyncFunctionKey], queryFn: getData });
+  const { data, error, isLoading, refetch } = useQuery({ queryKey: [asyncFunctionKey], queryFn: getData, retry: false });
 
   async function getData(): Promise<Awaited<ReturnType>> {
     const result = await asyncFunction(asyncFunctionProp);
