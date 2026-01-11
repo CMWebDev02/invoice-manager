@@ -20,7 +20,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const { fetchData: directoriesArrays, error: hasDirectoriesErrored, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination });
   const { fetchData: invoiceObj, error: hasInvoiceErrored, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination });
 
-  if (areDirectoriesLoading || isInvoiceLoading || directoriesArrays === null || invoiceObj === null) {
+  if (areDirectoriesLoading || isInvoiceLoading) {
     return <h1>Loading...</h1>;
   }
 
@@ -56,9 +56,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          <DirectoryNavigation directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />
+          {directoriesArrays !== null && <DirectoryNavigation directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
 
-          <FileDisplay invoiceFileData={invoiceObj.data} />
+          {invoiceObj !== null && <FileDisplay invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
     </>

@@ -74,6 +74,8 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<Fi
 
     const invoicesDirectoryContent = await window.api.file_system.getFiles(invoicesDestination);
 
+    if (invoicesDirectoryContent.length === 0) throw new Error('Directory Is Empty!');
+
     const firstFile: Dirent = invoicesDirectoryContent.at(0);
     const firstFilePath = joinPaths(firstFile.parentPath, firstFile.name);
 
@@ -110,8 +112,6 @@ export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport,
     const fileName = await window.api.file_system.validateFileName(fileObj.name, newFilePath);
 
     const finalFilePath = joinPaths(newFilePath, fileName);
-
-    console.log(finalFilePath);
 
     const isFileTransferred = await window.api.file_system.transferFile(fileObj.path, finalFilePath);
 
