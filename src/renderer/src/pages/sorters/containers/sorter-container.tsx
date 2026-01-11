@@ -28,6 +28,20 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     }
   }, [invoiceObj, directoriesArrays]);
 
+  if (areDirectoriesLoading || isInvoiceLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (directoryError || invoiceError) {
+    return (
+      <h1>
+        <h2>Error Occurred: </h2>
+        <h2>{invoiceError?.message}</h2>
+        <h2>{directoryError?.message}</h2>
+      </h1>
+    );
+  }
+
   function updateSelectedDirectory(dirObj: DirectoryExport): void {
     setSelectedDirectory(dirObj);
   }
@@ -38,8 +52,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
       if (selectedYear === '') throw new Error('No Year Selected');
 
-      if (invoiceObj === null) throw new Error('Invalid Invoice');
+      if (invoiceObj === undefined) throw new Error('Invalid Invoice');
 
+      setIsInteractionDisabled(true);
       sortFile(selectedDirectory, selectedYear, invoiceObj);
     } catch (error) {
       // TODO: Have this generate a pop up to indicate the error.
@@ -58,21 +73,14 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     }
   }
 
-  if (areDirectoriesLoading || isInvoiceLoading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (directoryError === '' || invoiceError === '') {
-    <h1>Error Has Occurred</h1>;
-  }
   return (
     <>
       <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          {directoriesArrays !== null && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+          {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
 
-          {invoiceObj !== null && <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
+          {/* {invoiceObj !== undefined && invoiceObj !== null && <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />} */}
         </div>
       </main>
     </>
