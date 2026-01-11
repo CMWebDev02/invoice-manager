@@ -2,9 +2,8 @@ import { searchSelector } from '@renderer/lib/store';
 import SorterContainer from './containers/sorter-container';
 import { useParams } from 'react-router';
 
-// TODO Rename any invoice vars to file
-// TODO Add the new directory modal and logic
 // TODO Add the error popups
+// TODO Add the new directory modal and logic
 // TODO Review all functions and revalidate their error checking and return values
 
 export default function SortersPage(): React.JSX.Element {

@@ -5,6 +5,7 @@ import { getCurrentInvoice, getLetterFolderDirectories, transferFile } from '@re
 import useFetchData from '../hooks/useFetchData';
 import type { DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'sonner';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -22,7 +23,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
-    if (invoiceObj !== null && directoriesArrays !== null) {
+    if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
       setIsInteractionDisabled(false);
     }
   }, [invoiceObj, directoriesArrays]);
@@ -42,8 +43,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       setIsInteractionDisabled(true);
       sortInvoice(selectedDirectory, selectedYear, invoiceObj);
     } catch (error) {
-      // TODO: Have this generate a pop up to indicate the error.
-      console.error(error);
+      const errorMessage = error instanceof Error ? error.message : 'An Unknown Error has Occurred';
+      toast.error('Validation Error!', {
+        description: errorMessage
+      });
     }
   }
 
@@ -55,7 +58,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     } catch (error) {
       // TODO: Have this generate a pop up to indicate the error.
       refetchInvoice();
-      console.error(error);
+      const errorMessage = error instanceof Error ? error.message : 'An Unknown Error has Occurred';
+      toast.error('File Transfer Error!', {
+        description: errorMessage
+      });
     }
   }
 
@@ -83,6 +89,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
           {invoiceObj !== undefined && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
+      <Toaster />
     </>
   );
 }
