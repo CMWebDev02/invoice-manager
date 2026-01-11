@@ -1,6 +1,6 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
-import FileDisplay from './file-display';
+import InvoiceDisplay from './invoice-display';
 import { getCurrentInvoice, getLetterFolderDirectories, transferFile } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { DirectoryExport, FileExport } from '@renderer/lib/types';
@@ -22,7 +22,6 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
-    console.log(invoiceObj);
     if (invoiceObj !== null && directoriesArrays !== null) {
       setIsInteractionDisabled(false);
     }
@@ -41,17 +40,17 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       if (invoiceObj === undefined) throw new Error('Invalid Invoice');
 
       setIsInteractionDisabled(true);
-      sortFile(selectedDirectory, selectedYear, invoiceObj);
+      sortInvoice(selectedDirectory, selectedYear, invoiceObj);
     } catch (error) {
       // TODO: Have this generate a pop up to indicate the error.
       console.error(error);
     }
   }
 
-  async function sortFile(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
+  async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
       const isTransferSuccessful = await transferFile(invoice, dir, year);
-      if (!isTransferSuccessful) throw new Error('File Failed to Transfer');
+      if (!isTransferSuccessful) throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
     } catch (error) {
       // TODO: Have this generate a pop up to indicate the error.
@@ -60,11 +59,11 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     }
   }
 
-  if (areDirectoriesLoading || isInvoiceLoading || directoriesArrays === undefined || invoiceObj === undefined) {
+  if (areDirectoriesLoading || isInvoiceLoading) {
     return <h1>Loading...</h1>;
   }
 
-  if (directoryError || invoiceError || directoriesArrays === null || invoiceObj === null) {
+  if (directoryError || invoiceError) {
     return (
       <h1>
         <p>Error Occurred: </p>
@@ -79,9 +78,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />
+          {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
 
-          <FileDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />
+          {invoiceObj !== undefined && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
     </>

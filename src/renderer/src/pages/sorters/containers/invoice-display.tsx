@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-interface FileDisplayProps {
+interface InvoiceDisplayProps {
   disabled: boolean;
   invoiceFileData: string;
 }
 
-export default function FileDisplay({ disabled, invoiceFileData }: FileDisplayProps): React.JSX.Element {
+export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDisplayProps): React.JSX.Element {
   const [pdf, setPDF] = useState<string>('');
 
   useEffect(() => {
