@@ -126,7 +126,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         </div>
       </main>
       <Toaster />
-      <NewDirectoryModal isOpen={isModalOpen} changeOpen={setIsModalOpen} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
+      <NewDirectoryModal isOpen={isModalOpen} changeOpen={toggleModal} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
     </>
   );
 }

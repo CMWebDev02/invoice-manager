@@ -16,7 +16,7 @@ export default function NewDirectoryModal({ isOpen, changeOpen, createNewDirecto
   return (
     <Sheet open={isOpen} onOpenChange={changeOpen}>
       <SheetContent className="w-1/3" side="left">
-        <SheetHeader>
+        <SheetHeader aria-describedby="Modal for initializing a new directory.">
           <SheetTitle>Directory Initializer</SheetTitle>
         </SheetHeader>
         <Label htmlFor="newDirectoryTextBox">New Directory Name:</Label>
