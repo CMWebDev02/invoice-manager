@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
-import { getCurrentInvoice, getLetterFolderDirectories, transferFile } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories, initializeNewDir, joinPaths, lettersArray, transferFile } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -18,10 +18,17 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [isInteractionDisabled, setIsInteractionDisabled] = useState<boolean>(true);
   const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
+  const [newDirectoryName, setNewDirectoryName] = useState<string>('');
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const triggerModal = () => setIsModalOpen(!isModalOpen);
+  const toggleModal = (): void => {
+    if (isModalOpen) {
+      setNewDirectoryName('');
+    }
+
+    setIsModalOpen(!isModalOpen);
+  };
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
@@ -70,6 +77,30 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     }
   }
 
+  async function createNewDirectory(): Promise<void> {
+    if (newDirectoryName === '') {
+      toast.error('New Directory Name Is Invalid!');
+      return;
+    }
+
+    const newDirectoryLetterFolder = newDirectoryName[0];
+
+    if (lettersArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
+      const directoryLetterFolderPath = joinPaths(directoriesDestination, newDirectoryLetterFolder);
+      const newDirectoryPath = joinPaths(directoryLetterFolderPath, newDirectoryName);
+      const isCreationSuccessful = await initializeNewDir(newDirectoryPath);
+      if (isCreationSuccessful) {
+        setIsInteractionDisabled(true);
+        refetchDirectories();
+        toggleModal();
+      } else {
+        toast.error('New Directory Name Failed to Initialize!');
+      }
+    } else {
+      toast.error('Invalid Starting Character!');
+    }
+  }
+
   if (areDirectoriesLoading || isInvoiceLoading) {
     return <h1>Loading...</h1>;
   }
@@ -86,7 +117,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   return (
     <>
-      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={triggerModal} />
+      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={toggleModal} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
@@ -95,7 +126,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         </div>
       </main>
       <Toaster />
-      <NewDirectoryModal isOpen={isModalOpen} changeOpen={setIsModalOpen} />
+      <NewDirectoryModal isOpen={isModalOpen} changeOpen={setIsModalOpen} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
     </>
   );
 }

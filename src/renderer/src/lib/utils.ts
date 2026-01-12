@@ -3,6 +3,8 @@ import { type Dirent } from 'fs';
 import { twMerge } from 'tailwind-merge';
 import type { DirectoryExport, FileExport } from './types';
 
+export const lettersArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
@@ -48,6 +50,17 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     const isValidPath = await window.api.file_system.validateDirectoryPath(dirPath);
     return isValidPath;
   } catch (error: unknown) {
+    console.error(error);
+    return false;
+  }
+}
+
+export async function initializeNewDir(newDir): Promise<boolean> {
+  try {
+    const isCreationSuccessful = await window.api.file_system.initializeNewDir(newDir);
+    if (!isCreationSuccessful) throw new Error('Failed to Initialize New Directory');
+    return true;
+  } catch (error) {
     console.error(error);
     return false;
   }
@@ -105,7 +118,7 @@ export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport,
 
     const isYearFolderValid = await validateDirectoryPath(newFilePath);
     if (!isYearFolderValid) {
-      const isCreationSuccessful = await window.api.file_system.initializeNewDir(newFilePath);
+      const isCreationSuccessful = await initializeNewDir(newFilePath);
       if (!isCreationSuccessful) throw new Error('Failed to Create Folder for Associated Year');
     }
 
