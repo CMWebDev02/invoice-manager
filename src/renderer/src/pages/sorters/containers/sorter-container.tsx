@@ -6,6 +6,7 @@ import useFetchData from '../hooks/useFetchData';
 import type { DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
+import NewDirectoryModal from '../components/new-directory-modal';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -17,6 +18,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [isInteractionDisabled, setIsInteractionDisabled] = useState<boolean>(true);
   const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const triggerModal = () => setIsModalOpen(!isModalOpen);
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
@@ -81,7 +86,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   return (
     <>
-      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} />
+      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={triggerModal} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
@@ -90,6 +95,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         </div>
       </main>
       <Toaster />
+      <NewDirectoryModal isOpen={isModalOpen} changeOpen={setIsModalOpen} />
     </>
   );
 }
