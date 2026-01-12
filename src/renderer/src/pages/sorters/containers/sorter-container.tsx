@@ -7,6 +7,9 @@ import type { DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
+import { Button } from '@renderer/components/ui/button';
+import ChangeLog from './changelog';
+import ChangeLogDrawer from '../components/changelog-drawer';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -21,6 +24,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [newDirectoryName, setNewDirectoryName] = useState<string>('');
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   const toggleModal = (): void => {
     if (isModalOpen) {
@@ -29,6 +33,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
     setIsModalOpen(!isModalOpen);
   };
+
+  const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
   // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
@@ -120,13 +126,17 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={toggleModal} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+          <div className="w-1/3 h-full flex flex-col gap-1">
+            {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+            <ChangeLog triggerChangeLog={toggleDrawer} />
+          </div>
 
           {invoiceObj !== undefined && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
       <Toaster />
       <NewDirectoryModal isOpen={isModalOpen} changeOpen={toggleModal} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
+      <ChangeLogDrawer isDrawerOpen={isDrawerOpen} triggerChangeLog={toggleDrawer} />
     </>
   );
 }

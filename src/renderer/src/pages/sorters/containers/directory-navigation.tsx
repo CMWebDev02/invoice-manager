@@ -51,7 +51,7 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
   }
 
   return (
-    <div className="w-1/3">
+    <div className="w-full h-11/12">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
         <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
         <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
