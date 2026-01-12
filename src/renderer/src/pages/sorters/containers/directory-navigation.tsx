@@ -1,5 +1,5 @@
 import YearSelector from '../components/year-selector';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
@@ -17,6 +17,14 @@ interface DirectoryNavigationProps {
 export default function DirectoryNavigation({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
+
+  useEffect(() => {
+    // TODO: Have this refilter the array to display the new directory option
+    if (directoriesArrays !== null && directoriesArrays !== undefined) {
+      setUserSearchString('');
+      setFilteredDirectories([]);
+    }
+  }, [directoriesArrays]);
 
   function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
