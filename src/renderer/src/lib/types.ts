@@ -15,3 +15,12 @@ export type FileExport = {
   name: string;
   path: string;
 };
+
+export type ChangeLogEntry = {
+  id: string;
+  actionType: 'sorting' | 'creating';
+  actionDetails: {
+    itemName: string;
+    itemPath: string;
+  };
+};

@@ -3,11 +3,10 @@ import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
 import { getCurrentInvoice, getLetterFolderDirectories, initializeNewDir, joinPaths, lettersArray, transferFile } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
-import type { DirectoryExport, FileExport } from '@renderer/lib/types';
+import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
-import { Button } from '@renderer/components/ui/button';
 import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
 
@@ -22,6 +21,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [newDirectoryName, setNewDirectoryName] = useState<string>('');
+  const [changeLog, setChangeLog] = useState<ChangeLogEntry[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -33,10 +33,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
     setIsModalOpen(!isModalOpen);
   };
-
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  // TODO: Updates the directories to return a custom object containing the directory name and its path, use join to acquire it.
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
@@ -74,7 +72,6 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       if (!isTransferSuccessful) throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
     } catch (error) {
-      // TODO: Have this generate a pop up to indicate the error.
       refetchInvoice();
       const errorMessage = error instanceof Error ? error.message : 'An Unknown Error has Occurred';
       toast.error('File Transfer Error!', {
@@ -136,7 +133,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       </main>
       <Toaster />
       <NewDirectoryModal isOpen={isModalOpen} changeOpen={toggleModal} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
-      <ChangeLogDrawer isDrawerOpen={isDrawerOpen} triggerChangeLog={toggleDrawer} />
+      <ChangeLogDrawer isDrawerOpen={isDrawerOpen} triggerChangeLog={toggleDrawer} changeLog={changeLog} />
     </>
   );
 }
