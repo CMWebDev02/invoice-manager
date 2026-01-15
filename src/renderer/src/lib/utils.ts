@@ -135,3 +135,26 @@ export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport,
     return '';
   }
 }
+
+export async function undoFileTransfer(currentFilePath: string, fileName: string, newFilePath: string): Promise<boolean> {
+  try {
+    const isDirPathValid = await validateDirectoryPath(currentFilePath);
+    if (!isDirPathValid) throw new Error('File Path is Invalid!');
+    const isFilePathValid = await validateDirectoryPath(newFilePath);
+    if (!isFilePathValid) throw new Error('Transfer Location is Invalid!');
+
+    const transferPath = joinPaths(newFilePath, fileName);
+
+    const newFileName = await window.api.file_system.validateFileName(fileName, transferPath);
+
+    const finalFilePath = joinPaths(newFilePath, newFileName);
+
+    const isFileTransferred = await window.api.file_system.transferFile(currentFilePath, finalFilePath);
+
+    if (!isFileTransferred) throw new Error('Failed to transfer file');
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

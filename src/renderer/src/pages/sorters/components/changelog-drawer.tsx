@@ -1,3 +1,4 @@
+import { Button } from '@renderer/components/ui/button';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@renderer/components/ui/drawer';
 import type { ChangeLogEntry } from '@renderer/lib/types';
 
@@ -5,9 +6,10 @@ interface ChangeLogDrawerProps {
   isDrawerOpen: boolean;
   triggerChangeLog: () => void;
   changeLog: ChangeLogEntry[];
+  undoChangeLogAction: (actionObj: ChangeLogEntry) => Promise<void>;
 }
 
-export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, changeLog }: ChangeLogDrawerProps): React.JSX.Element {
+export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, changeLog, undoChangeLogAction }: ChangeLogDrawerProps): React.JSX.Element {
   return (
     <Drawer open={isDrawerOpen} onOpenChange={triggerChangeLog}>
       <DrawerContent>
@@ -30,6 +32,7 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
                   </p>
                 </>
               )}
+              <Button onClick={() => undoChangeLogAction(change)}>Undo</Button>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
-import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile, undoFileTransfer } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -131,7 +131,30 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   }
 
   async function undoChangeLogAction(actionObj: ChangeLogEntry): Promise<void> {
-    
+    try {
+      if (actionObj.actionType === 'creating') {
+        console.log('unavailable');
+      } else {
+        const isUndoSuccessful = await undoFileTransfer(actionObj.actionDetails.itemPath, actionObj.actionDetails.itemName, invoicesDestination);
+
+        if (!isUndoSuccessful) throw new Error('Failed to Undo File transfer');
+
+        setChangeLog((changeArray) => {
+          const currentArray = changeArray.filter((change) => change.id !== actionObj.id);
+          return [...currentArray];
+        });
+
+        toast.success('Action Undone!');
+      }
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        console.error(error);
+        toast.error('Unknown Error Occurred.');
+      }
+    }
   }
 
   if (areDirectoriesLoading || isInvoiceLoading) {
@@ -163,7 +186,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       </main>
       <Toaster />
       <NewDirectoryModal isOpen={isModalOpen} changeOpen={toggleModal} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />
-      <ChangeLogDrawer isDrawerOpen={isDrawerOpen} triggerChangeLog={toggleDrawer} changeLog={changeLog} />
+      <ChangeLogDrawer isDrawerOpen={isDrawerOpen} triggerChangeLog={toggleDrawer} changeLog={changeLog} undoChangeLogAction={undoChangeLogAction} />
     </>
   );
 }
