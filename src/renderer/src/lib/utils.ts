@@ -107,7 +107,7 @@ export async function getCurrentInvoice(invoicesDestination: string): Promise<Fi
   }
 }
 
-export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport, year: string): Promise<boolean> {
+export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport, year: string): Promise<string> {
   try {
     const isDirPathValid = await validateDirectoryPath(dirObj.dirPath);
     if (!isDirPathValid) throw new Error('Invalid Directory Path');
@@ -129,9 +129,9 @@ export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport,
     const isFileTransferred = await window.api.file_system.transferFile(fileObj.path, finalFilePath);
 
     if (!isFileTransferred) throw new Error('Failed to transfer file');
-    return true;
+    return finalFilePath;
   } catch (error) {
     console.error(error);
-    return false;
+    return '';
   }
 }

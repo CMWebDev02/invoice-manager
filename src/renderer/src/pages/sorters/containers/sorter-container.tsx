@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
-import { getCurrentInvoice, getLetterFolderDirectories, initializeNewDir, joinPaths, lettersArray, transferFile } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -68,9 +68,22 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
-      const isTransferSuccessful = await transferFile(invoice, dir, year);
-      if (!isTransferSuccessful) throw new Error('Invoice Failed to Transfer');
+      const newFolderLocation = await transferFile(invoice, dir, year);
+      if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
+      setChangeLog((changeArray) => {
+        const changeId = getUniqueID();
+
+        const newChange: ChangeLogEntry = {
+          id: changeId,
+          actionType: 'sorting',
+          actionDetails: {
+            itemName: invoice.name,
+            itemPath: newFolderLocation
+          }
+        };
+        return [newChange, ...changeArray];
+      });
     } catch (error) {
       refetchInvoice();
       const errorMessage = error instanceof Error ? error.message : 'An Unknown Error has Occurred';
@@ -96,12 +109,29 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         setIsInteractionDisabled(true);
         refetchDirectories();
         toggleModal();
+        setChangeLog((changeArray) => {
+          const changeId = getUniqueID();
+
+          const newChange: ChangeLogEntry = {
+            id: changeId,
+            actionType: 'creating',
+            actionDetails: {
+              itemName: newDirectoryName,
+              itemPath: newDirectoryPath
+            }
+          };
+          return [newChange, ...changeArray];
+        });
       } else {
         toast.error('New Directory Name Failed to Initialize!');
       }
     } else {
       toast.error('Invalid Starting Character!');
     }
+  }
+
+  async function undoChangeLogAction(actionObj: ChangeLogEntry): Promise<void> {
+    
   }
 
   if (areDirectoriesLoading || isInvoiceLoading) {
