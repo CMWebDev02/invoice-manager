@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
-import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile, undoFileTransfer } from '@renderer/lib/utils';
+import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile, undoDirectoryCreation, undoFileTransfer } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -76,11 +76,12 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
         const newChange: ChangeLogEntry = {
           id: changeId,
-          actionType: 'sorting',
+          actionType: 'sort',
           actionDetails: {
             itemName: invoice.name,
             itemPath: newFolderLocation
-          }
+          },
+          successful: true
         };
         return [newChange, ...changeArray];
       });
@@ -114,11 +115,12 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
           const newChange: ChangeLogEntry = {
             id: changeId,
-            actionType: 'creating',
+            actionType: 'create',
             actionDetails: {
               itemName: newDirectoryName,
               itemPath: newDirectoryPath
-            }
+            },
+            successful: true
           };
           return [newChange, ...changeArray];
         });
@@ -132,20 +134,36 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function undoChangeLogAction(actionObj: ChangeLogEntry): Promise<void> {
     try {
-      if (actionObj.actionType === 'creating') {
-        console.log('unavailable');
-      } else {
+      if (actionObj.actionType === 'create') {
+        const isUndoSuccessful = await undoDirectoryCreation(actionObj.actionDetails.itemPath);
+
+        if (!isUndoSuccessful) throw new Error('Failed to Undo Directory Creation!');
+      } else if (actionObj.actionType === 'sort') {
         const isUndoSuccessful = await undoFileTransfer(actionObj.actionDetails.itemPath, actionObj.actionDetails.itemName, invoicesDestination);
 
-        if (!isUndoSuccessful) throw new Error('Failed to Undo File transfer');
-
-        setChangeLog((changeArray) => {
-          const currentArray = changeArray.filter((change) => change.id !== actionObj.id);
-          return [...currentArray];
-        });
+        if (!isUndoSuccessful) throw new Error('Failed to Undo File Transfer!');
 
         toast.success('Action Undone!');
+      } else {
+        throw new Error('Invalid Action Type!');
       }
+
+      setChangeLog((changeArray) => {
+        const currentArray = changeArray.filter((change) => change.id !== actionObj.id);
+
+        const changeId = getUniqueID();
+        const newChange: ChangeLogEntry = {
+          id: changeId,
+          actionType: actionObj.actionType === 'create' ? 'undoCreate' : 'undoSort',
+          actionDetails: {
+            itemName: actionObj.actionDetails.itemName,
+            itemPath: actionObj.actionDetails.itemPath
+          },
+          successful: true
+        };
+
+        return [newChange, ...currentArray];
+      });
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -154,6 +172,21 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
         console.error(error);
         toast.error('Unknown Error Occurred.');
       }
+
+      setChangeLog((changeArray) => {
+        const changeId = getUniqueID();
+        const newChange: ChangeLogEntry = {
+          id: changeId,
+          actionType: actionObj.actionType === 'create' ? 'undoCreate' : 'undoSort',
+          actionDetails: {
+            itemName: actionObj.actionDetails.itemName,
+            itemPath: actionObj.actionDetails.itemPath
+          },
+          successful: false
+        };
+
+        return [newChange, ...changeArray];
+      });
     }
   }
 

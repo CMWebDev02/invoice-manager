@@ -154,3 +154,18 @@ export async function transferFile(currentPath: string, newPath: string): Promis
     return false;
   }
 }
+
+export async function removeDirectory(dirPath: string): Promise<boolean> {
+  try {
+    const isValidDirectory = await validateDirectoryPath(dirPath);
+
+    if (!isValidDirectory) throw new Error('Directory Path is Invalid!');
+
+    const isDeletionSuccessful = await fs.rmdir(dirPath);
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

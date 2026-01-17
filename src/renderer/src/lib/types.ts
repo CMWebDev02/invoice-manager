@@ -18,9 +18,10 @@ export type FileExport = {
 
 export type ChangeLogEntry = {
   id: string;
-  actionType: 'sorting' | 'creating';
+  actionType: 'sort' | 'create' | 'undoSort' | 'undoCreate';
   actionDetails: {
     itemName: string;
     itemPath: string;
   };
+  successful: boolean;
 };

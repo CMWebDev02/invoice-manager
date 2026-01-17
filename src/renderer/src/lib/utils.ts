@@ -158,3 +158,16 @@ export async function undoFileTransfer(currentFilePath: string, fileName: string
     return false;
   }
 }
+
+export async function undoDirectoryCreation(dirPath: string): Promise<boolean> {
+  try {
+    const isDeletionSuccessful = await window.api.file_system.removeDirectory(dirPath);
+
+    if (!isDeletionSuccessful) throw new Error('Failed to Remove Directory');
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

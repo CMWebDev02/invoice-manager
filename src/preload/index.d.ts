@@ -11,6 +11,7 @@ type FileSystemTypes = {
   validateFileName: (fileName: string, parentPath: string) => Promise<string>;
   transferFile: (currentPath: string, newPath: string) => Promise<boolean>;
   initializeNewDir: (dir: string) => Promise<boolean>;
+  removeDirectory: (dirPath: string) => Promise<boolean>;
 };
 
 type StorageTypes = {
