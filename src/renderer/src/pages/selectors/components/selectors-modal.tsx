@@ -8,12 +8,13 @@ import DirectorySelector from './directory-selector';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
-import { getUniqueID, validateDirectoryPath } from '@renderer/lib/utils';
+import { getUniqueID } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import { searchSelector, storeSelector } from '@renderer/lib/store';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
+import { validateDirectoryPath } from '@renderer/lib/file-system';
 
 interface SortersModalProps {
   drivesList: string[];

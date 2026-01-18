@@ -1,21 +1,18 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { getDirectories, getFiles, getHomeDir, getLetterFolderDirectories, joinPaths, validateDirectoryPath, readFile, validateFileName, transferFile, initializeNewDir, removeDirectory } from './file-system';
+import { getDirectoryContents, initializeNewDir, joinPaths, readFile, removeDirectory, transferFile, userHomeDir, validateDirectoryPath } from './file-system';
 import { getSelectors, getUserDrives, removeSelector, searchSelector, storeNewSelector, storeUserDrives, updateSelector } from './system-storage';
 
 // Custom APIs for renderer
 const api = {
   file_system: {
-    getDirectories,
-    getHomeDir,
+    userHomeDir,
     joinPaths,
-    validateDirectoryPath,
-    getLetterFolderDirectories,
-    getFiles,
+    getDirectoryContents,
     readFile,
-    validateFileName,
-    transferFile,
     initializeNewDir,
+    validateDirectoryPath,
+    transferFile,
     removeDirectory
   },
   storage: {

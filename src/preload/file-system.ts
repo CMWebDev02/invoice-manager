@@ -1,56 +1,33 @@
 import fs, { constants } from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import path, { join } from 'path';
-import type { DirectoryExport } from './types';
+import path from 'path';
 
-const userHomeDir = os.homedir();
+// All Basic File System Functions
+
+export const userHomeDir = os.homedir();
 
 export function joinPaths(...dirPaths: string[]): string {
-  try {
-    const newDirPath = path.join(...dirPaths);
-    return newDirPath;
-  } catch (error) {
-    console.error(error);
-    return '';
-  }
+  const newDirPath = path.join(...dirPaths);
+  return newDirPath;
 }
 
-export async function getDirectories(dirPath: string): Promise<Dirent<string>[]> {
+export async function getDirectoryContents(dirPath: string): Promise<Dirent<string>[]> {
   const allContents = await fs.readdir(dirPath, { withFileTypes: true });
-
-  // Checks if the dirent is a directory but not a not a hidden directory, the system information directory, or the Recycle bin directory.
-  const filteredFolders = allContents.filter((item) => item.isDirectory() && item.name[0] !== '.' && item.name.toLocaleLowerCase() !== `$RECYCLE.BIN`.toLocaleLowerCase() && item.name.toLocaleLowerCase() !== 'System Volume Information'.toLocaleLowerCase());
-  return filteredFolders;
-}
-
-export async function getFiles(dirPath: string): Promise<Dirent<string>[]> {
-  try {
-    const allContents = await fs.readdir(dirPath, { withFileTypes: true });
-
-    // TODO: Have this check if the file is a pdf or png file.
-    const filteredFolder = allContents.filter((item) => item.isFile());
-    return filteredFolder;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+  return allContents;
 }
 
 export async function readFile(filePath: string): Promise<string> {
-  try {
-    const file = await fs.readFile(filePath, { encoding: 'base64' });
-    return file;
-  } catch (error) {
-    console.error(error);
-    return '';
-  }
+  const file = await fs.readFile(filePath, { encoding: 'base64' });
+  return file;
 }
 
-export function getHomeDir(): string {
-  return userHomeDir;
+export async function initializeNewDir(dir: string): Promise<undefined> {
+  await fs.mkdir(dir);
+  return;
 }
 
+// TODO Change this to throw an error if anything other than invalid file path occurs
 export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
   try {
     //* Attempts to check the user's permissions for a file or directory, and if it can read the permissions from said file or directory it exists.
@@ -62,110 +39,15 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
   }
 }
 
-export async function initializeNewDir(dir: string): Promise<boolean> {
-  try {
-    const value = await fs.mkdir(dir, { recursive: true });
-    if (value === undefined) {
-      throw new Error(`Failed to create directory: ${dir}`);
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function transferFile(currentPath: string, newPath: string): Promise<undefined> {
+  //* Final parameter indicates the action to avoid overwriting any files
+  await fs.copyFile(currentPath, newPath, constants.COPYFILE_EXCL);
+  //* Removes the old file if the copy action is successful
+  await fs.rm(currentPath);
+  return;
 }
 
-export async function getLetterFolderDirectories(dir: string): Promise<DirectoryExport[][]> {
-  try {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const letterFoldersArray = letters.split('').map((letter) => joinPaths(dir, letter));
-    const letterFoldersDirectoriesArray: DirectoryExport[][] = [];
-
-    // Validates the various letter folders
-    //TODO: Have this reconfirm that the path is valid after creating it
-    for (const letterFolder of letterFoldersArray) {
-      const isValid = await validateDirectoryPath(letterFolder);
-
-      if (!isValid) {
-        const isCreated = await initializeNewDir(letterFolder);
-        if (!isCreated) {
-          throw new Error(`Failed to validate all letter folders, error caused by ${letterFolder}`);
-        }
-      }
-    }
-
-    for (const letterFolder of letterFoldersArray) {
-      // TODO: Change this to push a custom object containing the dirName and its path
-      const allDirectories = await getDirectories(letterFolder);
-      const letterFolderObjArray = allDirectories.map(({ name, parentPath }) => {
-        const dirPath = join(parentPath, name);
-        return { name, dirPath };
-      });
-      letterFoldersDirectoriesArray.push(letterFolderObjArray);
-    }
-
-    return letterFoldersDirectoriesArray;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
-
-export async function validateFileName(fileName: string, parentPath: string): Promise<string> {
-  try {
-    let currentFileName = fileName;
-    let isNameTaken = false;
-
-    do {
-      const newFilePath = join(parentPath, currentFileName);
-      isNameTaken = await validateDirectoryPath(newFilePath);
-
-      if (isNameTaken) {
-        // Checks for the windows duplicate file pattern, (X)
-        // TODO: Update this to go up to two numbers only
-        const copyPattern = /\((\d+)\)/;
-
-        const hasPattern = copyPattern.test(currentFileName);
-        if (hasPattern) {
-          currentFileName = currentFileName.replace(copyPattern, (_, copyNumber) => `(${parseInt(copyNumber) + 1})`);
-        } else {
-          currentFileName = `${currentFileName.substring(0, currentFileName.lastIndexOf('.'))} (2).pdf`;
-        }
-      }
-    } while (isNameTaken);
-
-    return currentFileName;
-  } catch (error) {
-    console.error(error);
-    return '';
-  }
-}
-
-export async function transferFile(currentPath: string, newPath: string): Promise<boolean> {
-  try {
-    await fs.copyFile(currentPath, newPath, constants.COPYFILE_EXCL);
-
-    await fs.rm(currentPath);
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
-export async function removeDirectory(dirPath: string): Promise<boolean> {
-  try {
-    const isValidDirectory = await validateDirectoryPath(dirPath);
-
-    if (!isValidDirectory) throw new Error('Directory Path is Invalid!');
-
-    const isDeletionSuccessful = await fs.rmdir(dirPath);
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function removeDirectory(dirPath: string): Promise<undefined> {
+  await fs.rmdir(dirPath);
+  return;
 }

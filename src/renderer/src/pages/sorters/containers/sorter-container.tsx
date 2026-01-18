@@ -1,7 +1,7 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from './invoice-display';
-import { getCurrentInvoice, getLetterFolderDirectories, getUniqueID, initializeNewDir, joinPaths, lettersArray, transferFile, undoDirectoryCreation, undoFileTransfer } from '@renderer/lib/utils';
+import { getUniqueID, subDirectoriesArray } from '@renderer/lib/utils';
 import useFetchData from '../hooks/useFetchData';
 import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
 import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
+import { getCurrentInvoice, getSubDirectories, initializeNewDir, joinPaths, removeDirectory, transferFile, validateSubDir } from '@renderer/lib/file-system';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -35,7 +36,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getLetterFolderDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getSubDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
@@ -68,7 +69,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
-      const newFolderLocation = await transferFile(invoice, dir, year);
+      const yearDirPath = await validateSubDir(dir.dirPath, year);
+      const newFolderLocation = await transferFile(invoice.name, invoice.path, yearDirPath);
       if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
       setChangeLog((changeArray) => {
@@ -95,18 +97,18 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   }
 
   async function createNewDirectory(): Promise<void> {
-    if (newDirectoryName === '') {
-      toast.error('New Directory Name Is Invalid!');
-      return;
-    }
+    try {
+      if (newDirectoryName === '') {
+        toast.error('New Directory Name Is Invalid!');
+        return;
+      }
 
-    const newDirectoryLetterFolder = newDirectoryName[0];
+      const newDirectoryLetterFolder = newDirectoryName[0];
 
-    if (lettersArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
-      const directoryLetterFolderPath = joinPaths(directoriesDestination, newDirectoryLetterFolder);
-      const newDirectoryPath = joinPaths(directoryLetterFolderPath, newDirectoryName);
-      const isCreationSuccessful = await initializeNewDir(newDirectoryPath);
-      if (isCreationSuccessful) {
+      if (subDirectoriesArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
+        const directoryLetterFolderPath = joinPaths(directoriesDestination, newDirectoryLetterFolder);
+        const newDirectoryPath = joinPaths(directoryLetterFolderPath, newDirectoryName);
+        await initializeNewDir(newDirectoryPath);
         setIsInteractionDisabled(true);
         refetchDirectories();
         toggleModal();
@@ -125,25 +127,20 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
           return [newChange, ...changeArray];
         });
       } else {
-        toast.error('New Directory Name Failed to Initialize!');
+        toast.error('Invalid Starting Character!');
+        return;
       }
-    } else {
-      toast.error('Invalid Starting Character!');
+    } catch {
+      toast.error('Failed to Create New Directory');
     }
   }
 
   async function undoChangeLogAction(actionObj: ChangeLogEntry): Promise<void> {
     try {
       if (actionObj.actionType === 'create') {
-        const isUndoSuccessful = await undoDirectoryCreation(actionObj.actionDetails.itemPath);
-
-        if (!isUndoSuccessful) throw new Error('Failed to Undo Directory Creation!');
+        await removeDirectory(actionObj.actionDetails.itemPath);
       } else if (actionObj.actionType === 'sort') {
-        const isUndoSuccessful = await undoFileTransfer(actionObj.actionDetails.itemPath, actionObj.actionDetails.itemName, invoicesDestination);
-
-        if (!isUndoSuccessful) throw new Error('Failed to Undo File Transfer!');
-
-        toast.success('Action Undone!');
+        await transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, invoicesDestination);
       } else {
         throw new Error('Invalid Action Type!');
       }
@@ -164,14 +161,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
         return [newChange, ...currentArray];
       });
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        console.error(error);
-        toast.error('Unknown Error Occurred.');
-      }
+      toast.success('Action Undone!');
+    } catch {
+      toast.error('Undo Failed!');
 
       setChangeLog((changeArray) => {
         const changeId = getUniqueID();

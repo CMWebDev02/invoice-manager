@@ -1,4 +1,4 @@
-import { cn, getDirectories, joinPaths, userHomeDir } from '@renderer/lib/utils';
+import { cn } from '@renderer/lib/utils';
 import { useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
@@ -6,6 +6,7 @@ import useAsyncUpdate from '../hooks/useAsyncUpdate';
 import DirectoryList from './directory-list';
 import { type Dirent } from 'fs';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
+import { getDirectories, joinPaths, userHomeDir } from '@renderer/lib/file-system';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;

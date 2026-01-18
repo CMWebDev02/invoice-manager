@@ -1,9 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
-import { type Dirent } from 'fs';
 import { twMerge } from 'tailwind-merge';
-import type { DirectoryExport, FileExport } from './types';
 
-export const lettersArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+export const subDirectoriesArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -26,148 +24,7 @@ export function getUniqueID(): string {
   return crypto.randomUUID();
 }
 
-export const userHomeDir = window.api.file_system.getHomeDir();
-
 export async function getAllDrives(): Promise<string[]> {
   const allDrives = await window.api.storage.getUserDrives();
   return allDrives;
-}
-
-export async function getDirectories(parentDirectoryPath: string): Promise<Dirent<string>[]> {
-  // Assigns user's home directory in the event an empty string is passed in.
-  const dirPath = parentDirectoryPath === '' ? window.api.file_system.getHomeDir() : parentDirectoryPath;
-  const allDirectories = await window.api.file_system.getDirectories(dirPath);
-  return allDirectories;
-}
-
-export function joinPaths(parentDir: string, childDir: string): string {
-  const newDirPath = window.api.file_system.joinPaths(parentDir, childDir);
-  return newDirPath;
-}
-
-export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
-  try {
-    const isValidPath = await window.api.file_system.validateDirectoryPath(dirPath);
-    return isValidPath;
-  } catch (error: unknown) {
-    console.error(error);
-    return false;
-  }
-}
-
-export async function initializeNewDir(newDir): Promise<boolean> {
-  try {
-    const isCreationSuccessful = await window.api.file_system.initializeNewDir(newDir);
-    if (!isCreationSuccessful) throw new Error('Failed to Initialize New Directory');
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
-export async function getLetterFolderDirectories(directoriesDestination: string): Promise<DirectoryExport[][] | null> {
-  try {
-    const isDirValid = await validateDirectoryPath(directoriesDestination);
-    if (!isDirValid) throw new Error('Directories Destination is invalid!');
-
-    const letterFolderDirectories = await window.api.file_system.getLetterFolderDirectories(directoriesDestination);
-
-    return letterFolderDirectories;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function getCurrentInvoice(invoicesDestination: string): Promise<FileExport | null> {
-  try {
-    const isInvoiceDirValid = await validateDirectoryPath(invoicesDestination);
-    if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!');
-
-    const invoicesDirectoryContent = await window.api.file_system.getFiles(invoicesDestination);
-
-    if (invoicesDirectoryContent.length === 0) throw new Error('Directory Is Empty!');
-
-    const firstFile: Dirent = invoicesDirectoryContent.at(0);
-    const firstFilePath = joinPaths(firstFile.parentPath, firstFile.name);
-
-    const currentInvoiceData = await window.api.file_system.readFile(firstFilePath);
-
-    const firstFileObj: FileExport = {
-      data: currentInvoiceData,
-      name: firstFile.name,
-      path: firstFilePath
-    };
-
-    return firstFileObj;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function transferFile(fileObj: FileExport, dirObj: DirectoryExport, year: string): Promise<string> {
-  try {
-    const isDirPathValid = await validateDirectoryPath(dirObj.dirPath);
-    if (!isDirPathValid) throw new Error('Invalid Directory Path');
-    const isFilePathValid = await validateDirectoryPath(fileObj.path);
-    if (!isFilePathValid) throw new Error('Invalid File Path');
-
-    const newFilePath = joinPaths(dirObj.dirPath, year);
-
-    const isYearFolderValid = await validateDirectoryPath(newFilePath);
-    if (!isYearFolderValid) {
-      const isCreationSuccessful = await initializeNewDir(newFilePath);
-      if (!isCreationSuccessful) throw new Error('Failed to Create Folder for Associated Year');
-    }
-
-    const fileName = await window.api.file_system.validateFileName(fileObj.name, newFilePath);
-
-    const finalFilePath = joinPaths(newFilePath, fileName);
-
-    const isFileTransferred = await window.api.file_system.transferFile(fileObj.path, finalFilePath);
-
-    if (!isFileTransferred) throw new Error('Failed to transfer file');
-    return finalFilePath;
-  } catch (error) {
-    console.error(error);
-    return '';
-  }
-}
-
-export async function undoFileTransfer(currentFilePath: string, fileName: string, newFilePath: string): Promise<boolean> {
-  try {
-    const isDirPathValid = await validateDirectoryPath(currentFilePath);
-    if (!isDirPathValid) throw new Error('File Path is Invalid!');
-    const isFilePathValid = await validateDirectoryPath(newFilePath);
-    if (!isFilePathValid) throw new Error('Transfer Location is Invalid!');
-
-    const transferPath = joinPaths(newFilePath, fileName);
-
-    const newFileName = await window.api.file_system.validateFileName(fileName, transferPath);
-
-    const finalFilePath = joinPaths(newFilePath, newFileName);
-
-    const isFileTransferred = await window.api.file_system.transferFile(currentFilePath, finalFilePath);
-
-    if (!isFileTransferred) throw new Error('Failed to transfer file');
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
-export async function undoDirectoryCreation(dirPath: string): Promise<boolean> {
-  try {
-    const isDeletionSuccessful = await window.api.file_system.removeDirectory(dirPath);
-
-    if (!isDeletionSuccessful) throw new Error('Failed to Remove Directory');
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
 }

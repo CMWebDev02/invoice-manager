@@ -1,5 +1,6 @@
 import { Button } from '@renderer/components/ui/button';
-import { cn, joinPaths } from '@renderer/lib/utils';
+import { joinPaths } from '@renderer/lib/file-system';
+import { cn } from '@renderer/lib/utils';
 import { type Dirent } from 'fs';
 import { useMemo } from 'react';
 

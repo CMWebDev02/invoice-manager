@@ -1,17 +1,14 @@
 import { ElectronAPI } from '@electron-toolkit/preload';
 
 type FileSystemTypes = {
-  getDirectories: (dirPath: string) => Promise<Dirent<string>[]>;
-  getHomeDir: () => string;
+  userHomeDir: string;
   joinPaths: (...dirPaths: string[]) => string;
-  validateDirectoryPath: (dirPath: string) => Promise<boolean>;
-  getLetterFolderDirectories: (dir: string) => Promise<DirectoryExport[][]>;
-  getFiles: (dirPath: string) => Promise<Dirent<string>[]>;
+  getDirectoryContents: (dirPath: string) => Promise<Dirent<string>[]>;
   readFile: (filePath: string) => Promise<string>;
-  validateFileName: (fileName: string, parentPath: string) => Promise<string>;
-  transferFile: (currentPath: string, newPath: string) => Promise<boolean>;
-  initializeNewDir: (dir: string) => Promise<boolean>;
-  removeDirectory: (dirPath: string) => Promise<boolean>;
+  initializeNewDir: (dir: string) => Promise<undefined>;
+  validateDirectoryPath: (dirPath: string) => Promise<boolean>;
+  transferFile: (currentPath: string, newPath: string) => Promise<undefined>;
+  removeDirectory: (dirPath: string) => Promise<undefined>;
 };
 
 type StorageTypes = {
