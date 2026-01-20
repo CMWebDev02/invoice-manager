@@ -78,7 +78,7 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
 
 export async function initializeNewDir(dirPath: string): Promise<undefined> {
   try {
-    file_system.initializeNewDir(dirPath);
+    await file_system.initializeNewDir(dirPath);
   } catch (error) {
     let message = `005 - Initializing Directory at ${dirPath}\n`;
     message += initializeErrorMessage(error);
@@ -96,8 +96,7 @@ export async function validateSubDir(dirPath: string, subDir: string): Promise<s
 
     const isYearFolderValid = await validateDirectoryPath(yearSubDirPath);
     if (!isYearFolderValid) {
-      const isCreationSuccessful = await initializeNewDir(yearSubDirPath);
-      if (!isCreationSuccessful) throw new Error('Failed to Create New Directory', { cause: '005' });
+      await initializeNewDir(yearSubDirPath);
     }
 
     return yearSubDirPath;
@@ -149,6 +148,7 @@ export async function validateFileName(fileName: string, dirPath: string): Promi
 export async function transferFile(currentFileName: string, currentFilePath: string, newDirPath: string): Promise<string> {
   try {
     const isNewDirPathValid = await validateDirectoryPath(newDirPath);
+    console.log(isNewDirPathValid);
     if (!isNewDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
     const isFilePathValid = await validateDirectoryPath(currentFilePath);
     if (!isFilePathValid) throw new Error('Invalid File Path', { cause: '004' });

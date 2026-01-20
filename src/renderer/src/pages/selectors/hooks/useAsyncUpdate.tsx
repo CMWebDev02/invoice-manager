@@ -15,7 +15,7 @@ interface UseAsyncUpdateProps<PropType, ReturnType> {
   asyncFunction: (updateTrigger: PropType) => Promise<ReturnType>;
   updateTrigger: PropType;
 }
-
+// TODO Move this to use the React Query hook already made in the sorting folder
 export default function useAsyncUpdate<PropType, ReturnType>({ asyncFunction, updateTrigger }: UseAsyncUpdateProps<PropType, ReturnType>): UseAsyncUpdate<ReturnType | null> {
   const [updateResults, setUpdateResults] = useState<ReturnType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);

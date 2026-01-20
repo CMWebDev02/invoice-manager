@@ -37,7 +37,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getSubDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
@@ -55,7 +55,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
       if (selectedYear === '') throw new Error('No Year Selected');
 
-      if (invoiceObj === undefined) throw new Error('Invalid Invoice');
+      if (invoiceObj === undefined || invoiceObj === null) throw new Error('Invalid Invoice');
 
       setIsInteractionDisabled(true);
       sortInvoice(selectedDirectory, selectedYear, invoiceObj);
@@ -70,6 +70,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
       const yearDirPath = await validateSubDir(dir.dirPath, year);
+      console.log(yearDirPath);
       const newFolderLocation = await transferFile(invoice.name, invoice.path, yearDirPath);
       if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
@@ -137,6 +138,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function undoChangeLogAction(actionObj: ChangeLogEntry): Promise<void> {
     try {
+      setIsInteractionDisabled(true);
       if (actionObj.actionType === 'create') {
         await removeDirectory(actionObj.actionDetails.itemPath);
       } else if (actionObj.actionType === 'sort') {
@@ -202,11 +204,11 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           <div className="w-1/3 h-full flex flex-col gap-1">
-            {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+            {directoriesArrays !== undefined && directoriesArrays !== null && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
             <ChangeLog triggerChangeLog={toggleDrawer} />
           </div>
 
-          {invoiceObj !== undefined && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
+          {invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
         </div>
       </main>
       <Toaster />
