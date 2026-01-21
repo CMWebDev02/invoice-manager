@@ -1,4 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
+import MenuButton from './menu-button';
 
 interface SortersNavBarProps {
   sorterTitle: string;
@@ -14,7 +15,7 @@ export default function SortersNavBar({ sorterTitle, triggerSorting, triggerModa
       <div className="flex flex-row justify-around w-1/3">
         <Button onClick={triggerSorting}>Sort</Button>
         <Button onClick={triggerModal}>New Folder</Button>
-        <Button>Menu</Button>
+        <MenuButton />
       </div>
     </nav>
   );
