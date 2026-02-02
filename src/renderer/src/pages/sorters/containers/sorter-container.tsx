@@ -9,7 +9,7 @@ import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
 import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
-import { FileSystem } from '@renderer/lib/file-system';
+import { FileSystem, SorterActions } from '@renderer/lib/file-system';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -36,8 +36,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: FileSystem.getSubDirectories.bind(FileSystem), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: FileSystem.getCurrentInvoice.bind(FileSystem), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
+  const sorterActions = new SorterActions(directoriesDestination, invoicesDestination);
+
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {

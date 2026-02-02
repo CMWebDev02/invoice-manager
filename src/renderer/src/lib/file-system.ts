@@ -182,17 +182,32 @@ export class FileSystem {
     }
   }
 
-  static async getCurrentInvoice(invoicesDestination: string): Promise<FileExport | null> {
+  static getUserHomeDir(): string {
+    return this._userHomeDir;
+  }
+}
+
+// move all sorter specific actions to this class and have use the FileSystem class
+export class SorterActions {
+  _directoriesDestination: string;
+  _invoicesDestination: string;
+
+  constructor(directoriesDestination: string, invoicesDestination: string) {
+    this._directoriesDestination = directoriesDestination;
+    this._invoicesDestination = invoicesDestination;
+  }
+
+  async getCurrentInvoice(): Promise<FileExport | null> {
     try {
-      const isInvoiceDirValid = await this.validateDirectoryPath(invoicesDestination);
+      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(this._invoicesDestination);
       if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
 
-      const invoicesDirectoryContent = await this.getFiles(invoicesDestination);
+      const invoicesDirectoryContent = await FileSystem.getFiles(this._invoicesDestination);
       const firstFile = invoicesDirectoryContent.at(0);
 
       if (firstFile === undefined) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
 
-      const firstFilePath = this.joinPaths(firstFile.parentPath, firstFile.name);
+      const firstFilePath = FileSystem.joinPaths(firstFile.parentPath, firstFile.name);
       const currentInvoiceData = await file_system.readFile(firstFilePath);
 
       const firstFileObj: FileExport = {
@@ -206,7 +221,7 @@ export class FileSystem {
       if (error instanceof Error && error.cause === 'EMPTY') {
         return null;
       } else {
-        let message = `010 - Getting Current Invoice at ${invoicesDestination}\n`;
+        let message = `010 - Getting Current Invoice at ${this._invoicesDestination}\n`;
         message += initializeErrorMessage(error);
         // TODO Have these write to a file
         console.error(message);
@@ -215,25 +230,25 @@ export class FileSystem {
     }
   }
 
-  static async getSubDirectories(directoriesDestination: string): Promise<DirectoryExport[][]> {
+  async getSubDirectories(): Promise<DirectoryExport[][]> {
     try {
-      const isDirValid = await this.validateDirectoryPath(directoriesDestination);
+      const isDirValid = await FileSystem.validateDirectoryPath(this._directoriesDestination);
       if (!isDirValid) throw new Error('Directories Destination is invalid!', { cause: '004' });
       const subDirPaths: string[] = [];
       const subFoldersDirectoriesArray: DirectoryExport[][] = [];
 
       // Validates the various sub directories before attempting to retrieve their contents
       for (const subDir of subDirectoriesArray) {
-        const subDirPath = await this.validateSubDir(directoriesDestination, subDir);
+        const subDirPath = await FileSystem.validateSubDir(this._directoriesDestination, subDir);
         subDirPaths.push(subDirPath);
       }
 
       for (const subDirPath of subDirPaths) {
         // Gathers all directories of the current sub directory
-        const allDirectories = await this.getDirectories(subDirPath);
+        const allDirectories = await FileSystem.getDirectories(subDirPath);
         // Iterates through all directories found and maps them to an object that holds their path and name.
         const SubFolderObjArray = allDirectories.map(({ name, parentPath }) => {
-          const dirPath = this.joinPaths(parentPath, name);
+          const dirPath = FileSystem.joinPaths(parentPath, name);
           return { name, dirPath };
         });
         subFoldersDirectoriesArray.push(SubFolderObjArray);
@@ -241,20 +256,11 @@ export class FileSystem {
 
       return subFoldersDirectoriesArray;
     } catch (error) {
-      let message = `011 - Getting Sub Folders at ${directoriesDestination}\n`;
+      let message = `011 - Getting Sub Folders at ${this._directoriesDestination}\n`;
       message += initializeErrorMessage(error);
       // TODO Have these write to a file
       console.error(message);
       throw new Error(`An Issue Occurred Retrieving Sub Directories`);
     }
   }
-
-  static getUserHomeDir(): string {
-    return this._userHomeDir;
-  }
-}
-
-// move all sorter specific actions to this class and have use the FileSystem class
-export class SorterActions {
-  
 }

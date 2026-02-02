@@ -1,7 +1,6 @@
 import { searchSelector } from '@renderer/lib/store';
 import SorterContainer from './containers/sorter-container';
 import { useParams } from 'react-router';
-import { FileSystem } from '@renderer/lib/file-system';
 
 // TODO Review all functions and revalidate their error checking and return values
 
@@ -14,8 +13,6 @@ export default function SortersPage(): React.JSX.Element {
 
     // Have this check that a valid directory was pulled after searching
     if (selectorTitle !== '' && directoriesDestination !== '' && invoicesDestination !== '' && invoicesDestination !== undefined) {
-      const fileSystem = new FileSystem(directoriesDestination, invoicesDestination);
-
       return <SorterContainer sorterTitle={selectorTitle} directoriesDestination={directoriesDestination} invoicesDestination={invoicesDestination} />;
     }
   }
