@@ -1,5 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
-import { joinPaths } from '@renderer/lib/file-system';
+import { FileSystem } from '@renderer/lib/file-system';
 import { cn } from '@renderer/lib/utils';
 import { type Dirent } from 'fs';
 import { useMemo } from 'react';
@@ -15,6 +15,7 @@ interface DirectoryListProps {
 }
 
 export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
+  const fileSystem = new FileSystem();
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -30,7 +31,7 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
     );
 
   const values = directoriesArray.map((dir: Dirent) => {
-    const childDirPath = joinPaths(dir.parentPath, dir.name);
+    const childDirPath = fileSystem.joinPaths(dir.parentPath, dir.name);
 
     return (
       <div key={dir.name} className="flex w-full bg-primary">

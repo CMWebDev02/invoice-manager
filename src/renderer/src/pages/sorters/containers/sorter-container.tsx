@@ -9,7 +9,7 @@ import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
 import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
-import { getCurrentInvoice, getSubDirectories, initializeNewDir, joinPaths, removeDirectory, transferFile, validateSubDir } from '@renderer/lib/file-system';
+import { FileSystem } from '@renderer/lib/file-system';
 
 interface SortersContainerProps {
   sorterTitle: string;
@@ -36,8 +36,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: getSubDirectories, asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: getCurrentInvoice, asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
+  const fileSystem = new FileSystem();
+
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: fileSystem.getSubDirectories.bind(fileSystem), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: fileSystem.getCurrentInvoice.bind(fileSystem), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
@@ -69,9 +71,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
-      const yearDirPath = await validateSubDir(dir.dirPath, year);
+      const yearDirPath = await fileSystem.validateSubDir(dir.dirPath, year);
       console.log(yearDirPath);
-      const newFolderLocation = await transferFile(invoice.name, invoice.path, yearDirPath);
+      const newFolderLocation = await fileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
       if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
       setChangeLog((changeArray) => {
@@ -107,9 +109,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       const newDirectoryLetterFolder = newDirectoryName[0];
 
       if (subDirectoriesArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
-        const directoryLetterFolderPath = joinPaths(directoriesDestination, newDirectoryLetterFolder);
-        const newDirectoryPath = joinPaths(directoryLetterFolderPath, newDirectoryName);
-        await initializeNewDir(newDirectoryPath);
+        const directoryLetterFolderPath = fileSystem.joinPaths(directoriesDestination, newDirectoryLetterFolder);
+        const newDirectoryPath = fileSystem.joinPaths(directoryLetterFolderPath, newDirectoryName);
+        await fileSystem.initializeNewDir(newDirectoryPath);
         setIsInteractionDisabled(true);
         refetchDirectories();
         toggleModal();
@@ -140,9 +142,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     try {
       setIsInteractionDisabled(true);
       if (actionObj.actionType === 'create') {
-        await removeDirectory(actionObj.actionDetails.itemPath);
+        await fileSystem.removeDirectory(actionObj.actionDetails.itemPath);
       } else if (actionObj.actionType === 'sort') {
-        await transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, invoicesDestination);
+        await fileSystem.transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, invoicesDestination);
       } else {
         throw new Error('Invalid Action Type!');
       }

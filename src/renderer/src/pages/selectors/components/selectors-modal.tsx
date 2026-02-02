@@ -14,7 +14,7 @@ import { searchSelector, storeSelector } from '@renderer/lib/store';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
-import { validateDirectoryPath } from '@renderer/lib/file-system';
+import { FileSystem } from '@renderer/lib/file-system';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -24,6 +24,7 @@ interface SortersModalProps {
 }
 
 export default function SelectorsModal({ drivesList, toggleModal, existingSelectorId, selectorType }: SortersModalProps): React.JSX.Element {
+  const fileSystem = new FileSystem();
   const [selectorId, setSelectorId] = useState<string>('');
   const [selectorTitle, setSelectorTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
@@ -92,7 +93,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
 
   async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
     if (dirPath !== '') {
-      const isValidPath = await validateDirectoryPath(dirPath);
+      const isValidPath = await fileSystem.validateDirectoryPath(dirPath);
       if (isValidPath && pathDestination === 'invoices') {
         setInvoicesDestination(dirPath);
       } else if (isValidPath && pathDestination === 'directories') {

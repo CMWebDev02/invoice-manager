@@ -6,7 +6,7 @@ import useAsyncUpdate from '../hooks/useAsyncUpdate';
 import DirectoryList from './directory-list';
 import { type Dirent } from 'fs';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
-import { getDirectories, joinPaths, userHomeDir } from '@renderer/lib/file-system';
+import { FileSystem } from '@renderer/lib/file-system';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -15,10 +15,11 @@ interface DirectorySelectorProps {
 }
 
 export default function DirectorySelector({ updateSavedPath, drivesList, className }: DirectorySelectorProps): React.JSX.Element {
-  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(userHomeDir);
+  const fileSystem = new FileSystem();
+  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(fileSystem.getUserHomeDir());
   const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string>('');
 
-  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: getDirectories, updateTrigger: currentDirectoryPath });
+  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: fileSystem.getDirectories, updateTrigger: currentDirectoryPath });
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);
@@ -27,7 +28,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
   // Traverses to the parent path of the current directory using relative paths.
   function reversePathTraversal(): void {
-    const previousRelativePath = joinPaths(currentDirectoryPath, '..');
+    const previousRelativePath = fileSystem.joinPaths(currentDirectoryPath, '..');
     updateCurrentDirectoryPath(previousRelativePath);
   }
 
