@@ -15,7 +15,6 @@ interface DirectoryListProps {
 }
 
 export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
-  const fileSystem = new FileSystem();
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -31,7 +30,7 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
     );
 
   const values = directoriesArray.map((dir: Dirent) => {
-    const childDirPath = fileSystem.joinPaths(dir.parentPath, dir.name);
+    const childDirPath = FileSystem.joinPaths(dir.parentPath, dir.name);
 
     return (
       <div key={dir.name} className="flex w-full bg-primary">

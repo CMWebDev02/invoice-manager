@@ -15,11 +15,10 @@ interface DirectorySelectorProps {
 }
 
 export default function DirectorySelector({ updateSavedPath, drivesList, className }: DirectorySelectorProps): React.JSX.Element {
-  const fileSystem = new FileSystem();
-  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(fileSystem.getUserHomeDir());
+  const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(FileSystem.getUserHomeDir());
   const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string>('');
 
-  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: fileSystem.getDirectories, updateTrigger: currentDirectoryPath });
+  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: FileSystem.getDirectories.bind(FileSystem), updateTrigger: currentDirectoryPath });
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);
@@ -28,7 +27,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
   // Traverses to the parent path of the current directory using relative paths.
   function reversePathTraversal(): void {
-    const previousRelativePath = fileSystem.joinPaths(currentDirectoryPath, '..');
+    const previousRelativePath = FileSystem.joinPaths(currentDirectoryPath, '..');
     updateCurrentDirectoryPath(previousRelativePath);
   }
 

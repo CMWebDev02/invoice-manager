@@ -12,14 +12,11 @@ function initializeErrorMessage(error: Error | unknown): string {
   }
 }
 
+// Make this a static class
 export class FileSystem {
-  _userHomeDir: string;
+  static _userHomeDir: string = file_system.userHomeDir;
 
-  constructor() {
-    this._userHomeDir = file_system.userHomeDir;
-  }
-
-  async getDirectories(dirPath: string): Promise<Dirent<string>[]> {
+  static async getDirectories(dirPath: string): Promise<Dirent<string>[]> {
     // TODO: Move this to the component for the directory selector
     //    Assigns user's home directory in the event an empty string is passed in.
     //   const dirPath = parentDirectoryPath === '' ? file_system.getHomeDir() : parentDirectoryPath;
@@ -38,7 +35,7 @@ export class FileSystem {
     }
   }
 
-  async getFiles(dirPath: string): Promise<Dirent<string>[]> {
+  static async getFiles(dirPath: string): Promise<Dirent<string>[]> {
     try {
       const allContents = await file_system.getDirectoryContents(dirPath);
 
@@ -55,7 +52,7 @@ export class FileSystem {
     }
   }
 
-  joinPaths(parentDir: string, childDir: string): string {
+  static joinPaths(parentDir: string, childDir: string): string {
     try {
       const newDirPath = file_system.joinPaths(parentDir, childDir);
       return newDirPath;
@@ -68,7 +65,7 @@ export class FileSystem {
     }
   }
 
-  async validateDirectoryPath(dirPath: string): Promise<boolean> {
+  static async validateDirectoryPath(dirPath: string): Promise<boolean> {
     try {
       const isValidPath = file_system.validateDirectoryPath(dirPath);
       return isValidPath;
@@ -81,7 +78,7 @@ export class FileSystem {
     }
   }
 
-  async initializeNewDir(dirPath: string): Promise<undefined> {
+  static async initializeNewDir(dirPath: string): Promise<undefined> {
     try {
       await file_system.initializeNewDir(dirPath);
     } catch (error) {
@@ -93,7 +90,7 @@ export class FileSystem {
     }
   }
 
-  async validateSubDir(dirPath: string, subDir: string): Promise<string> {
+  static async validateSubDir(dirPath: string, subDir: string): Promise<string> {
     try {
       const isDirPathValid = await this.validateDirectoryPath(dirPath);
       if (!isDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
@@ -114,7 +111,7 @@ export class FileSystem {
     }
   }
 
-  async validateFileName(fileName: string, dirPath: string): Promise<string> {
+  static async validateFileName(fileName: string, dirPath: string): Promise<string> {
     try {
       let currentFileName = fileName;
       let isNameTaken = false;
@@ -150,7 +147,7 @@ export class FileSystem {
     }
   }
 
-  async transferFile(currentFileName: string, currentFilePath: string, newDirPath: string): Promise<string> {
+  static async transferFile(currentFileName: string, currentFilePath: string, newDirPath: string): Promise<string> {
     try {
       const isNewDirPathValid = await this.validateDirectoryPath(newDirPath);
       console.log(isNewDirPathValid);
@@ -185,7 +182,7 @@ export class FileSystem {
     }
   }
 
-  async getCurrentInvoice(invoicesDestination: string): Promise<FileExport | null> {
+  static async getCurrentInvoice(invoicesDestination: string): Promise<FileExport | null> {
     try {
       const isInvoiceDirValid = await this.validateDirectoryPath(invoicesDestination);
       if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
@@ -218,7 +215,7 @@ export class FileSystem {
     }
   }
 
-  async getSubDirectories(directoriesDestination: string): Promise<DirectoryExport[][]> {
+  static async getSubDirectories(directoriesDestination: string): Promise<DirectoryExport[][]> {
     try {
       const isDirValid = await this.validateDirectoryPath(directoriesDestination);
       if (!isDirValid) throw new Error('Directories Destination is invalid!', { cause: '004' });
@@ -252,7 +249,12 @@ export class FileSystem {
     }
   }
 
-  getUserHomeDir(): string {
+  static getUserHomeDir(): string {
     return this._userHomeDir;
   }
+}
+
+// move all sorter specific actions to this class and have use the FileSystem class
+export class SorterActions {
+  
 }

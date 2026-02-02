@@ -36,10 +36,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const fileSystem = new FileSystem();
-
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: fileSystem.getSubDirectories.bind(fileSystem), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: fileSystem.getCurrentInvoice.bind(fileSystem), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: FileSystem.getSubDirectories.bind(FileSystem), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: FileSystem.getCurrentInvoice.bind(FileSystem), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
@@ -72,7 +70,6 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
       const yearDirPath = await fileSystem.validateSubDir(dir.dirPath, year);
-      console.log(yearDirPath);
       const newFolderLocation = await fileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
       if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
