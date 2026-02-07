@@ -34,8 +34,8 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
@@ -141,7 +141,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       if (actionObj.actionType === 'create') {
         await FileSystem.removeDirectory(actionObj.actionDetails.itemPath);
       } else if (actionObj.actionType === 'sort') {
-        await FileSystem.transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, sorterActions._invoicesDestination);
+        await FileSystem.transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, sorterActions.invoicesDestination);
       } else {
         throw new Error('Invalid Action Type!');
       }
