@@ -12,12 +12,10 @@ import ChangeLogDrawer from '../components/changelog-drawer';
 import { FileSystem, SorterActions } from '@renderer/lib/file-system';
 
 interface SortersContainerProps {
-  sorterTitle: string;
-  directoriesDestination: string;
-  invoicesDestination: string;
+  sorterActions: SorterActions;
 }
 
-export default function SorterContainer({ sorterTitle, directoriesDestination, invoicesDestination }: SortersContainerProps): React.JSX.Element {
+export default function SorterContainer({ sorterActions }: SortersContainerProps): React.JSX.Element {
   const [isInteractionDisabled, setIsInteractionDisabled] = useState<boolean>(true);
   const [selectedDirectory, setSelectedDirectory] = useState<DirectoryExport | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>('');
@@ -36,10 +34,8 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
 
-  const sorterActions = new SorterActions(directoriesDestination, invoicesDestination);
-
-  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionProp: directoriesDestination, asyncFunctionKey: 'directories' });
-  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionProp: invoicesDestination, asyncFunctionKey: 'invoices' });
+  const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<string, DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionKey: 'directories' });
+  const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<string, FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
     if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
@@ -71,8 +67,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
-      const yearDirPath = await fileSystem.validateSubDir(dir.dirPath, year);
-      const newFolderLocation = await fileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
+      const yearDirPath = await FileSystem.validateSubDir(dir.dirPath, year);
+      const newFolderLocation = await FileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
+      // TODO: Check if this if is necessary
       if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
       refetchInvoice();
       setChangeLog((changeArray) => {
@@ -108,9 +105,10 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
       const newDirectoryLetterFolder = newDirectoryName[0];
 
       if (subDirectoriesArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
-        const directoryLetterFolderPath = fileSystem.joinPaths(directoriesDestination, newDirectoryLetterFolder);
-        const newDirectoryPath = fileSystem.joinPaths(directoryLetterFolderPath, newDirectoryName);
-        await fileSystem.initializeNewDir(newDirectoryPath);
+        // TODO: Fix this and have it not call the private val
+        const directoryLetterFolderPath = FileSystem.joinPaths(sorterActions.directoryDestination, newDirectoryLetterFolder);
+        const newDirectoryPath = FileSystem.joinPaths(directoryLetterFolderPath, newDirectoryName);
+        await FileSystem.initializeNewDir(newDirectoryPath);
         setIsInteractionDisabled(true);
         refetchDirectories();
         toggleModal();
@@ -141,9 +139,9 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
     try {
       setIsInteractionDisabled(true);
       if (actionObj.actionType === 'create') {
-        await fileSystem.removeDirectory(actionObj.actionDetails.itemPath);
+        await FileSystem.removeDirectory(actionObj.actionDetails.itemPath);
       } else if (actionObj.actionType === 'sort') {
-        await fileSystem.transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, invoicesDestination);
+        await FileSystem.transferFile(actionObj.actionDetails.itemName, actionObj.actionDetails.itemPath, sorterActions._invoicesDestination);
       } else {
         throw new Error('Invalid Action Type!');
       }
@@ -201,7 +199,7 @@ export default function SorterContainer({ sorterTitle, directoriesDestination, i
 
   return (
     <>
-      <SortersNavBar sorterTitle={sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={toggleModal} />
+      <SortersNavBar sorterTitle={sorterActions.sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={toggleModal} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           <div className="w-1/3 h-full flex flex-col gap-1">

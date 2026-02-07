@@ -12,7 +12,6 @@ function initializeErrorMessage(error: Error | unknown): string {
   }
 }
 
-// Make this a static class
 export class FileSystem {
   static _userHomeDir: string = file_system.userHomeDir;
 
@@ -150,7 +149,6 @@ export class FileSystem {
   static async transferFile(currentFileName: string, currentFilePath: string, newDirPath: string): Promise<string> {
     try {
       const isNewDirPathValid = await this.validateDirectoryPath(newDirPath);
-      console.log(isNewDirPathValid);
       if (!isNewDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
       const isFilePathValid = await this.validateDirectoryPath(currentFilePath);
       if (!isFilePathValid) throw new Error('Invalid File Path', { cause: '004' });
@@ -170,7 +168,7 @@ export class FileSystem {
     }
   }
 
-  async removeDirectory(dirPath: string): Promise<undefined> {
+  static async removeDirectory(dirPath: string): Promise<undefined> {
     try {
       await window.api.file_system.removeDirectory(dirPath);
     } catch (error) {
@@ -187,22 +185,43 @@ export class FileSystem {
   }
 }
 
-// move all sorter specific actions to this class and have use the FileSystem class
 export class SorterActions {
-  _directoriesDestination: string;
-  _invoicesDestination: string;
+  directoryDestination: string;
+  invoicesDestination: string;
+  sorterTitle: string;
+  _areDestinationsValid: boolean;
 
-  constructor(directoriesDestination: string, invoicesDestination: string) {
-    this._directoriesDestination = directoriesDestination;
-    this._invoicesDestination = invoicesDestination;
+  constructor(directoriesDestination: string, invoicesDestination: string, sorterTitle: string) {
+    this.directoryDestination = directoriesDestination;
+    this.invoicesDestination = invoicesDestination;
+    this.sorterTitle = sorterTitle;
+    this._areDestinationsValid = false;
+  }
+
+  async validateDirectories(): Promise<void> {
+    try {
+      const isDirectoriesDestinationValid = await FileSystem.validateDirectoryPath(this.directoryDestination);
+      if (!isDirectoriesDestinationValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
+
+      const isInvoiceDestinationValid = await FileSystem.validateDirectoryPath(this.invoicesDestination);
+      if (!isInvoiceDestinationValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
+    } catch (error) {
+      let message = `013 - Validating Destinations | Directories: ${this.directoryDestination} | Invoices: ${this.invoicesDestination}\n`;
+      message += initializeErrorMessage(error);
+      // TODO Have these write to a file
+      console.error(message);
+      throw new Error(`An Issue Occurred Validating Destinations`);
+    }
   }
 
   async getCurrentInvoice(): Promise<FileExport | null> {
     try {
-      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(this._invoicesDestination);
+      if (this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
+
+      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(this.invoicesDestination);
       if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
 
-      const invoicesDirectoryContent = await FileSystem.getFiles(this._invoicesDestination);
+      const invoicesDirectoryContent = await FileSystem.getFiles(this.invoicesDestination);
       const firstFile = invoicesDirectoryContent.at(0);
 
       if (firstFile === undefined) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
@@ -221,7 +240,7 @@ export class SorterActions {
       if (error instanceof Error && error.cause === 'EMPTY') {
         return null;
       } else {
-        let message = `010 - Getting Current Invoice at ${this._invoicesDestination}\n`;
+        let message = `010 - Getting Current Invoice at ${this.invoicesDestination}\n`;
         message += initializeErrorMessage(error);
         // TODO Have these write to a file
         console.error(message);
@@ -232,14 +251,16 @@ export class SorterActions {
 
   async getSubDirectories(): Promise<DirectoryExport[][]> {
     try {
-      const isDirValid = await FileSystem.validateDirectoryPath(this._directoriesDestination);
+      if (this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
+
+      const isDirValid = await FileSystem.validateDirectoryPath(this.directoryDestination);
       if (!isDirValid) throw new Error('Directories Destination is invalid!', { cause: '004' });
       const subDirPaths: string[] = [];
       const subFoldersDirectoriesArray: DirectoryExport[][] = [];
 
       // Validates the various sub directories before attempting to retrieve their contents
       for (const subDir of subDirectoriesArray) {
-        const subDirPath = await FileSystem.validateSubDir(this._directoriesDestination, subDir);
+        const subDirPath = await FileSystem.validateSubDir(this.directoryDestination, subDir);
         subDirPaths.push(subDirPath);
       }
 
@@ -256,7 +277,7 @@ export class SorterActions {
 
       return subFoldersDirectoriesArray;
     } catch (error) {
-      let message = `011 - Getting Sub Folders at ${this._directoriesDestination}\n`;
+      let message = `011 - Getting Sub Folders at ${this.directoryDestination}\n`;
       message += initializeErrorMessage(error);
       // TODO Have these write to a file
       console.error(message);
