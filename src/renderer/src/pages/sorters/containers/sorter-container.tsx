@@ -177,6 +177,12 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       });
 
       toast.error('Undo Failed!');
+      // In the instance where no changes are made to the directories or current invoice,
+      // the interaction needs to be reenabled
+      setIsInteractionDisabled(false);
+    } finally {
+      refetchInvoice();
+      refetchDirectories();
     }
   }
 

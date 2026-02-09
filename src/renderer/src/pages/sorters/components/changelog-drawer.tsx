@@ -38,7 +38,7 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
         return (
           <>
             <h1>Undo {change.successful === true ? 'Successful' : 'Failed'}:</h1>
-            <p>Failed to remove directory {change.actionDetails.itemPath}!</p>
+            <p>Remove directory {change.actionDetails.itemPath}!</p>
           </>
         );
         break;
@@ -46,9 +46,9 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
       case 'undoSort': {
         return (
           <>
-            <h1>Undo {change.successful === true ? 'Successful' : 'Failed'}</h1>
+            <h1>Undo {change.successful === true ? 'Successful' : 'Failed'}:</h1>
             <p>
-              Failed to remove file {change.actionDetails.itemName} from {change.actionDetails.itemPath}!
+              Remove file {change.actionDetails.itemName} from {change.actionDetails.itemPath}!
             </p>
           </>
         );
