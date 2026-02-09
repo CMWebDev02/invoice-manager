@@ -24,7 +24,6 @@ interface SortersModalProps {
 }
 
 export default function SelectorsModal({ drivesList, toggleModal, existingSelectorId, selectorType }: SortersModalProps): React.JSX.Element {
-  const fileSystem = new FileSystem();
   const [selectorId, setSelectorId] = useState<string>('');
   const [selectorTitle, setSelectorTitle] = useState<string>('');
   const [invoicesDestination, setInvoicesDestination] = useState<string>('');
@@ -93,7 +92,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
 
   async function updateCurrentSavePath(dirPath: string, pathDestination: 'invoices' | 'directories'): Promise<void> {
     if (dirPath !== '') {
-      const isValidPath = await fileSystem.validateDirectoryPath(dirPath);
+      const isValidPath = await FileSystem.validateDirectoryPath(dirPath);
       if (isValidPath && pathDestination === 'invoices') {
         setInvoicesDestination(dirPath);
       } else if (isValidPath && pathDestination === 'directories') {

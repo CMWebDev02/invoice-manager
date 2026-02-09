@@ -18,7 +18,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
   const [currentDirectoryPath, setCurrentDirectoryPath] = useState<string>(FileSystem.getUserHomeDir());
   const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string>('');
 
-  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: FileSystem.getDirectories.bind(FileSystem), updateTrigger: currentDirectoryPath });
+  const { updateResults: directoriesArray, isLoading, error: directoriesError } = useAsyncUpdate<string, Dirent[]>({ asyncFunction: FileSystem.getDirectories, updateTrigger: currentDirectoryPath });
 
   function updateCurrentDirectoryPath(dirPath: string): void {
     setCurrentDirectoryPath(dirPath);
