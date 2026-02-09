@@ -68,9 +68,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   async function sortInvoice(dir: DirectoryExport, year: string, invoice: FileExport): Promise<void> {
     try {
       const yearDirPath = await FileSystem.validateSubDir(dir.dirPath, year);
-      const newFolderLocation = await FileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
-      // TODO: Check if this if is necessary
-      if (newFolderLocation === '') throw new Error('Invoice Failed to Transfer');
+      const newInvoiceLocation = await FileSystem.transferFile(invoice.name, invoice.path, yearDirPath);
       refetchInvoice();
       setChangeLog((changeArray) => {
         const changeId = getUniqueID();
@@ -80,7 +78,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
           actionType: 'sort',
           actionDetails: {
             itemName: invoice.name,
-            itemPath: newFolderLocation
+            itemPath: newInvoiceLocation
           },
           successful: true
         };
@@ -98,14 +96,13 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   async function createNewDirectory(): Promise<void> {
     try {
       if (newDirectoryName === '') {
-        toast.error('New Directory Name Is Invalid!');
+        toast.error('Name Cannot Be Blank!');
         return;
       }
 
       const newDirectoryLetterFolder = newDirectoryName[0];
 
       if (subDirectoriesArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
-        // TODO: Fix this and have it not call the private val
         const directoryLetterFolderPath = FileSystem.joinPaths(sorterActions.directoryDestination, newDirectoryLetterFolder);
         const newDirectoryPath = FileSystem.joinPaths(directoryLetterFolderPath, newDirectoryName);
         await FileSystem.initializeNewDir(newDirectoryPath);
@@ -164,8 +161,6 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       });
       toast.success('Action Undone!');
     } catch {
-      toast.error('Undo Failed!');
-
       setChangeLog((changeArray) => {
         const changeId = getUniqueID();
         const newChange: ChangeLogEntry = {
@@ -180,6 +175,8 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
 
         return [newChange, ...changeArray];
       });
+
+      toast.error('Undo Failed!');
     }
   }
 

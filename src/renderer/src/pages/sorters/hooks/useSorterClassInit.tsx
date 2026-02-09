@@ -14,14 +14,14 @@ interface UseSorterClassInitProps {
 }
 
 export default function UseSorterClassInit({ sorterId, asyncFunctionKey }: UseSorterClassInitProps): UseSorterClassInit {
-  const { data, error, isLoading, refetch } = useQuery({ queryKey: [asyncFunctionKey], queryFn: getData, retry: false });
+  const { data, error, isLoading } = useQuery({ queryKey: [asyncFunctionKey], queryFn: initObj, retry: false });
 
-  async function getData(): Promise<SorterActions | null> {
+  async function initObj(): Promise<SorterActions> {
     const selectorType = 'sorters';
 
-    if (sorterId === undefined) return null;
+    if (sorterId === undefined) throw new Error('Invalid Sorter Id', { cause: 'sorterId' });
     const { selectorTitle, directoriesDestination, invoicesDestination } = searchSelector(selectorType, sorterId);
-    if (invoicesDestination === undefined) return null;
+    if (invoicesDestination === undefined) throw new Error('Invalid Invoices Destination', { cause: 'invoicesDestination' });
     const sorterObj = new SorterActions(directoriesDestination, invoicesDestination, selectorTitle);
     await sorterObj.validateDirectories();
     return sorterObj;

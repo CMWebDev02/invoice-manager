@@ -153,9 +153,9 @@ export class FileSystem {
       const isFilePathValid = await this.validateDirectoryPath(currentFilePath);
       if (!isFilePathValid) throw new Error('Invalid File Path', { cause: '004' });
 
-      const fileName = await this.validateFileName(currentFileName, newDirPath);
+      const finalFileName = await this.validateFileName(currentFileName, newDirPath);
 
-      const finalFilePath = this.joinPaths(newDirPath, fileName);
+      const finalFilePath = this.joinPaths(newDirPath, finalFileName);
 
       await file_system.transferFile(currentFilePath, finalFilePath);
       return finalFilePath;
