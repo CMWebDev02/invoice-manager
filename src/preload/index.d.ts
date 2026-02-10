@@ -5,10 +5,12 @@ type FileSystemTypes = {
   joinPaths: (...dirPaths: string[]) => string;
   getDirectoryContents: (dirPath: string) => Promise<Dirent<string>[]>;
   readFile: (filePath: string) => Promise<string>;
-  initializeNewDir: (dir: string) => Promise<undefined>;
+  initializeNewDir: (dir: string) => Promise<void>;
   validateDirectoryPath: (dirPath: string) => Promise<boolean>;
-  transferFile: (currentPath: string, newPath: string) => Promise<undefined>;
-  removeDirectory: (dirPath: string) => Promise<undefined>;
+  transferFile: (currentPath: string, newPath: string) => Promise<void>;
+  removeDirectory: (dirPath: string) => Promise<void>;
+  initializeNewFile: (filePath: string) => Promise<void>;
+  appendContentToFile: (filePath: string, newContent: string) => Promise<void>;
 };
 
 type StorageTypes = {
