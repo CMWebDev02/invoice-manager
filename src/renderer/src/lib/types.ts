@@ -1,3 +1,5 @@
+import type { Dirent } from 'fs';
+
 export type SelectorDetails = {
   selectorId: string;
   selectorTitle: string;
@@ -24,4 +26,17 @@ export type ChangeLogEntry = {
     itemPath: string;
   };
   successful: boolean;
+};
+
+export type FileSystemTypes = {
+  userHomeDir: string;
+  joinPaths: (...dirPaths: string[]) => string;
+  getDirectoryContents: (dirPath: string) => Promise<Dirent<string>[]>;
+  readFile: (filePath: string) => Promise<string>;
+  initializeNewDir: (dir: string) => Promise<void>;
+  validateDirectoryPath: (dirPath: string) => Promise<boolean>;
+  transferFile: (currentPath: string, newPath: string) => Promise<void>;
+  removeDirectory: (dirPath: string) => Promise<void>;
+  initializeNewFile: (filePath: string) => Promise<void>;
+  appendContentToFile: (filePath: string, newContent: string) => Promise<void>;
 };

@@ -1,7 +1,7 @@
 import type { Dirent } from 'fs';
 import { DirectoryExport, FileExport } from './types';
 import { subDirectoriesArray } from './utils';
-import { initializeErrorMessage } from './error-handling';
+import { ErrorHandling } from './error-handling';
 
 const file_system = window.api.file_system;
 
@@ -19,10 +19,8 @@ export class FileSystem {
       const allDirectories = allContents.filter((item) => item.isDirectory() && item.name[0] !== '.' && item.name.toLocaleLowerCase() !== `$RECYCLE.BIN`.toLocaleLowerCase() && item.name.toLocaleLowerCase() !== 'System Volume Information'.toLocaleLowerCase());
       return allDirectories;
     } catch (error) {
-      let message = `001 - Fetching Directories From ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `001 - Fetching Directories From ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Fetching Directories`);
     }
   }
@@ -36,10 +34,8 @@ export class FileSystem {
       const filteredFolder = allContents.filter((item) => item.isFile());
       return filteredFolder;
     } catch (error) {
-      let message = `002 - Fetching Files From ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `002 - Fetching Files From ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Fetching Files`);
     }
   }
@@ -53,9 +49,7 @@ export class FileSystem {
       for (const path of dirPaths) {
         message += ` | ${path} `;
       }
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Joining Paths`);
     }
   }
@@ -65,10 +59,8 @@ export class FileSystem {
       const isValidPath = file_system.validateDirectoryPath(dirPath);
       return isValidPath;
     } catch (error) {
-      let message = `004 - Validating Path ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `004 - Validating Path ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Validating Paths`);
     }
   }
@@ -77,10 +69,8 @@ export class FileSystem {
     try {
       await file_system.initializeNewDir(dirPath);
     } catch (error) {
-      let message = `005 - Initializing Directory at ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `005 - Initializing Directory at ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Creating New Directory`);
     }
   }
@@ -98,10 +88,8 @@ export class FileSystem {
 
       return yearSubDirPath;
     } catch (error) {
-      let message = `006 - Validating Sub Folder ${subDir} at path ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `006 - Validating Sub Folder ${subDir} at path ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Validating Sub Directory`);
     }
   }
@@ -134,10 +122,8 @@ export class FileSystem {
 
       return currentFileName;
     } catch (error) {
-      let message = `007 - Validating File Name ${fileName} at path ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `007 - Validating File Name ${fileName} at path ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Validating File Name`);
     }
   }
@@ -156,10 +142,8 @@ export class FileSystem {
       await file_system.transferFile(currentFilePath, finalFilePath);
       return finalFilePath;
     } catch (error) {
-      let message = `008 - Transferring File from ${currentFilePath} to ${newDirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `008 - Transferring File from ${currentFilePath} to ${newDirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Transferring File`);
     }
   }
@@ -168,10 +152,8 @@ export class FileSystem {
     try {
       await window.api.file_system.removeDirectory(dirPath);
     } catch (error) {
-      let message = `009 - Removing Directory ${dirPath}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `009 - Removing Directory ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Removing A Directory`);
     }
   }
@@ -202,10 +184,8 @@ export class SorterActions {
       const isInvoiceDestinationValid = await FileSystem.validateDirectoryPath(this.invoicesDestination);
       if (!isInvoiceDestinationValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
     } catch (error) {
-      let message = `013 - Validating Destinations | Directories: ${this.directoryDestination} | Invoices: ${this.invoicesDestination}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `013 - Validating Destinations | Directories: ${this.directoryDestination} | Invoices: ${this.invoicesDestination}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Validating Destinations`);
     }
   }
@@ -236,10 +216,8 @@ export class SorterActions {
       if (error instanceof Error && error.cause === 'EMPTY') {
         return null;
       } else {
-        let message = `010 - Getting Current Invoice at ${this.invoicesDestination}\n`;
-        message += initializeErrorMessage(error);
-        // TODO Have these write to a file
-        console.error(message);
+        const message = `010 - Getting Current Invoice at ${this.invoicesDestination}\n`;
+        ErrorHandling.updateErrorFile(message, error);
         throw new Error(`An Issue Occurred Retrieving Current Invoice`);
       }
     }
@@ -273,10 +251,8 @@ export class SorterActions {
 
       return subFoldersDirectoriesArray;
     } catch (error) {
-      let message = `011 - Getting Sub Folders at ${this.directoryDestination}\n`;
-      message += initializeErrorMessage(error);
-      // TODO Have these write to a file
-      console.error(message);
+      const message = `011 - Getting Sub Folders at ${this.directoryDestination}\n`;
+      ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Retrieving Sub Directories`);
     }
   }
