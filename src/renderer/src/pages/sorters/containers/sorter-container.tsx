@@ -103,8 +103,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       const newDirectoryLetterFolder = newDirectoryName[0];
 
       if (subDirectoriesArray.includes(newDirectoryLetterFolder?.toUpperCase())) {
-        const directoryLetterFolderPath = FileSystem.joinPaths(sorterActions.directoryDestination, newDirectoryLetterFolder);
-        const newDirectoryPath = FileSystem.joinPaths(directoryLetterFolderPath, newDirectoryName);
+        const newDirectoryPath = FileSystem.joinPaths(sorterActions.directoryDestination, newDirectoryLetterFolder, newDirectoryName);
         await FileSystem.initializeNewDir(newDirectoryPath);
         setIsInteractionDisabled(true);
         refetchDirectories();

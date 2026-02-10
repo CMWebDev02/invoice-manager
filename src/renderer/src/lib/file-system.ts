@@ -1,16 +1,9 @@
 import type { Dirent } from 'fs';
 import { DirectoryExport, FileExport } from './types';
 import { subDirectoriesArray } from './utils';
+import { initializeErrorMessage } from './error-handling';
 
 const file_system = window.api.file_system;
-
-function initializeErrorMessage(error: Error | unknown): string {
-  if (error instanceof Error) {
-    return `Name: ${error.name} Cause: ${error.cause} - ${error.message}`;
-  } else {
-    return 'An Unknown Error has Occurred!';
-  }
-}
 
 export class FileSystem {
   static _userHomeDir: string = file_system.userHomeDir;
@@ -51,12 +44,15 @@ export class FileSystem {
     }
   }
 
-  static joinPaths(parentDir: string, childDir: string): string {
+  static joinPaths(...dirPaths: string[]): string {
     try {
-      const newDirPath = file_system.joinPaths(parentDir, childDir);
+      const newDirPath = file_system.joinPaths(...dirPaths);
       return newDirPath;
     } catch (error) {
-      let message = `003 - Joining Paths for Parent Path ${parentDir} and Child Path ${childDir}\n`;
+      let message = `003 - Joining Paths\n`;
+      for (const path of dirPaths) {
+        message += ` | ${path} `;
+      }
       message += initializeErrorMessage(error);
       // TODO Have these write to a file
       console.error(message);
