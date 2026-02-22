@@ -15,6 +15,7 @@ import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
+import { SorterTest } from '@renderer/tests/sorter-tests';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -65,30 +66,44 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
   }
 
   async function saveChanges(): Promise<void> {
-    const sorterObject: SelectorDetails = {
-      selectorId: selectorId,
-      selectorTitle: selectorTitle,
-      directoriesDestination: directoriesDestination,
-      invoicesDestination
-    };
-    // Indicates if the selector is new or being updated
-    let isNewSelector = false;
+    try {
+      const sorterObject: SelectorDetails = {
+        selectorId: selectorId,
+        selectorTitle: selectorTitle,
+        directoriesDestination: directoriesDestination,
+        invoicesDestination
+      };
+      // Indicates if the selector is new or being updated
+      let isNewSelector = false;
 
-    // Checks if a new selector is being saved
-    if (selectorId == '') {
-      // Creates a new id for the new selector
-      sorterObject.selectorId = getUniqueID();
-      isNewSelector = true;
-    }
+      // Checks if a new selector is being saved
+      if (selectorId == '') {
+        // Creates a new id for the new selector
+        sorterObject.selectorId = getUniqueID();
+        isNewSelector = true;
+      }
 
-    // Calls the method To 
+      // Calls the method to validate the destinations
+      if (selectorType === 'sorters') {
+        const newSorterTest = new SorterTest(directoriesDestination, invoicesDestination, selectorTitle);
+        
+      } else {
+        console.log('Add Viewers');
+      }
 
-    const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
+      const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
 
-    if (isStored) {
-      toggleModal();
-    } else {
-      console.error(`Failed to save new ${selectorType}!`);
+      if (isStored) {
+        toggleModal();
+      } else {
+        throw new Error(`Failed to save new ${selectorType}!`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error(`Unknown Error Occurred While Saving new ${selectorType}`);
+      }
     }
   }
 
