@@ -81,6 +81,8 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       isNewSelector = true;
     }
 
+    // Calls the method To 
+
     const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
 
     if (isStored) {

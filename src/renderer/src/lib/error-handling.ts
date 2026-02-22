@@ -2,7 +2,7 @@ import { FileSystem } from './file-system';
 import type { FileSystemTypes } from './types';
 
 export class ErrorHandling {
-  static _errorFilePath: string = window.api.file_system.joinPaths(FileSystem.getUserHomeDir(), 'AppData', 'Roaming', 'invoice-manager', 'Errors.txt');
+  static _errorFilePath: string = window.api.file_system.joinPaths(window.api.file_system.userHomeDir, 'AppData', 'Roaming', 'invoice-manager', 'Errors.txt');
   static _fileSystem: FileSystemTypes = window.api.file_system;
 
   static async _initializeErrorFile(): Promise<void> {
