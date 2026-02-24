@@ -15,7 +15,7 @@ import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
-import { SorterTest } from '@renderer/tests/sorter-tests';
+import { SorterTest } from '@renderer/pages/selectors/tests/sorter-tests';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -86,7 +86,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       // Calls the method to validate the destinations
       if (selectorType === 'sorters') {
         const newSorterTest = new SorterTest(directoriesDestination, invoicesDestination, selectorTitle);
-        
+        newSorterTest.initiateTests();
       } else {
         console.log('Add Viewers');
       }
