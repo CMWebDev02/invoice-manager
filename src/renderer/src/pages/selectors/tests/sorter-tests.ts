@@ -3,8 +3,14 @@ import { getUniqueID } from '@renderer/lib/utils';
 
 export class SorterTest {
   _sorterActions: SorterActions;
+  _foldersName: string;
 
   constructor(directoriesDestination: string, invoicesDestination: string, sorterTitle: string) {
+    // Generates a random value
+    const randomStringValues = getUniqueID().split('-');
+    // Pulls the first 8 characters of the value
+    const randomStringValue = randomStringValues[0];
+    this._foldersName = `.temp-${randomStringValue}`;
     this._sorterActions = new SorterActions(directoriesDestination, invoicesDestination, sorterTitle);
   }
 
@@ -14,13 +20,8 @@ export class SorterTest {
 
   async _directoryCreationTest(): Promise<void> {
     try {
-      // Generates a random value
-      const randomStringValues = getUniqueID().split('-');
-      // Pulls the first 8 characters of the value
-      const randomStringValue = randomStringValues[0];
-      // Uses the random 8 characters to generate temp folders with random names
-      const tempDirectoriesDestination = FileSystem.joinPaths(this._sorterActions.directoryDestination, `.temp-${randomStringValue}`);
-      const tempInvoicesDestination = FileSystem.joinPaths(this._sorterActions.invoicesDestination, `.temp-${randomStringValue}`);
+      const tempDirectoriesDestination = FileSystem.joinPaths(this._sorterActions.directoryDestination, this._foldersName);
+      const tempInvoicesDestination = FileSystem.joinPaths(this._sorterActions.invoicesDestination, this._foldersName);
       await FileSystem.initializeNewDir(tempDirectoriesDestination);
       await FileSystem.initializeNewDir(tempInvoicesDestination);
 
