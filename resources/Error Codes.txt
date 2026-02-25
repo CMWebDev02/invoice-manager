@@ -2,12 +2,13 @@ FileSystem:
 001 - getDirectories
 002 - getFiles
 003 - joinPaths
-004 - Validating Path
+004 - validateDirectoryPath
 005 - initializeNewDir
 006 - validateSubDir
 007 - validateFileName
 008 - transferFile
-009 - Removing Directory
+009 - removeDirectory
+014 - copyTestFile
 
 SorterActions
 010 - getCurrentInvoice

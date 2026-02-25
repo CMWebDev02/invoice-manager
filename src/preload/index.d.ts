@@ -11,6 +11,7 @@ type FileSystemTypes = {
   removeDirectory: (dirPath: string) => Promise<void>;
   initializeNewFile: (filePath: string) => Promise<void>;
   appendContentToFile: (filePath: string, newContent: string) => Promise<void>;
+  copyTestFile: (newPath: string) => Promise<void>;
 };
 
 type StorageTypes = {

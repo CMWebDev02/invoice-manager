@@ -158,6 +158,20 @@ export class FileSystem {
     }
   }
 
+  static async copyTestFile(dirPath: string): Promise<void> {
+    try {
+      const isDirPathValid = await this.validateDirectoryPath(dirPath);
+      if (!isDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
+
+      await file_system.copyTestFile(dirPath);
+      return;
+    } catch (error) {
+      const message = `014 - Copying Test File to ${dirPath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
+      throw new Error(`An Issue Occurred Copying File`);
+    }
+  }
+
   static getUserHomeDir(): string {
     return this._userHomeDir;
   }

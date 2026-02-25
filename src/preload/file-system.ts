@@ -1,7 +1,8 @@
 import fs, { constants } from 'fs/promises';
 import os from 'os';
 import { type Dirent } from 'fs';
-import path from 'path';
+import path, { join } from 'path';
+import pdfFilePath from '../../resources/PDF.pdf?asset';
 
 // All Basic File System Functions
 
@@ -60,5 +61,17 @@ export async function transferFile(currentPath: string, newPath: string): Promis
 
 export async function removeDirectory(dirPath: string): Promise<void> {
   await fs.rmdir(dirPath);
+  return;
+}
+
+export async function copyTestFile(newPath: string): Promise<void> {
+  // Reads the data from the Test Pdf
+  const pdfFile = await fs.readFile(pdfFilePath);
+  // Declares the file name for the new test file
+  const testFileName = 'testPDF.pdf';
+  // Sets the new file path for the test file
+  const testFilePath = join(newPath, testFileName);
+  // Writes the new test file to its destination
+  await fs.writeFile(testFilePath, pdfFile);
   return;
 }

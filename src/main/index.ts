@@ -3,6 +3,7 @@ import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { storeUserDrives } from '../preload/system-storage';
+import pdfFilePath from '../../resources/PDF.pdf?commonjs-external&asset';
 
 function createWindow(): void {
   // Create the browser window.
@@ -25,8 +26,8 @@ function createWindow(): void {
     mainWindow.show();
     // Opens dev tools upon launching the app, for troubleshooting purposes.
     mainWindow.webContents.openDevTools();
-    // Move this to occur after app launches
-    // Pulls the user's drives for later use
+
+    // Pulls the user's drives letter names
     await storeUserDrives();
   });
 
