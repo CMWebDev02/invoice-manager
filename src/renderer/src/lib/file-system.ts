@@ -150,11 +150,18 @@ export class FileSystem {
 
   static async removeDirectory(dirPath: string): Promise<undefined> {
     try {
+      const isDirPathValid = await this.validateDirectoryPath(dirPath);
+      if (!isDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
+      
       await window.api.file_system.removeDirectory(dirPath);
     } catch (error) {
-      const message = `009 - Removing Directory ${dirPath}\n`;
-      ErrorHandling.updateErrorFile(message, error);
-      throw new Error(`An Issue Occurred Removing A Directory`);
+      if (error instanceof Error && error.cause === 'ENOTEMPTY') {
+        throw new Error(`Failed To Remove Directory - Directory Is Not Empty`, { cause: 'DirNotEmpty' });
+      } else {
+        const message = `009 - Removing Directory ${dirPath}\n`;
+        ErrorHandling.updateErrorFile(message, error);
+        throw new Error(`An Issue Occurred Removing A Directory`);
+      }
     }
   }
 
@@ -169,6 +176,19 @@ export class FileSystem {
       const message = `014 - Copying Test File to ${dirPath}\n`;
       ErrorHandling.updateErrorFile(message, error);
       throw new Error(`An Issue Occurred Copying File`);
+    }
+  }
+
+  static async removeTestFile(testFilePath: string): Promise<void> {
+    try {
+      const isFilePathValid = await this.validateDirectoryPath(testFilePath);
+      if (!isFilePathValid) throw new Error('Invalid Directory Path', { cause: '004' });
+
+      await
+    } catch (error) {
+      const message = `015 - Removing Test File - ${testFilePath}\n`;
+      ErrorHandling.updateErrorFile(message, error);
+      throw new Error(`An Issue Occurred Removing Test File`);
     }
   }
 

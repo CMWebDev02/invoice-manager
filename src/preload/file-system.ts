@@ -75,3 +75,8 @@ export async function copyTestFile(newPath: string): Promise<void> {
   await fs.writeFile(testFilePath, pdfFile);
   return;
 }
+
+export async function removeTestFile(testFilePath: string): Promise<void> {
+  await fs.rm(testFilePath);
+  return;
+}

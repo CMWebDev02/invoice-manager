@@ -1,6 +1,6 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { appendContentToFile, copyTestFile, getDirectoryContents, initializeNewDir, initializeNewFile, joinPaths, readFile, removeDirectory, transferFile, userHomeDir, validateDirectoryPath } from './file-system';
+import { appendContentToFile, copyTestFile, getDirectoryContents, initializeNewDir, initializeNewFile, joinPaths, readFile, removeDirectory, removeTestFile, transferFile, userHomeDir, validateDirectoryPath } from './file-system';
 import { getSelectors, getUserDrives, removeSelector, searchSelector, storeNewSelector, storeUserDrives, updateSelector } from './system-storage';
 
 // Custom APIs for renderer
@@ -16,7 +16,8 @@ const api = {
     removeDirectory,
     initializeNewFile,
     appendContentToFile,
-    copyTestFile
+    copyTestFile,
+    removeTestFile
   },
   storage: {
     storeUserDrives,

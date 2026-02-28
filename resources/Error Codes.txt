@@ -9,6 +9,7 @@ FileSystem:
 008 - transferFile
 009 - removeDirectory
 014 - copyTestFile
+015 - removeTestFile
 
 SorterActions
 010 - getCurrentInvoice

@@ -2,11 +2,14 @@ import { FileSystem, SorterActions } from '@renderer/lib/file-system';
 import { getUniqueID } from '@renderer/lib/utils';
 
 export class SorterTest {
+  _testFileName: string;
   _sorterActions: SorterActions;
   _tempDirectoriesDestination: string;
   _tempInvoicesDestination: string;
 
   constructor(directoriesDestination: string, invoicesDestination: string, sorterTitle: string) {
+    this._testFileName = 'testPDF.pdf';
+
     // Generates a random value
     const randomStringValues = getUniqueID().split('-');
     // Pulls the first 8 characters of the value
@@ -39,6 +42,8 @@ export class SorterTest {
         // Throws an error To indicate the creation failed
         throw new Error();
       }
+
+      return;
     } catch {
       throw new Error('Directory Creation Test Failed');
     }
@@ -46,12 +51,9 @@ export class SorterTest {
 
   async _fileTransferTest(): Promise<void> {
     try {
-      // Gathers the path to the test pdf file in resources
-      const testFileName = 'testPDF.pdf';
-
       // Copies the test pdf file to the directories destination and validates the action
       await FileSystem.copyTestFile(this._tempDirectoriesDestination);
-      const copiedFilePath = FileSystem.joinPaths(this._tempDirectoriesDestination, testFileName);
+      const copiedFilePath = FileSystem.joinPaths(this._tempDirectoriesDestination, this._testFileName);
       const isResourceFileCopied = await FileSystem.validateDirectoryPath(copiedFilePath);
       if (!isResourceFileCopied) {
         // Throws an error to indicate the copying of the file failed
@@ -59,17 +61,17 @@ export class SorterTest {
       }
 
       // Transfers the test pdf file to the invoices destination from the directories destination
-      const directoriesFilePath = await FileSystem.transferFile(testFileName, copiedFilePath, this._tempDirectoriesDestination);
-      const isDirectoriesFileTransferValid = await FileSystem.validateDirectoryPath(directoriesFilePath);
-      if (!isDirectoriesFileTransferValid) {
+      const invoiceFilePath = await FileSystem.transferFile(this._testFileName, copiedFilePath, this._tempInvoicesDestination);
+      const isInvoiceFileValid = await FileSystem.validateDirectoryPath(invoiceFilePath);
+      if (!isInvoiceFileValid) {
         // Throws an error to indicate the transferring of a file failed
         throw new Error();
       }
 
       // Transfers the test pdf file to the directories destination from the invoices destination
-      const invoiceFilePath = await FileSystem.transferFile(testFileName, directoriesFilePath, this._tempInvoicesDestination);
-      const isInvoiceFileTransferValid = await FileSystem.validateDirectoryPath(invoiceFilePath);
-      if (!isInvoiceFileTransferValid) {
+      const directoriesFilePath = await FileSystem.transferFile(this._testFileName, invoiceFilePath, this._tempDirectoriesDestination);
+      const isDirectoriesFileValid = await FileSystem.validateDirectoryPath(directoriesFilePath);
+      if (!isDirectoriesFileValid) {
         // Throws an error to indicate the transferring of a file failed
         throw new Error();
       }
@@ -80,16 +82,60 @@ export class SorterTest {
     }
   }
 
-  async _duplicateFileTransferTest(): Promise<void> {}
+  async _duplicateFileTransferTest(): Promise<void> {
+    try {
+      // Copies the test pdf file to the directories destination and validates the action
+      await FileSystem.copyTestFile(this._tempInvoicesDestination);
+      const copiedFilePath = FileSystem.joinPaths(this._tempInvoicesDestination, this._testFileName);
+      const isResourceFileCopied = await FileSystem.validateDirectoryPath(copiedFilePath);
+      if (!isResourceFileCopied) {
+        // Throws an error to indicate the copying of the file failed
+        throw new Error();
+      }
 
-  async _nonEmptyDirectoryDeletionTest(): Promise<void> {}
+      // Transfers the test pdf file to the directories destination from the invoices destination
+      const invoiceFilePath = await FileSystem.transferFile(this._testFileName, copiedFilePath, this._tempDirectoriesDestination);
+      const isInvoiceFileValid = await FileSystem.validateDirectoryPath(invoiceFilePath);
+      if (!isInvoiceFileValid) {
+        // Throws an error to indicate the transferring of a file failed
+        throw new Error();
+      }
 
-  async _directoryDeletionTest(): Promise<void> {}
+      return;
+    } catch {
+      throw new Error('Duplicate File Transfer Test Failed');
+    }
+  }
+
+  async _nonEmptyDirectoryDeletionTest(): Promise<void> {
+    try {
+      await FileSystem.removeDirectory(this._tempDirectoriesDestination);
+    } catch (error) {
+      if (error instanceof Error && error.cause === 'DirNotEmpty') {
+        return;
+      } else {
+        throw new Error('Removing NonEmpty Directory Test Failed');
+      }
+    }
+  }
+
+  async _directoryDeletionTest(): Promise<void> {
+    try {
+      const testFileNameTwo = await FileSystem.validateFileName(this._testFileName, this._tempDirectoriesDestination);
+      console.log(testFileNameTwo);
+
+      // await FileSystem.removeTestFile()
+    } catch {
+      throw new Error('Removing Directory Test Failed');
+    }
+  }
 
   async initiateTests(): Promise<void> {
     await this._initialPathsTest();
     await this._directoryCreationTest();
     await this._fileTransferTest();
+    await this._duplicateFileTransferTest();
+    await this._nonEmptyDirectoryDeletionTest();
     console.log('Test Over');
   }
 }
