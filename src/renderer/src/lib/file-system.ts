@@ -152,10 +152,11 @@ export class FileSystem {
     try {
       const isDirPathValid = await this.validateDirectoryPath(dirPath);
       if (!isDirPathValid) throw new Error('Invalid Directory Path', { cause: '004' });
-      
+
       await window.api.file_system.removeDirectory(dirPath);
     } catch (error) {
-      if (error instanceof Error && error.cause === 'ENOTEMPTY') {
+      // Checks if the error an instance of the Error constructor and verifies the code property exists on it
+      if (error instanceof Error && 'code' in error && error.code === 'ENOTEMPTY') {
         throw new Error(`Failed To Remove Directory - Directory Is Not Empty`, { cause: 'DirNotEmpty' });
       } else {
         const message = `009 - Removing Directory ${dirPath}\n`;
@@ -184,7 +185,7 @@ export class FileSystem {
       const isFilePathValid = await this.validateDirectoryPath(testFilePath);
       if (!isFilePathValid) throw new Error('Invalid Directory Path', { cause: '004' });
 
-      await
+      await window.api.file_system.removeTestFile(testFilePath);
     } catch (error) {
       const message = `015 - Removing Test File - ${testFilePath}\n`;
       ErrorHandling.updateErrorFile(message, error);

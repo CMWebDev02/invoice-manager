@@ -121,10 +121,39 @@ export class SorterTest {
 
   async _directoryDeletionTest(): Promise<void> {
     try {
-      const testFileNameTwo = await FileSystem.validateFileName(this._testFileName, this._tempDirectoriesDestination);
-      console.log(testFileNameTwo);
+      // Creates the second test file name using the same method as the validateFileName method
+      const testFileNameTwo = `${this._testFileName.substring(0, this._testFileName.lastIndexOf('.'))} (2).pdf`;
 
-      // await FileSystem.removeTestFile()
+      const testFilePath = FileSystem.joinPaths(this._tempDirectoriesDestination, this._testFileName);
+      await FileSystem.removeTestFile(testFilePath);
+      // Confirms that the testFile is successfully removed
+      const isTestFileOneValid = await FileSystem.validateDirectoryPath(testFilePath);
+      if (isTestFileOneValid) {
+        // Throws an error to indicate the copying of the file failed
+        throw new Error();
+      }
+
+      const testFilePathTwo = FileSystem.joinPaths(this._tempDirectoriesDestination, testFileNameTwo);
+      await FileSystem.removeTestFile(testFilePathTwo);
+      const isTestFileTwoValid = await FileSystem.validateDirectoryPath(testFilePathTwo);
+      if (isTestFileTwoValid) {
+        // Throws an error to indicate the copying of the file failed
+        throw new Error();
+      }
+
+      await FileSystem.removeDirectory(this._tempDirectoriesDestination);
+      const isTempDirectoriesDestinationValid = await FileSystem.validateDirectoryPath(testFilePathTwo);
+      if (isTempDirectoriesDestinationValid) {
+        // Throws an error to indicate the copying of the file failed
+        throw new Error();
+      }
+
+      await FileSystem.removeDirectory(this._tempInvoicesDestination);
+      const isTempInvoicesDestinationValid = await FileSystem.validateDirectoryPath(testFilePathTwo);
+      if (isTempInvoicesDestinationValid) {
+        // Throws an error to indicate the copying of the file failed
+        throw new Error();
+      }
     } catch {
       throw new Error('Removing Directory Test Failed');
     }
@@ -136,6 +165,7 @@ export class SorterTest {
     await this._fileTransferTest();
     await this._duplicateFileTransferTest();
     await this._nonEmptyDirectoryDeletionTest();
+    await this._directoryDeletionTest();
     console.log('Test Over');
   }
 }
