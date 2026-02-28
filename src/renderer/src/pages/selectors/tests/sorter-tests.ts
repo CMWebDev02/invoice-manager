@@ -24,7 +24,7 @@ export class SorterTest {
     try {
       await this._sorterActions.validateDirectories();
     } catch {
-      throw new Error('Directory Initialization Failed');
+      throw new Error('Directory Initialization Failed', { cause: 'DirectoryInitialization' });
     }
   }
 
@@ -45,7 +45,7 @@ export class SorterTest {
 
       return;
     } catch {
-      throw new Error('Directory Creation Test Failed');
+      throw new Error('Directory Creation Test Failed', { cause: 'DirectoryCreation' });
     }
   }
 
@@ -78,7 +78,7 @@ export class SorterTest {
 
       return;
     } catch {
-      throw new Error('File Transfer Test Failed');
+      throw new Error('File Transfer Test Failed', { cause: 'FileTransfer' });
     }
   }
 
@@ -103,7 +103,7 @@ export class SorterTest {
 
       return;
     } catch {
-      throw new Error('Duplicate File Transfer Test Failed');
+      throw new Error('Duplicate File Transfer Test Failed', { cause: 'DuplicateFileTransfer' });
     }
   }
 
@@ -114,7 +114,7 @@ export class SorterTest {
       if (error instanceof Error && error.cause === 'DirNotEmpty') {
         return;
       } else {
-        throw new Error('Removing NonEmpty Directory Test Failed');
+        throw new Error('Removing NonEmpty Directory Test Failed', { cause: 'NonEmptyDirectoryDeletion' });
       }
     }
   }
@@ -155,17 +155,24 @@ export class SorterTest {
         throw new Error();
       }
     } catch {
-      throw new Error('Removing Directory Test Failed');
+      throw new Error('Removing Directory Test Failed', { cause: 'DirectoryDeletion' });
     }
   }
 
   async initiateTests(): Promise<void> {
-    await this._initialPathsTest();
-    await this._directoryCreationTest();
-    await this._fileTransferTest();
-    await this._duplicateFileTransferTest();
-    await this._nonEmptyDirectoryDeletionTest();
-    await this._directoryDeletionTest();
-    console.log('Test Over');
+    try {
+      await this._initialPathsTest();
+      await this._directoryCreationTest();
+      await this._fileTransferTest();
+      await this._duplicateFileTransferTest();
+      await this._nonEmptyDirectoryDeletionTest();
+      await this._directoryDeletionTest();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`File System Validation Tests Failed\n ${error.name} - ${error.message}`);
+      } else {
+        throw new Error(`File System Validation Tests Failed\n Unknown - An Unknown Error Has Occurred`);
+      }
+    }
   }
 }
