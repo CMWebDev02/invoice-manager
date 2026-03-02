@@ -292,3 +292,99 @@ export class SorterActions {
     }
   }
 }
+
+export class ViewerActions {
+  directoryDestination: string;
+  sorterTitle: string;
+  _isDestinationValid: boolean;
+
+  constructor(directoriesDestination: string, sorterTitle: string) {
+    this.directoryDestination = directoriesDestination;
+    this.sorterTitle = sorterTitle;
+    this._isDestinationValid = false;
+  }
+
+  async validateDestination(): Promise<void> {
+    try {
+      const isDirectoriesDestinationValid = await FileSystem.validateDirectoryPath(this.directoryDestination);
+      if (!isDirectoriesDestinationValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
+
+      this._isDestinationValid = true;
+    } catch (error) {
+      const message = `016 - Validating Directories Destination | Destination: ${this.directoryDestination}\n`;
+      ErrorHandling.updateErrorFile(message, error);
+      throw new Error(`An Issue Occurred Validating Directories Destination`);
+    }
+  }
+
+  async getInvoice(invoicePath: string): Promise<FileExport | null> {
+    try {
+      if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
+
+      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(invoicePath);
+      if (!isInvoiceDirValid) throw new Error('Invoice Path is invalid!', { cause: '004' });
+
+      const invoicesDirectoryContent = await FileSystem.getFiles(this.invoicesDestination);
+      const firstFile = invoicesDirectoryContent.at(0);
+
+      if (firstFile === undefined) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
+
+      const firstFilePath = FileSystem.joinPaths(firstFile.parentPath, firstFile.name);
+      const currentInvoiceData = await file_system.readFile(firstFilePath);
+
+      const firstFileObj: FileExport = {
+        data: currentInvoiceData,
+        name: firstFile.name,
+        path: firstFilePath
+      };
+
+      return firstFileObj;
+    } catch (error) {
+      if (error instanceof Error && error.cause === 'EMPTY') {
+        return null;
+      } else {
+        const message = `017 - Getting Invoice ${invoicePath}\n`;
+        ErrorHandling.updateErrorFile(message, error);
+        throw new Error(`An Issue Occurred Retrieving Current Invoice`);
+      }
+    }
+  }
+
+  async getSubDirectories(): Promise<DirectoryExport[][]> {
+    try {
+      if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
+
+      const isDirValid = await FileSystem.validateDirectoryPath(this.directoryDestination);
+      if (!isDirValid) throw new Error('Directories Destination is invalid!', { cause: '004' });
+      const subDirPaths: string[] = [];
+      const subFoldersDirectoriesArray: DirectoryExport[][] = [];
+
+      // Validates the various sub directories before attempting to retrieve their contents
+      for (const subDir of subDirectoriesArray) {
+        const subDirPath = await FileSystem.validateSubDir(this.directoryDestination, subDir);
+        subDirPaths.push(subDirPath);
+      }
+
+      for (const subDirPath of subDirPaths) {
+        // Gathers all directories of the current sub directory
+        const allDirectories = await FileSystem.getDirectories(subDirPath);
+        // Iterates through all directories found and maps them to an object that holds their path and name.
+        const SubFolderObjArray = allDirectories.map(({ name, parentPath }) => {
+          const dirPath = FileSystem.joinPaths(parentPath, name);
+          return { name, dirPath };
+        });
+        subFoldersDirectoriesArray.push(SubFolderObjArray);
+      }
+
+      return subFoldersDirectoriesArray;
+    } catch (error) {
+      const message = `018 - Getting Sub Folders at ${this.directoryDestination}\n`;
+      ErrorHandling.updateErrorFile(message, error);
+      throw new Error(`An Issue Occurred Retrieving Sub Directories`);
+    }
+  }
+
+  async getAllFiles(): Promise<string[]> {
+    
+  }
+}

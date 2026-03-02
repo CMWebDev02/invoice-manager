@@ -16,5 +16,10 @@ SorterActions
 011 - getSubDirectories
 013 - validateDirectories
 
+ViewerActions
+016 - validateDestination
+017 - getInvoice
+018 - getSubDirectories
+
 Hooks:
 012 - useAsyncInit
