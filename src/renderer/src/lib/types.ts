@@ -18,6 +18,11 @@ export type FileExport = {
   path: string;
 };
 
+export type FileInfo = {
+  name: string;
+  path: string;
+};
+
 export type ChangeLogEntry = {
   id: string;
   actionType: 'sort' | 'create' | 'undoSort' | 'undoCreate';

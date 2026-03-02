@@ -1,5 +1,5 @@
 import type { Dirent } from 'fs';
-import { DirectoryExport, FileExport } from './types';
+import { DirectoryExport, FileExport, FileInfo } from './types';
 import { subDirectoriesArray } from './utils';
 import { ErrorHandling } from './error-handling';
 
@@ -218,6 +218,8 @@ export class SorterActions {
 
       const isInvoiceDestinationValid = await FileSystem.validateDirectoryPath(this.invoicesDestination);
       if (!isInvoiceDestinationValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
+
+      this._areDestinationsValid = true;
     } catch (error) {
       const message = `013 - Validating Destinations | Directories: ${this.directoryDestination} | Invoices: ${this.invoicesDestination}\n`;
       ErrorHandling.updateErrorFile(message, error);
@@ -227,7 +229,7 @@ export class SorterActions {
 
   async getCurrentInvoice(): Promise<FileExport | null> {
     try {
-      if (this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
+      if (!this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
 
       const isInvoiceDirValid = await FileSystem.validateDirectoryPath(this.invoicesDestination);
       if (!isInvoiceDirValid) throw new Error('Invoice Destination is invalid!', { cause: '004' });
@@ -260,7 +262,7 @@ export class SorterActions {
 
   async getSubDirectories(): Promise<DirectoryExport[][]> {
     try {
-      if (this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
+      if (!this._areDestinationsValid) throw new Error('Destinations Are Invalid!', { cause: '013' });
 
       const isDirValid = await FileSystem.validateDirectoryPath(this.directoryDestination);
       if (!isDirValid) throw new Error('Directories Destination is invalid!', { cause: '004' });
@@ -317,35 +319,29 @@ export class ViewerActions {
     }
   }
 
-  async getInvoice(invoicePath: string): Promise<FileExport | null> {
+  async getInvoice(invoiceInfo: FileInfo): Promise<FileExport | null> {
     try {
       if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
 
-      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(invoicePath);
+      const isInvoiceDirValid = await FileSystem.validateDirectoryPath(invoiceInfo.path);
       if (!isInvoiceDirValid) throw new Error('Invoice Path is invalid!', { cause: '004' });
 
-      const invoicesDirectoryContent = await FileSystem.getFiles(this.invoicesDestination);
-      const firstFile = invoicesDirectoryContent.at(0);
+      const currentInvoiceData = await file_system.readFile(invoiceInfo.path);
 
-      if (firstFile === undefined) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
-
-      const firstFilePath = FileSystem.joinPaths(firstFile.parentPath, firstFile.name);
-      const currentInvoiceData = await file_system.readFile(firstFilePath);
-
-      const firstFileObj: FileExport = {
+      // Spreads in the associated info from the invoiceInfo Object
+      const fileObj: FileExport = {
         data: currentInvoiceData,
-        name: firstFile.name,
-        path: firstFilePath
+        ...invoiceInfo
       };
 
-      return firstFileObj;
+      return fileObj;
     } catch (error) {
       if (error instanceof Error && error.cause === 'EMPTY') {
         return null;
       } else {
-        const message = `017 - Getting Invoice ${invoicePath}\n`;
+        const message = `017 - Getting Invoice ${invoiceInfo.name} from its path - ${invoiceInfo.path}\n`;
         ErrorHandling.updateErrorFile(message, error);
-        throw new Error(`An Issue Occurred Retrieving Current Invoice`);
+        throw new Error(`An Issue Occurred Retrieving The Invoice`);
       }
     }
   }
@@ -384,7 +380,39 @@ export class ViewerActions {
     }
   }
 
-  async getAllFiles(): Promise<string[]> {
-    
+  async getAllFiles(dirPath: string): Promise<FileInfo[] | null> {
+    try {
+      if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
+
+      const isDirPathValid = await FileSystem.validateDirectoryPath(dirPath);
+      if (!isDirPathValid) throw new Error('Directory Path is invalid!', { cause: '004' });
+
+      const directoryContents = await FileSystem.getFiles(dirPath);
+
+      if (directoryContents.length == 0) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
+
+      const allFilesInfoArr: FileInfo[] = [];
+
+      for (const file of directoryContents) {
+        const filePath = FileSystem.joinPaths(file.parentPath, file.name);
+
+        const fileObj: FileInfo = {
+          name: file.name,
+          path: filePath
+        };
+
+        allFilesInfoArr.push(fileObj);
+      }
+
+      return allFilesInfoArr;
+    } catch (error) {
+      if (error instanceof Error && error.cause === 'EMPTY') {
+        return null;
+      } else {
+        const message = `019 - Getting Invoices from ${dirPath}\n`;
+        ErrorHandling.updateErrorFile(message, error);
+        throw new Error(`An Issue Occurred Retrieving All Invoices`);
+      }
+    }
   }
 }
