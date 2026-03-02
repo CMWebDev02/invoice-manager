@@ -103,11 +103,13 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         newSorterTest.initiateTests();
       } else {
         console.log('Add Viewers');
+        return;
       }
 
       const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
 
       if (isStored) {
+        toast.success(`New ${selectorType} Saved!`);
         toggleModal();
       } else {
         throw new Error(`Failed to save new ${selectorType}!`, { cause: 'SavingFailed' });
