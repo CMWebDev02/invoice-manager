@@ -10,6 +10,7 @@ import { getSelectors, removeSelector } from '@renderer/lib/store';
 import SelectorsModal from './components/selectors-modal';
 import { Link } from 'react-router';
 import type { SelectorDetails } from '@renderer/lib/types';
+import { Toaster } from 'sonner';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -130,6 +131,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           )}
         </div>
       </Dialog>
+      <Toaster />
     </div>
   );
 }

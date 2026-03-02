@@ -16,6 +16,7 @@ import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
 import { SorterTest } from '@renderer/pages/selectors/tests/sorter-tests';
+import { toast } from 'sonner';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -49,20 +50,33 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
   function validateChanges(): void {
     // Have validate changes validate the title string, check for invalid characters
     // and validate the directory and invoice destinations
-
-    if (selectorType === 'sorters') {
-      if (selectorTitle !== '' && invoicesDestination !== '' && directoriesDestination !== '') {
-        saveChanges();
-        return;
+    try {
+      if (selectorTitle === '') {
+        throw new Error('Invalid Title Entry', { cause: 'InvalidEntry' });
       }
-    } else if (selectorType === 'viewers') {
-      if (selectorTitle !== '' && directoriesDestination !== '') {
-        saveChanges();
-        return;
+
+      if (selectorType === 'sorters') {
+        if (invoicesDestination === '' || directoriesDestination === '') {
+          throw new Error('Invalid Invoices and Destinations Entries', { cause: 'InvalidEntry' });
+        }
+      } else if (selectorType === 'viewers') {
+        if (directoriesDestination !== '') {
+          throw new Error('Invalid Destinations Entry');
+        }
+      } else {
+        throw new Error('Invalid Selector Type', { cause: 'InvalidEntry' });
+      }
+
+      saveChanges();
+      return;
+    } catch (error) {
+      if (error instanceof Error && error.cause === 'InvalidEntry') {
+        toast.error(error.message);
+      } else {
+        console.error(error);
+        toast.error('An Unknown Error Occurred');
       }
     }
-
-    console.error(`Invalid ${selectorType} settings!`);
   }
 
   async function saveChanges(): Promise<void> {
@@ -96,13 +110,14 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       if (isStored) {
         toggleModal();
       } else {
-        throw new Error(`Failed to save new ${selectorType}!`);
+        throw new Error(`Failed to save new ${selectorType}!`, { cause: 'SavingFailed' });
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error(error.message);
+        toast.error(error.message);
       } else {
-        console.error(`Unknown Error Occurred While Saving new ${selectorType}`);
+        console.error(error);
+        toast.error(`Unknown Error Occurred While Saving new ${selectorType}`);
       }
     }
   }
