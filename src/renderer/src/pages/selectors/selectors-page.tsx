@@ -10,7 +10,7 @@ import { getSelectors, removeSelector } from '@renderer/lib/store';
 import SelectorsModal from './components/selectors-modal';
 import { Link } from 'react-router';
 import type { SelectorDetails } from '@renderer/lib/types';
-import { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -51,7 +51,10 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
     console.log('create confirmation');
     const isSuccessful: boolean = removeSelector(selectorType, selectorId);
     if (isSuccessful) {
+      toast.success(`${selectorType} Removed!`);
       setSavedSorters(getSelectors(selectorType));
+    } else {
+      toast.error(`Failed to Remove ${selectorType}!`);
     }
   }
 
