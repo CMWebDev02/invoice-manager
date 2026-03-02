@@ -31,7 +31,8 @@ export default function App(): React.JSX.Element {
             <Route index element={<TitlePage />} />
             <Route path="/selector-viewers" element={<SelectorsPage selectorType="viewers" />} />
             <Route path="/selector-sorters" element={<SelectorsPage selectorType="sorters" />} />
-            <Route path="/changelogs" element={<ChangeLogsPage />} />
+            {/* Will Add Changelogs Saving in the Future */}
+            {/* <Route path="/changelogs" element={<ChangeLogsPage />} /> */}
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
 

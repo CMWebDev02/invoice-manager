@@ -19,7 +19,8 @@ export default function TitlePage(): React.JSX.Element {
         >
           <TitleLink linkHref="./selector-sorters">Sorters</TitleLink>
           <TitleLink linkHref="./selector-viewers">Viewers</TitleLink>
-          <TitleLink linkHref="./changelogs">Changelogs</TitleLink>
+          {/* Will Add Back Changelog Saving in the Future */}
+          {/* <TitleLink linkHref="./changelogs">Changelogs</TitleLink> */}
           <TitleLink linkHref="./settings">Settings</TitleLink>
         </CardContent>
       </Card>

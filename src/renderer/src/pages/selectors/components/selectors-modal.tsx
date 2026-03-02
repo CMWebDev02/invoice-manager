@@ -45,7 +45,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     }
   }, [existingSelectorId, selectorType]);
 
-  // Have this display an error message on screen
+  // TODO: Have this display an error message on screen
   function validateChanges(): void {
     // Have validate changes validate the title string, check for invalid characters
     // and validate the directory and invoice destinations
