@@ -15,7 +15,7 @@ import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
-import { SorterTest } from '@renderer/pages/selectors/tests/sorter-tests';
+import { SorterTest, ViewerTest } from '@renderer/pages/selectors/tests/sorter-tests';
 import { toast } from 'sonner';
 
 interface SortersModalProps {
@@ -102,8 +102,8 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         const newSorterTest = new SorterTest(directoriesDestination, invoicesDestination, selectorTitle);
         newSorterTest.initiateTests();
       } else {
-        console.log('Add Viewers');
-        return;
+        const newViewerTest = new ViewerTest(directoriesDestination, selectorTitle);
+        newViewerTest.initiateTests();
       }
 
       const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);

@@ -1,14 +1,15 @@
 import { useParams } from 'react-router';
-import UseSorterClassInit from './hooks/useSorterClassInit';
+import ViewerContainer from './containers/viewer-container';
+import useViewerClassInit from '@renderer/hooks/useViewerClassInit';
 
 export default function SortersPage(): React.JSX.Element {
   const { sorterId } = useParams();
-  const { sorterActions, isLoading, error } = UseSorterClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
+  const { viewerActions, isLoading, error } = useViewerClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
 
   return (
     <>
       {isLoading && <h1>Loading...</h1>}
-      {sorterActions === null || sorterActions === undefined ? <h1>Error: {error?.message}</h1> : <SorterContainer sorterActions={sorterActions} />}
+      {viewerActions === null || viewerActions === undefined ? <h1>Error: {error?.message}</h1> : <ViewerContainer viewerActions={viewerActions} />}
     </>
   );
 }
