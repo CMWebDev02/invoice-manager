@@ -13,7 +13,7 @@ interface UseSorterClassInitProps {
   asyncFunctionKey: string;
 }
 
-export default function UseSorterClassInit({ sorterId, asyncFunctionKey }: UseSorterClassInitProps): UseSorterClassInit {
+export default function useSorterClassInit({ sorterId, asyncFunctionKey }: UseSorterClassInitProps): UseSorterClassInit {
   const { data, error, isLoading } = useQuery({ queryKey: [asyncFunctionKey], queryFn: initObj, retry: false });
 
   async function initObj(): Promise<SorterActions> {

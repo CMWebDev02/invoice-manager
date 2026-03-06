@@ -7,17 +7,17 @@ type UseFetchData<UpdateType> = {
   triggerRefetching: () => void;
 };
 
-interface UseFetchDataProps<PropType, ReturnType> {
-  asyncFunction: (asyncFunctionProp: PropType) => Promise<ReturnType>;
-  asyncFunctionProp: PropType;
+interface UseFetchDataProps<ReturnType> {
+  asyncFunction: () => Promise<ReturnType>;
   asyncFunctionKey: string;
 }
 
-export default function useFetchData<PropType, ReturnType>({ asyncFunction, asyncFunctionProp, asyncFunctionKey }: UseFetchDataProps<PropType, ReturnType>): UseFetchData<ReturnType | null> {
+export default function useFetchData<ReturnType>({ asyncFunction, asyncFunctionKey }: UseFetchDataProps<ReturnType>): UseFetchData<ReturnType | null> {
   const { data, error, isLoading, refetch } = useQuery({ queryKey: [asyncFunctionKey], queryFn: getData, retry: false });
 
   async function getData(): Promise<Awaited<ReturnType>> {
-    const result = await asyncFunction(asyncFunctionProp);
+    const result = await asyncFunction();
+
     return result;
   }
 

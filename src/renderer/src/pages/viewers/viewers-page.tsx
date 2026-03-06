@@ -1,10 +1,9 @@
-import SorterContainer from './containers/sorter-container';
 import { useParams } from 'react-router';
-import useSorterClassInit from '../../hooks/useSorterClassInit';
+import UseSorterClassInit from './hooks/useSorterClassInit';
 
 export default function SortersPage(): React.JSX.Element {
   const { sorterId } = useParams();
-  const { sorterActions, isLoading, error } = useSorterClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
+  const { sorterActions, isLoading, error } = UseSorterClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
 
   return (
     <>
