@@ -193,7 +193,7 @@ export class ViewerTest {
     this._viewerActions = new ViewerActions(directoriesDestination, sorterTitle);
   }
 
-  async _initialPathsTest(): Promise<void> {
+  async _initialPathTest(): Promise<void> {
     try {
       await this._viewerActions.validateDestination();
     } catch {
@@ -207,7 +207,7 @@ export class ViewerTest {
 
       const isDirectoriesDestinationValid = await FileSystem.validateDirectoryPath(this._tempDirectoriesDestination);
 
-      if (isDirectoriesDestinationValid) {
+      if (!isDirectoriesDestinationValid) {
         // Throws an error To indicate the creation failed
         throw new Error();
       }
@@ -231,7 +231,7 @@ export class ViewerTest {
 
       return;
     } catch {
-      throw new Error('File Transfer Test Failed', { cause: 'FileTransfer' });
+      throw new Error('File Copy Test Failed', { cause: 'FileTransfer' });
     }
   }
 
@@ -253,7 +253,7 @@ export class ViewerTest {
 
       return;
     } catch {
-      throw new Error('File Transfer Test Failed', { cause: 'FileTransfer' });
+      throw new Error('File Reading Test Failed', { cause: 'FileTransfer' });
     }
   }
 
@@ -281,8 +281,9 @@ export class ViewerTest {
 
   async initiateTests(): Promise<void> {
     try {
-      await this._initialPathsTest();
+      await this._initialPathTest();
       await this._directoryCreationTest();
+      await this._fileCopyTest();
       await this._fileReadTest();
       await this._directoryDeletionTest();
     } catch (error) {

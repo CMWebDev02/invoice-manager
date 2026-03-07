@@ -60,7 +60,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           throw new Error('Invalid Invoices and Destinations Entries', { cause: 'InvalidEntry' });
         }
       } else if (selectorType === 'viewers') {
-        if (directoriesDestination !== '') {
+        if (directoriesDestination === '') {
           throw new Error('Invalid Destinations Entry');
         }
       } else {
@@ -101,9 +101,11 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       if (selectorType === 'sorters') {
         const newSorterTest = new SorterTest(directoriesDestination, invoicesDestination, selectorTitle);
         newSorterTest.initiateTests();
-      } else {
+      } else if (selectorType === 'viewers') {
         const newViewerTest = new ViewerTest(directoriesDestination, selectorTitle);
         newViewerTest.initiateTests();
+      } else {
+        throw new Error(`Failed to save new ${selectorType}!`, { cause: 'UnknownSelectorType' });
       }
 
       const isStored = await storeSelector(selectorType, sorterObject, isNewSelector);
