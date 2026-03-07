@@ -7,6 +7,7 @@ import SelectorsPage from './pages/selectors/selectors-page';
 import { useEffect, useState } from 'react';
 import SortersPage from './pages/sorters/sorters-page';
 import HeaderAndBody from './components/pages/header-and-body';
+import ViewersPage from './pages/viewers/viewers-page';
 
 export default function App(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -37,7 +38,7 @@ export default function App(): React.JSX.Element {
           </Route>
 
           <Route path="/sorters/:sorterId" element={<SortersPage />} />
-          {/* <Route path="/viewers/:sorterId" element={<SortersPage />} /> Add once viewers page is initialized*/}
+          <Route path="/viewers/:viewerId" element={<ViewersPage />} />
         </Routes>
       </BrowserRouter>
     </>

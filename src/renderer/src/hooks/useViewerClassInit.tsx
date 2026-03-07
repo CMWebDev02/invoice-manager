@@ -9,18 +9,18 @@ type UseViewerClassInit = {
 };
 
 interface UseViewerClassInitProps {
-  sorterId: string | undefined;
+  viewerId: string | undefined;
   asyncFunctionKey: string;
 }
 
-export default function useViewerClassInit({ sorterId, asyncFunctionKey }: UseViewerClassInitProps): UseViewerClassInit {
+export default function useViewerClassInit({ viewerId, asyncFunctionKey }: UseViewerClassInitProps): UseViewerClassInit {
   const { data, error, isLoading } = useQuery({ queryKey: [asyncFunctionKey], queryFn: initObj, retry: false });
 
   async function initObj(): Promise<ViewerActions> {
     const selectorType = 'viewers';
 
-    if (sorterId === undefined) throw new Error('Invalid Sorter Id', { cause: 'sorterId' });
-    const { selectorTitle, directoriesDestination } = searchSelector(selectorType, sorterId);
+    if (viewerId === undefined) throw new Error('Invalid Viewer Id', { cause: 'sorterId' });
+    const { selectorTitle, directoriesDestination } = searchSelector(selectorType, viewerId);
     const viewerActions = new ViewerActions(directoriesDestination, selectorTitle);
     await viewerActions.validateDestination();
     return viewerActions;

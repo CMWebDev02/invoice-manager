@@ -2,9 +2,9 @@ import { useParams } from 'react-router';
 import ViewerContainer from './containers/viewer-container';
 import useViewerClassInit from '@renderer/hooks/useViewerClassInit';
 
-export default function SortersPage(): React.JSX.Element {
-  const { sorterId } = useParams();
-  const { viewerActions, isLoading, error } = useViewerClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
+export default function ViewersPage(): React.JSX.Element {
+  const { viewerId } = useParams();
+  const { viewerActions, isLoading, error } = useViewerClassInit({ viewerId, asyncFunctionKey: 'sorting-class' });
 
   return (
     <>
