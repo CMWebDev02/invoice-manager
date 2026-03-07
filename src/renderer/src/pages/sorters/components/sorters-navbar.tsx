@@ -1,5 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
-import MenuButton from './menu-button';
+import MenuButton from '../../selectors/components/menu-button';
 
 interface SortersNavBarProps {
   sorterTitle: string;
