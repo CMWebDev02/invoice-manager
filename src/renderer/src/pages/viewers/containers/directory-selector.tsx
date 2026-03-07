@@ -1,20 +1,18 @@
-import YearSelector from '../components/year-selector';
 import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
-import DirectoryOption from '../../../components/user/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
+import DirectoryOption from '@renderer/components/user/directory-option';
 
-interface DirectoryNavigationProps {
+interface DirectorySelectorProps {
   disabled: boolean;
   directoriesArrays: DirectoryExport[][];
   selectedDirectory: DirectoryExport | null;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
-  updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function DirectoryNavigation({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
 
@@ -54,7 +52,6 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
     <div className="w-full h-11/12">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
         <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
-        <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
