@@ -205,7 +205,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           <div className="w-1/3 h-full flex flex-col gap-1">
-            {directoriesArrays !== undefined && directoriesArrays !== null && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+            {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
             <ChangeLog triggerChangeLog={toggleDrawer} />
           </div>
 

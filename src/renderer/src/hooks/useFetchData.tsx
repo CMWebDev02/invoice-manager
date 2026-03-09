@@ -12,7 +12,7 @@ interface UseFetchDataProps<ReturnType> {
   asyncFunctionKey: string;
 }
 
-export default function useFetchData<ReturnType>({ asyncFunction, asyncFunctionKey }: UseFetchDataProps<ReturnType>): UseFetchData<ReturnType | null> {
+export default function useFetchData<ReturnType>({ asyncFunction, asyncFunctionKey }: UseFetchDataProps<ReturnType>): UseFetchData<ReturnType> {
   const { data, error, isLoading, refetch } = useQuery({ queryKey: [asyncFunctionKey], queryFn: getData, retry: false });
 
   async function getData(): Promise<Awaited<ReturnType>> {
