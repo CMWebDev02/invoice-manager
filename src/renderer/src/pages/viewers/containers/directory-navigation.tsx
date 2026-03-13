@@ -4,16 +4,18 @@ import { useState } from 'react';
 import DirectoryList from '../components/directory-list';
 import { toast } from 'sonner';
 import { Button } from '@renderer/components/ui/button';
+import { DirectoryContent } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {
   mainDirPath: string;
   returnToSearch: () => void;
+  getDirectoryContents: (dirContents: string) => Promise<DirectoryContent[] | null>;
 }
 
-export default function DirectoryNavigation({ mainDirPath, returnToSearch }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDirectoryContents }: DirectoryNavigationProps): React.JSX.Element {
   const [currentDirPath, setCurrentDirPath] = useState<string>(mainDirPath);
 
-  const { updateResults: currentDirSubDirs, error: subDirsError, isLoading: areSubDirsLoaded } = useAsyncUpdate({ asyncFunction: FileSystem.getDirectories, updateTrigger: currentDirPath });
+  const { updateResults: currentDirSubDirs, error: subDirsError, isLoading: areSubDirsLoaded } = useAsyncUpdate({ asyncFunction: getDirectoryContents, updateTrigger: currentDirPath });
 
   // Traverses to the parent path of the current directory using relative paths.
   function reversePathTraversal(): void {

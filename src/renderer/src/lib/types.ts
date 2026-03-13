@@ -18,9 +18,10 @@ export type FileExport = {
   path: string;
 };
 
-export type FileInfo = {
+export type DirectoryContent = {
   name: string;
   path: string;
+  isDir: boolean;
 };
 
 export type ChangeLogEntry = {

@@ -3,9 +3,9 @@ import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
 import { DirectoryExport } from '@renderer/lib/types';
-import DirectoryOption from '@renderer/components/user/directory-option';
 import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
+import DirectoryOption from '../components/directory-option';
 
 interface DirectorySelectorProps {
   disabled: boolean;

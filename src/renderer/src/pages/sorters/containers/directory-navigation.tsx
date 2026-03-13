@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
-import DirectoryOption from '../../../components/user/directory-option';
+import DirectoryOption from '../components/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
 
 interface DirectoryNavigationProps {

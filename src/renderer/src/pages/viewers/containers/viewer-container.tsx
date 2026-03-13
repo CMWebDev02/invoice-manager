@@ -4,7 +4,7 @@ import ViewersNavBar from '../components/viewers-navbar';
 import DirectorySelector from './directory-selector';
 import { useState } from 'react';
 import useFetchData from '@renderer/hooks/useFetchData';
-import { DirectoryExport } from '@renderer/lib/types';
+import { DirectoryContent, DirectoryExport } from '@renderer/lib/types';
 import DirectoryNavigation from './directory-navigation';
 
 interface ViewerContainerProps {
@@ -16,6 +16,11 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
   const [selectedDirectoryPath, setSelectedDirectoryPath] = useState<string | null>(null);
 
   const { fetchData: directoriesArrays, error: directoriesError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<DirectoryExport[][]>({ asyncFunction: viewerActions.getSubDirectories.bind(viewerActions), asyncFunctionKey: 'viewer-directories' });
+
+  async function getDirectoryContents(dirPath: string): Promise<DirectoryContent[] | null> {
+    const dirContents = await viewerActions.getAllDirContents(dirPath);
+    return dirContents;
+  }
 
   function updateSelectedDirectory(dirObj: DirectoryExport): void {
     setSelectedDirectoryPath(dirObj.dirPath);
@@ -44,7 +49,7 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           {/* Have this get hidden for a directory navigation element upon user clicking select */}
-          <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} />}</div>
+          <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} getDirectoryContents={getDirectoryContents} />}</div>
         </div>
       </main>
       <Toaster />

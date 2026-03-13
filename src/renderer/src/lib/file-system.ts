@@ -1,5 +1,5 @@
 import type { Dirent } from 'fs';
-import { DirectoryExport, FileExport, FileInfo } from './types';
+import { DirectoryContent, DirectoryExport, FileExport } from './types';
 import { subDirectoriesArray } from './utils';
 import { ErrorHandling } from './error-handling';
 
@@ -319,7 +319,7 @@ export class ViewerActions {
     }
   }
 
-  async getInvoice(invoiceInfo: FileInfo): Promise<FileExport | null> {
+  async getInvoice(invoiceInfo: DirectoryContent): Promise<FileExport | null> {
     try {
       if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
 
@@ -380,25 +380,42 @@ export class ViewerActions {
     }
   }
 
-  async getAllFiles(dirPath: string): Promise<FileInfo[] | null> {
+  async getAllDirContents(dirPath: string): Promise<DirectoryContent[] | null> {
     try {
       if (!this._isDestinationValid) throw new Error('Destinations Are Invalid!', { cause: '016' });
 
       const isDirPathValid = await FileSystem.validateDirectoryPath(dirPath);
       if (!isDirPathValid) throw new Error('Directory Path is invalid!', { cause: '004' });
 
-      const directoryContents = await FileSystem.getFiles(dirPath);
+      // TODO: Possibly change this to a single operation
+      const dirDirectoryContents = await FileSystem.getDirectories(dirPath);
+      const dirFileContents = await FileSystem.getFiles(dirPath);
 
-      if (directoryContents.length == 0) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
+      if (dirDirectoryContents.length == 0 && dirFileContents.length == 0) throw new Error('Directory Is Empty!', { cause: 'EMPTY' });
 
-      const allFilesInfoArr: FileInfo[] = [];
+      const allFilesInfoArr: DirectoryContent[] = [];
 
-      for (const file of directoryContents) {
+      // Iterates through both directories and files and appends them to the array
+
+      for (const dir of dirDirectoryContents) {
+        const dirPath = FileSystem.joinPaths(dir.parentPath, dir.name);
+
+        const dirObj: DirectoryContent = {
+          name: dir.name,
+          path: dirPath,
+          isDir: true
+        };
+
+        allFilesInfoArr.push(dirObj);
+      }
+
+      for (const file of dirFileContents) {
         const filePath = FileSystem.joinPaths(file.parentPath, file.name);
 
-        const fileObj: FileInfo = {
+        const fileObj: DirectoryContent = {
           name: file.name,
-          path: filePath
+          path: filePath,
+          isDir: false
         };
 
         allFilesInfoArr.push(fileObj);
@@ -409,9 +426,9 @@ export class ViewerActions {
       if (error instanceof Error && error.cause === 'EMPTY') {
         return null;
       } else {
-        const message = `019 - Getting Invoices from ${dirPath}\n`;
+        const message = `019 - Getting Directories and Files from ${dirPath}\n`;
         ErrorHandling.updateErrorFile(message, error);
-        throw new Error(`An Issue Occurred Retrieving All Invoices`);
+        throw new Error(`An Issue Occurred Retrieving All Directory Contents`);
       }
     }
   }

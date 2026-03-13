@@ -20,7 +20,8 @@ ViewerActions
 016 - validateDestination
 017 - getInvoice
 018 - getSubDirectories
-019 - getAllFiles
+019 - getAllDirContents
+
 
 Hooks:
 012 - useAsyncInit
