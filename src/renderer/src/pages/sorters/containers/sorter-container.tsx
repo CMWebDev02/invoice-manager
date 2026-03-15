@@ -1,6 +1,6 @@
 import SortersNavBar from '../components/sorters-navbar';
 import DirectoryNavigation from './directory-navigation';
-import InvoiceDisplay from './invoice-display';
+import InvoiceDisplay from '../../../components/user/invoice-display';
 import { getUniqueID, subDirectoriesArray } from '@renderer/lib/utils';
 import useFetchData from '../../../hooks/useFetchData';
 import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/types';

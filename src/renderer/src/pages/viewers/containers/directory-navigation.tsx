@@ -10,9 +10,10 @@ interface DirectoryNavigationProps {
   mainDirPath: string;
   returnToSearch: () => void;
   getDirectoryContents: (dirContents: string) => Promise<DirectoryContent[] | null>;
+  getInvoice: (path: DirectoryContent) => Promise<void>;
 }
 
-export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDirectoryContents }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDirectoryContents, getInvoice }: DirectoryNavigationProps): React.JSX.Element {
   const [currentDirPath, setCurrentDirPath] = useState<string>(mainDirPath);
 
   const { updateResults: currentDirSubDirs, error: subDirsError, isLoading: areSubDirsLoaded } = useAsyncUpdate({ asyncFunction: getDirectoryContents, updateTrigger: currentDirPath });
@@ -38,7 +39,7 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
 
   return (
     <>
-      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} />}
+      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} />}
       <Button onClick={returnToSearch}>Return</Button>
     </>
   );

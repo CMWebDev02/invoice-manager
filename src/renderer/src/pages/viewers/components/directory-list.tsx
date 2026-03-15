@@ -6,9 +6,10 @@ interface DirectoryListProps {
   reversePathTraversal: () => void;
   subDirs: DirectoryContent[];
   updateCurrentPath: React.Dispatch<React.SetStateAction<string>>;
+  getInvoice: (path: DirectoryContent) => Promise<void>;
 }
 
-export default function DirectoryList({ subDirs, reversePathTraversal, updateCurrentPath }: DirectoryListProps): React.JSX.Element {
+export default function DirectoryList({ subDirs, reversePathTraversal, updateCurrentPath, getInvoice }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -25,7 +26,7 @@ export default function DirectoryList({ subDirs, reversePathTraversal, updateCur
           {path.name}
         </div>
         {/* Only displays the directory navigation button if the path leads to a directory. */}
-        {path.isDir && (
+        {path.isDir ? (
           <Button
             onClick={() => {
               updateCurrentPath(path.path);
@@ -33,6 +34,15 @@ export default function DirectoryList({ subDirs, reversePathTraversal, updateCur
             className="w-1/4"
           >
             -{'>'}
+          </Button>
+        ) : (
+          <Button
+            className="w-1/4"
+            onClick={() => {
+              getInvoice(path);
+            }}
+          >
+            ^
           </Button>
         )}
       </div>
