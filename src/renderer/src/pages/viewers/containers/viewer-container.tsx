@@ -7,6 +7,7 @@ import useFetchData from '@renderer/hooks/useFetchData';
 import { DirectoryContent, DirectoryExport } from '@renderer/lib/types';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from '@renderer/components/user/invoice-display';
+import LoadingPage from '@renderer/pages/loading/loading-page';
 
 interface ViewerContainerProps {
   viewerActions: ViewerActions;
@@ -68,7 +69,7 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
   }
 
   if (areDirectoriesLoading) {
-    return <h1>Loading...</h1>;
+    return <LoadingPage />;
   }
 
   if (directoriesError || directoriesArrays === undefined) {

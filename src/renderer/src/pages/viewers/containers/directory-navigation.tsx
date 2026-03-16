@@ -5,6 +5,7 @@ import DirectoryList from '../components/directory-list';
 import { toast } from 'sonner';
 import { Button } from '@renderer/components/ui/button';
 import { DirectoryContent } from '@renderer/lib/types';
+import LoadingIndicator from '@renderer/components/pages/loading-indicator';
 
 interface DirectoryNavigationProps {
   mainDirPath: string;
@@ -34,8 +35,12 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
     return <h1>Error Occurred Fetching Directories</h1>;
   }
 
-  if (areSubDirsLoaded) {
-    return <h1>Loading...</h1>;
+  if (!areSubDirsLoaded) {
+    return (
+      <div className="w-full h-full">
+        <LoadingIndicator />
+      </div>
+    );
   }
 
   return (

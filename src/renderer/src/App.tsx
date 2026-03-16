@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import SortersPage from './pages/sorters/sorters-page';
 import HeaderAndBody from './components/pages/header-and-body';
 import ViewersPage from './pages/viewers/viewers-page';
-import LoadingIndicator from './pages/loading/loading-page';
+import LoadingPage from './pages/loading/loading-page';
 
 export default function App(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -23,7 +23,7 @@ export default function App(): React.JSX.Element {
   }, []);
 
   // Add an actual loading screen
-  if (!isLoading) return <LoadingIndicator />;
+  if (isLoading) return <LoadingPage />;
 
   return (
     <>

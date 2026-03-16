@@ -1,6 +1,7 @@
 import { useParams } from 'react-router';
 import ViewerContainer from './containers/viewer-container';
 import useViewerClassInit from '@renderer/hooks/useViewerClassInit';
+import LoadingPage from '../loading/loading-page';
 
 export default function ViewersPage(): React.JSX.Element {
   const { viewerId } = useParams();
@@ -8,7 +9,7 @@ export default function ViewersPage(): React.JSX.Element {
 
   return (
     <>
-      {isLoading && <h1>Loading...</h1>}
+      {isLoading && <LoadingPage />}
       {viewerActions === null || viewerActions === undefined ? <h1>Error: {error?.message}</h1> : <ViewerContainer viewerActions={viewerActions} />}
     </>
   );
