@@ -7,9 +7,10 @@ interface DirectoryListProps {
   subDirs: DirectoryContent[];
   updateCurrentPath: React.Dispatch<React.SetStateAction<string>>;
   getInvoice: (path: DirectoryContent) => Promise<void>;
+  disabled: boolean;
 }
 
-export default function DirectoryList({ subDirs, reversePathTraversal, updateCurrentPath, getInvoice }: DirectoryListProps): React.JSX.Element {
+export default function DirectoryList({ subDirs, reversePathTraversal, updateCurrentPath, getInvoice, disabled }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -32,6 +33,7 @@ export default function DirectoryList({ subDirs, reversePathTraversal, updateCur
               updateCurrentPath(path.path);
             }}
             className="w-1/4"
+            disabled={disabled}
           >
             -{'>'}
           </Button>
@@ -41,6 +43,7 @@ export default function DirectoryList({ subDirs, reversePathTraversal, updateCur
             onClick={() => {
               getInvoice(path);
             }}
+            disabled={disabled}
           >
             ^
           </Button>

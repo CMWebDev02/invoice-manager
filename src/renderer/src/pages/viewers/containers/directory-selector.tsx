@@ -82,7 +82,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
         </div>
       </div>
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <Button onClick={getSelectedDirSubDirs} className="w-full">
+        <Button onClick={getSelectedDirSubDirs} className="w-full" disabled={disabled}>
           Select
         </Button>
       </div>
