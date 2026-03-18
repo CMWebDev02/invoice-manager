@@ -8,6 +8,7 @@ import { DirectoryContent, DirectoryExport } from '@renderer/lib/types';
 import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from '@renderer/components/user/invoice-display';
 import LoadingPage from '@renderer/pages/loading/loading-page';
+import ErrorPage from '@renderer/components/pages/error-page';
 
 interface ViewerContainerProps {
   viewerActions: ViewerActions;
@@ -73,12 +74,10 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
   }
 
   if (directoriesError || directoriesArrays === undefined) {
-    return (
-      <h1>
-        <p>Error Occurred: </p>
-        <p>{directoriesError?.message}</p>
-      </h1>
-    );
+    const errors: Error[] = [];
+    if (directoriesError !== null) errors.push(directoriesError);
+    if (directoriesArrays === undefined) errors.push(new Error('Failed to Fetch Directories!'));
+    return <ErrorPage errors={errors} />;
   }
 
   return (

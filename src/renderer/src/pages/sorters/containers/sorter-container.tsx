@@ -10,6 +10,8 @@ import NewDirectoryModal from '../components/new-directory-modal';
 import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
 import { FileSystem, SorterActions } from '@renderer/lib/file-system';
+import LoadingPage from '@renderer/pages/loading/loading-page';
+import ErrorPage from '@renderer/components/pages/error-page';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -186,17 +188,14 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   }
 
   if (areDirectoriesLoading || isInvoiceLoading) {
-    return <h1>Loading...</h1>;
+    return <LoadingPage />;
   }
 
-  if (directoryError || invoiceError) {
-    return (
-      <h1>
-        <p>Error Occurred: </p>
-        <p>{invoiceError?.message}</p>
-        <p>{directoryError?.message}</p>
-      </h1>
-    );
+  if (directoryError !== null || invoiceError !== null) {
+    const errors: Error[] = [];
+    if (directoryError !== null) errors.push(directoryError);
+    if (invoiceError !== null) errors.push(invoiceError);
+    return <ErrorPage errors={errors} />;
   }
 
   return (
