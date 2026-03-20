@@ -7,6 +7,7 @@ import DirectoryList from './directory-list';
 import { type Dirent } from 'fs';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { FileSystem } from '@renderer/lib/file-system';
+import LoadingIndicator from '@renderer/components/pages/loading-indicator';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -32,8 +33,6 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
   }
 
   function updateDirectoryPath(dirPath: string): void {
-    // Finish adding logic to denote if a path is currently selected or not, by having the path be colored red or the board becoming red
-    // also add in the save option to use the selected directory
     setSelectedDirectoryPath(dirPath);
   }
 
@@ -49,8 +48,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
         <h2 className="w-full">{currentDirectoryPath}</h2>
       </FlexRowContainer>
-      {/* Add an actual loading icon */}
-      {isLoading || directoriesArray === null ? <div>loading</div> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
+      {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
     </div>
   );
 }
