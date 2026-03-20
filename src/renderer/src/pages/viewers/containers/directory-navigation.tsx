@@ -36,7 +36,7 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
     return <ErrorPage errors={[subDirsError]} />;
   }
 
-  if (!areSubDirsLoaded) {
+  if (areSubDirsLoaded) {
     return <LoadingIndicator />;
   }
 
