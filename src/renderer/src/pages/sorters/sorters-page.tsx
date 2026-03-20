@@ -8,11 +8,11 @@ export default function SortersPage(): React.JSX.Element {
   const { sorterActions, isLoading, error } = useSorterClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
 
   if (error !== null) {
-    return <ErrorPage error={error} />;
+    return <ErrorPage errors={[error]} />;
   }
 
   if (sorterActions === null || sorterActions === undefined) {
-    return <ErrorPage error={new Error('Failed to Access Sorter!')} />;
+    return <ErrorPage errors={[new Error('Failed to Access Sorter!')]} />;
   }
 
   return (
