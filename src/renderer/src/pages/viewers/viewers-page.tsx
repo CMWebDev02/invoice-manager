@@ -13,7 +13,7 @@ export default function ViewersPage(): React.JSX.Element {
   }
 
   if (viewerActions === null || viewerActions === undefined) {
-    return <ErrorPage errors={[new Error('Failed to Access Sorter!')]} />;
+    return <ErrorPage errors={[new Error('Failed to Access Viewer!')]} />;
   }
 
   return (
