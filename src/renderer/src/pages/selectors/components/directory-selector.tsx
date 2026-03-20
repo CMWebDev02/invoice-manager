@@ -8,6 +8,7 @@ import { type Dirent } from 'fs';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { FileSystem } from '@renderer/lib/file-system';
 import LoadingIndicator from '@renderer/components/pages/loading-indicator';
+import ErrorPage from '@renderer/components/pages/error-page';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -36,6 +37,10 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
     setSelectedDirectoryPath(dirPath);
   }
 
+  if (directoriesError) {
+    return <ErrorPage errors={[directoriesError]} />;
+  }
+
   return (
     <div className={cn('flex flex-col', className)}>
       <FlexRowContainer className="flex-wrap justify-around h-16 bg-navbar">
@@ -48,7 +53,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
         <h2 className="w-full">{currentDirectoryPath}</h2>
       </FlexRowContainer>
-      {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} asyncFetchError={directoriesError} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
+      {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList className="h-[calc(100%-4rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
     </div>
   );
 }

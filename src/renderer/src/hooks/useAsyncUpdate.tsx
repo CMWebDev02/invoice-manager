@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 type UseAsyncUpdate<UpdateType> = {
   updateResults: UpdateType;
   isLoading: boolean;
-  error: unknown;
+  error: Error | null;
 };
 
 // https://www.tutorialsteacher.com/typescript/typescript-generic-interface
@@ -19,7 +19,7 @@ interface UseAsyncUpdateProps<PropType, ReturnType> {
 export default function useAsyncUpdate<PropType, ReturnType>({ asyncFunction, updateTrigger }: UseAsyncUpdateProps<PropType, ReturnType>): UseAsyncUpdate<ReturnType | null> {
   const [updateResults, setUpdateResults] = useState<ReturnType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<unknown>();
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     try {
@@ -30,8 +30,11 @@ export default function useAsyncUpdate<PropType, ReturnType>({ asyncFunction, up
       setIsLoading(true);
       getUpdatedResults();
     } catch (error) {
-      console.error(error);
-      setError(error);
+      if (error instanceof Error) {
+        setError(error);
+      } else {
+        setError(new Error('An Unknown Error has Occurred!'));
+      }
     } finally {
       setIsLoading(false);
     }

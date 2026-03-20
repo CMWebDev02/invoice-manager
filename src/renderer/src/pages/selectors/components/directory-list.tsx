@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 
 interface DirectoryListProps {
   directoriesArray: Dirent[];
-  asyncFetchError: unknown;
   updateCurrentDirectoryPath: (dirPath: string) => void;
   selectedDirectoryPath: string;
   updateSelectDirectoryPath: (dirPath: string) => void;
@@ -14,7 +13,7 @@ interface DirectoryListProps {
   className?: string;
 }
 
-export default function DirectoryList({ directoriesArray, asyncFetchError, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
+export default function DirectoryList({ directoriesArray, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
@@ -23,11 +22,6 @@ export default function DirectoryList({ directoriesArray, asyncFetchError, updat
     ),
     [reversePathTraversal]
   );
-  if (asyncFetchError)
-    return (
-      // Add an actual error page
-      <h1>{JSON.stringify(asyncFetchError)}</h1>
-    );
 
   const values = directoriesArray.map((dir: Dirent) => {
     const childDirPath = FileSystem.joinPaths(dir.parentPath, dir.name);
