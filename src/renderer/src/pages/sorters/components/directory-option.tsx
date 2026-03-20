@@ -14,11 +14,8 @@ export default function DirectoryOption({ disabled, directoryObject, currentDire
 
   return (
     <div>
-      <Button className={`w-5/6 bg-${backGroundColor} `} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
+      <Button className={`w-5/6 bg-${backGroundColor}`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
         {name}
-      </Button>
-      <Button className="w-1/6" disabled={disabled}>
-        -{'>'}
       </Button>
     </div>
   );
