@@ -1,4 +1,4 @@
-import MenuButton from '@renderer/pages/selectors/components/menu-button';
+import MenuButton from '@renderer/components/user/menu-button';
 
 interface ViewersNavBarProps {
   sorterTitle: string;

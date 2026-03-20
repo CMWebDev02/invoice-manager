@@ -1,5 +1,5 @@
 import { FileSystem, SorterActions, ViewerActions } from '@renderer/lib/file-system';
-import { DirectoryContent, FileExport } from '@renderer/lib/types';
+import { DirectoryContent } from '@renderer/lib/types';
 import { getUniqueID } from '@renderer/lib/utils';
 
 export class SorterTest {
