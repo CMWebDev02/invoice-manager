@@ -85,7 +85,6 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
       <ViewersNavBar sorterTitle={viewerActions.sorterTitle} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
-          {/* Have this get hidden for a directory navigation element upon user clicking select */}
           <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} getDirectoryContents={getDirectoryContents} getInvoice={getInvoice} disabled={isUserInteractionDisabled} />}</div>
           {selectedInvoiceData !== null && <InvoiceDisplay disabled={isUserInteractionDisabled} invoiceFileData={selectedInvoiceData} />}
         </div>
