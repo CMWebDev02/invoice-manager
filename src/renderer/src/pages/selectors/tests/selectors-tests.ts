@@ -1,5 +1,5 @@
 import { FileSystem, SorterActions, ViewerActions } from '@renderer/lib/file-system';
-import { FileInfo } from '@renderer/lib/types';
+import { DirectoryContent, FileExport } from '@renderer/lib/types';
 import { getUniqueID } from '@renderer/lib/utils';
 
 export class SorterTest {
@@ -239,9 +239,10 @@ export class ViewerTest {
     try {
       const testFilePath = FileSystem.joinPaths(this._tempDirectoriesDestination, this._testFileName);
 
-      const testFileInfo: FileInfo = {
+      const testFileInfo: DirectoryContent = {
         name: this._testFileName,
-        path: testFilePath
+        path: testFilePath,
+        isDir: false
       };
 
       const testFileExport = await this._viewerActions.getInvoice(testFileInfo);

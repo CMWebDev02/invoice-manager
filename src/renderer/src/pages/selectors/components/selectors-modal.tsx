@@ -15,7 +15,7 @@ import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
-import { SorterTest, ViewerTest } from '@renderer/pages/selectors/tests/sorter-tests';
+import { SorterTest, ViewerTest } from '@renderer/pages/selectors/tests/selectors-tests';
 import { toast } from 'sonner';
 
 interface SortersModalProps {
