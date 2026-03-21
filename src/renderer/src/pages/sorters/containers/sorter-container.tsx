@@ -40,7 +40,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
 
   useEffect(() => {
-    if (invoiceObj !== null && directoriesArrays !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
+    if (invoiceObj !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
       setIsInteractionDisabled(false);
     }
   }, [invoiceObj, directoriesArrays]);

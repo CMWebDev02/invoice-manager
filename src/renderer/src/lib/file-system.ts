@@ -270,6 +270,7 @@ export class SorterActions {
       const subFoldersDirectoriesArray: DirectoryExport[][] = [];
 
       // Validates the various sub directories before attempting to retrieve their contents
+      //? subDirectoriesArray is the Array of the various characters used to denote subdirectories in the main folder
       for (const subDir of subDirectoriesArray) {
         const subDirPath = await FileSystem.validateSubDir(this.directoryDestination, subDir);
         subDirPaths.push(subDirPath);

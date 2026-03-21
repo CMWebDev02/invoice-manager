@@ -18,13 +18,31 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
 
+  // Find a way to remove the need for the userSearchString in the dependencies array or prevent this from triggering rerendering along with refiltering 
   useEffect(() => {
-    // TODO: Have this refilter the array to display the new directory option
-    if (directoriesArrays !== null && directoriesArrays !== undefined) {
-      setUserSearchString('');
-      setFilteredDirectories([]);
+    function reFilter(): void {
+      const textInput = userSearchString;
+      // Uppercase the text input to make it easier to determine the subIndex value
+      // and offsets the value by 65 to make letters correspond to value 0-25
+      const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
+
+      // Checks that the textInput is populated
+      if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
+        const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
+          // Performs the necessary check of the directory name based on the user's capitalization setting,
+          const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
+          const comparedTextInput = !userSettings.autoCapitalizeAllInputs ? textInput : textInput.toUpperCase();
+
+          return directoryName.startsWith(comparedTextInput);
+        });
+        setFilteredDirectories(filteredArray);
+      } else {
+        setFilteredDirectories([]);
+      }
     }
-  }, [directoriesArrays]);
+
+    reFilter();
+  }, [directoriesArrays, userSearchString]);
 
   function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
