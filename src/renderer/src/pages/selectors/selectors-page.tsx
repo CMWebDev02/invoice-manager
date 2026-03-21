@@ -11,6 +11,7 @@ import SelectorsModal from './components/selectors-modal';
 import { Link } from 'react-router';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { toast, Toaster } from 'sonner';
+import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -47,14 +48,12 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   }
 
   function removeExistingSelector(selectorId: string): void {
-    //TODO: Add confirmation popup
-    console.log('create confirmation');
     const isSuccessful: boolean = removeSelector(selectorType, selectorId);
     if (isSuccessful) {
-      toast.success(`${selectorType} Removed!`);
+      toast.success(`${selectorType === 'sorters' ? 'Sorter' : 'Viewer'} Removed!`);
       setSavedSorters(getSelectors(selectorType));
     } else {
-      toast.error(`Failed to Remove ${selectorType}!`);
+      toast.error(`Failed to Remove ${selectorType === 'sorters' ? 'Sorter' : 'Viewer'}!`);
     }
   }
 
@@ -81,9 +80,18 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           </Button>
         </Link>
         {editingMode && (
-          <Button variant="destructive" className="w-1/6" onClick={() => removeExistingSelector(selectorId)}>
-            <FontAwesomeIcon icon={faXmark} size="lg" />
-          </Button>
+          <Popover>
+            <PopoverTrigger className="w-1/6">
+              <Button variant="destructive" className="w-full">
+                <FontAwesomeIcon icon={faXmark} size="lg" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full">
+              <Button className="w-full" onClick={() => removeExistingSelector(selectorId)}>
+                Confirm
+              </Button>
+            </PopoverContent>
+          </Popover>
         )}
       </div>
     );
