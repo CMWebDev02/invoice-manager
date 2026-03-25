@@ -5,6 +5,7 @@ import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { userSettings } from '@renderer/lib/temp';
 import DirectoryOption from '../components/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
+import useDebounce from '@renderer/hooks/useDebounce';
 
 interface DirectoryNavigationProps {
   disabled: boolean;
@@ -17,11 +18,12 @@ interface DirectoryNavigationProps {
 export default function DirectoryNavigation({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
+  const filterString = useDebounce({ updateVar: userSearchString });
 
-  // Find a way to remove the need for the userSearchString in the dependencies array or prevent this from triggering rerendering along with refiltering 
+  // Find a way to remove the need for the userSearchString in the dependencies array or prevent this from triggering rerendering along with refiltering
   useEffect(() => {
     function reFilter(): void {
-      const textInput = userSearchString;
+      const textInput = filterString;
       // Uppercase the text input to make it easier to determine the subIndex value
       // and offsets the value by 65 to make letters correspond to value 0-25
       const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
@@ -42,36 +44,17 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
     }
 
     reFilter();
-  }, [directoriesArrays, userSearchString]);
+  }, [directoriesArrays, filterString]);
 
-  function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
+  function updateSearchString(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
-    // Uppercase the text input to make it easier to determine the subIndex value
-    // and offsets the value by 65 to make letters correspond to value 0-25
-    const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
-
-    // Checks that the textInput is populated
-    if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
-      const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
-        // Performs the necessary check of the directory name based on the user's capitalization setting,
-        const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
-        const comparedTextInput = !userSettings.autoCapitalizeAllInputs ? textInput : textInput.toUpperCase();
-
-        return directoryName.startsWith(comparedTextInput);
-      });
-      setFilteredDirectories(filteredArray);
-    } else {
-      setFilteredDirectories([]);
-    }
-
-    // Regardless of value, the search string needs to be updated
     setUserSearchString(textInput);
   }
 
   return (
     <div className="w-full h-11/12">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} />
         <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
