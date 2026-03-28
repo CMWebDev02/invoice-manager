@@ -20,7 +20,6 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const filterString = useDebounce({ updateVar: userSearchString });
 
-  // Find a way to remove the need for the userSearchString in the dependencies array or prevent this from triggering rerendering along with refiltering
   useEffect(() => {
     function reFilter(): void {
       const textInput = filterString;
