@@ -9,6 +9,7 @@ import SortersPage from './pages/sorters/sorters-page';
 import HeaderAndBody from './components/pages/header-and-body';
 import ViewersPage from './pages/viewers/viewers-page';
 import LoadingPage from './pages/loading/loading-page';
+import { UserSettings } from './lib/user-settings';
 
 export default function App(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,7 +20,11 @@ export default function App(): React.JSX.Element {
       setIsLoading(false);
     }
 
+    // Calls the necessary initial load functions
+    // Loads the user's drive letters and stores them
     pullUserDrives();
+    // Initializes the user's settings object
+    UserSettings.initializeUserSettings();
   }, []);
 
   // Add an actual loading screen

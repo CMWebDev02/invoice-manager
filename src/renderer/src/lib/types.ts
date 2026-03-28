@@ -46,3 +46,7 @@ export type FileSystemTypes = {
   initializeNewFile: (filePath: string) => Promise<void>;
   appendContentToFile: (filePath: string, newContent: string) => Promise<void>;
 };
+
+export type UserSettingsTypes = {
+  strictInputs: boolean;
+};

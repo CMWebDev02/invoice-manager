@@ -61,5 +61,3 @@ export async function storeSelector(page: 'sorters' | 'viewers', newSelector: Se
     return false;
   }
 }
-
-

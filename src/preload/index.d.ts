@@ -23,6 +23,9 @@ type StorageTypes = {
   searchSelector: (selectorType: 'sorters' | 'viewers', sorterId: string) => SelectorDetails;
   removeSelector: (selectorType: 'sorters' | 'viewers', sorterId: string) => boolean;
   getSelectors: (selectorType: 'sorters' | 'viewers') => SorterDetails[];
+  initializeUserSettings: (userSettingsObj: UserSettings) => void;
+  updateUserSettings: (userSettingsObj: UserSettings) => boolean;
+  retrieveUserSettings: () => UserSettings | false;
 };
 
 declare global {

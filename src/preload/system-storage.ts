@@ -1,12 +1,13 @@
 import Store from 'electron-store';
 import { pullUserDrives } from './powershell';
-import type { SelectorDetails } from './types';
+import type { SelectorDetails, UserSettings } from './types';
 
 type StoreTypes = {
   userData: boolean;
   userDrives: string;
   sortersArray: string;
   viewersArray: string;
+  userSettings: string;
 };
 
 const store = new Store<StoreTypes>();
@@ -26,7 +27,7 @@ export async function storeUserDrives(): Promise<boolean> {
 export function getUserDrives(): string[] {
   try {
     const drivesString: string = store.get('userDrives');
-    const userDrives = JSON.parse(drivesString);
+    const userDrives: string[] = JSON.parse(drivesString);
     return userDrives;
   } catch (error) {
     console.error(error);
@@ -129,12 +130,12 @@ export function getSelectors(selectorType: 'sorters' | 'viewers'): SelectorDetai
     if (selectorType === 'sorters') {
       const currentSorters = store.get('sortersArray', '');
       // Checks if there is a stored viewersArray, else return an empty array.
-      const currentSortersArray = currentSorters !== '' ? JSON.parse(currentSorters) : [];
+      const currentSortersArray: SelectorDetails[] = currentSorters !== '' ? JSON.parse(currentSorters) : [];
       return currentSortersArray;
     } else if (selectorType === 'viewers') {
       const currentViewers = store.get('viewersArray', '');
       // Checks if there is a stored viewersArray, else return an empty array.
-      const currentViewersArray = currentViewers !== '' ? JSON.parse(currentViewers) : [];
+      const currentViewersArray: SelectorDetails[] = currentViewers !== '' ? JSON.parse(currentViewers) : [];
       return currentViewersArray;
     }
 
@@ -142,5 +143,40 @@ export function getSelectors(selectorType: 'sorters' | 'viewers'): SelectorDetai
   } catch (error) {
     console.error(error);
     return [];
+  }
+}
+
+// Called upon first loading the application and checks if there is a stored user settings object already present
+// and stores a default settings object if one is not already stored
+// The return boolean will indicate if the sorter is
+export function initializeUserSettings(userSettingsObj: UserSettings): void {
+  try {
+    const userSettingsString: string = store.get('userSettings');
+    if (userSettingsString === undefined) {
+      store.set('userSettings', JSON.stringify(userSettingsObj));
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export function updateUserSettings(userSettingsObj: UserSettings): boolean {
+  try {
+    store.set('userSettings', JSON.stringify(userSettingsObj));
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export function retrieveUserSettings(): UserSettings | false {
+  try {
+    const userSettingsString: string = store.get('userSettings');
+    const userSettings: UserSettings = JSON.parse(userSettingsString);
+    return userSettings;
+  } catch (error) {
+    console.error(error);
+    throw new Error('An Unexpected Error Occurred Getting User Settings!');
   }
 }

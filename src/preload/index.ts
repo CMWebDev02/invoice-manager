@@ -1,7 +1,7 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { appendContentToFile, copyTestFile, getDirectoryContents, initializeNewDir, initializeNewFile, joinPaths, readFile, removeDirectory, removeTestFile, transferFile, userHomeDir, validateDirectoryPath } from './file-system';
-import { getSelectors, getUserDrives, removeSelector, searchSelector, storeNewSelector, storeUserDrives, updateSelector } from './system-storage';
+import { getSelectors, getUserDrives, retrieveUserSettings, removeSelector, searchSelector, storeNewSelector, storeUserDrives, updateUserSettings, updateSelector, initializeUserSettings } from './system-storage';
 
 // Custom APIs for renderer
 const api = {
@@ -26,7 +26,10 @@ const api = {
     updateSelector,
     searchSelector,
     removeSelector,
-    getSelectors
+    getSelectors,
+    initializeUserSettings,
+    updateUserSettings,
+    retrieveUserSettings
   }
 };
 

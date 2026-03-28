@@ -9,3 +9,7 @@ export type DirectoryExport = {
   name: string;
   dirPath: string;
 };
+
+export type UserSettings = {
+  strictInputs: boolean;
+};
