@@ -27,7 +27,6 @@ export default function App(): React.JSX.Element {
     UserSettings.initializeUserSettings();
   }, []);
 
-  // Add an actual loading screen
   if (isLoading) return <LoadingPage />;
 
   return (
