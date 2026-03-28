@@ -6,6 +6,7 @@ import { DirectoryExport } from '@renderer/lib/types';
 import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
 import DirectoryOption from '../components/directory-option';
+import useDebounce from '@renderer/hooks/useDebounce';
 
 interface DirectorySelectorProps {
   disabled: boolean;
@@ -17,36 +18,35 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const [currentDirectory, setCurrentDirectory] = useState<DirectoryExport | null>(null);
+  const filterString = useDebounce({ updateVar: userSearchString });
 
   useEffect(() => {
-    // TODO: Have this refilter the array to display the new directory option
-    if (directoriesArrays !== null && directoriesArrays !== undefined) {
-      setUserSearchString('');
-      setFilteredDirectories([]);
-    }
-  }, [directoriesArrays]);
+    function reFilter(): void {
+      const textInput = filterString;
+      // Uppercase the text input to make it easier to determine the subIndex value
+      // and offsets the value by 65 to make letters correspond to value 0-25
+      const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
 
-  function filterDirectories(e: React.ChangeEvent<HTMLInputElement>): void {
+      // Checks that the textInput is populated
+      if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
+        const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
+          // Performs the necessary check of the directory name based on the user's capitalization setting,
+          const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
+          const comparedTextInput = !userSettings.autoCapitalizeAllInputs ? textInput : textInput.toUpperCase();
+
+          return directoryName.startsWith(comparedTextInput);
+        });
+        setFilteredDirectories(filteredArray);
+      } else {
+        setFilteredDirectories([]);
+      }
+    }
+
+    reFilter();
+  }, [directoriesArrays, filterString]);
+
+  function updateSearchString(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
-    // Uppercase the text input to make it easier to determine the subIndex value
-    // and offsets the value by 65 to make letters correspond to value 0-25
-    const subDirectoryIndex = textInput.toUpperCase().charCodeAt(0) - 65;
-
-    // Checks that the textInput is populated
-    if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
-      const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
-        // Performs the necessary check of the directory name based on the user's capitalization setting,
-        const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
-        const comparedTextInput = !userSettings.autoCapitalizeAllInputs ? textInput : textInput.toUpperCase();
-
-        return directoryName.startsWith(comparedTextInput);
-      });
-      setFilteredDirectories(filteredArray);
-    } else {
-      setFilteredDirectories([]);
-    }
-
-    // Regardless of value, the search string needs to be updated
     setUserSearchString(textInput);
   }
 
@@ -72,7 +72,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
   return (
     <div className="w-full h-11/12 flex-col gap-1">
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => filterDirectories(e)} value={userSearchString} />
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} />
       </div>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
