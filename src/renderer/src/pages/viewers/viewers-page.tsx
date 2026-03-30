@@ -6,7 +6,7 @@ import ErrorPage from '@renderer/components/pages/error-page';
 
 export default function ViewersPage(): React.JSX.Element {
   const { viewerId } = useParams();
-  const { viewerActions, isLoading, error } = useViewerClassInit({ viewerId, asyncFunctionKey: 'sorting-class' });
+  const { viewerActions, isLoading, error } = useViewerClassInit({ viewerId, asyncFunctionKey: 'viewers-class' });
 
   if (error !== null) {
     return <ErrorPage errors={[error]} />;
