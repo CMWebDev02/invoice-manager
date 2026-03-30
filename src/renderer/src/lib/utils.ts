@@ -18,6 +18,14 @@ export function getTitleCase(str: string): string {
   return titleArray.join(' ');
 }
 
+export function convertCamelCase(str: string): string {
+  let newStr = str.replace(/([a-z])([A-Z])/, '$1 $2');
+
+  newStr = newStr.at(0)?.toUpperCase() + newStr.slice(1, newStr.length);
+
+  return newStr;
+}
+
 export function getUniqueID(): string {
   // Credit: MrCano369x
   // https://stackoverflow.com/questions/3231459/how-can-i-create-unique-ids-with-javascript

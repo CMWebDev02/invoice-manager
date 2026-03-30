@@ -1,15 +1,26 @@
-import { Toggle } from '@renderer/components/ui/toggle';
+import { Switch } from '@renderer/components/ui/switch';
+import { convertCamelCase } from '@renderer/lib/utils';
 
 interface SettingOptionProps {
   settingName: string;
   settingValue: boolean;
+  updateUserSetting: (settingName: string, settingValue: boolean) => void;
 }
 
-export default function SettingOption({ settingName, settingValue }: SettingOptionProps): React.JSX.Element {
+export default function SettingOption({ settingName, settingValue, updateUserSetting }: SettingOptionProps): React.JSX.Element {
+  const settingsTitle = convertCamelCase(settingName);
+
+  function handleChange(): void {
+    updateUserSetting(settingName, !settingValue);
+  }
+
   return (
-    <div>
-      <h1>{settingName}</h1>
-      <Toggle variant={'outline'}>{settingValue === true ? 'True' : 'False'}</Toggle>
+    <div className="flex justify-between">
+      <p>{settingsTitle}</p>
+      <div>
+        <label htmlFor={settingName}>{settingValue === true ? 'True' : 'False'}</label>
+        <Switch onCheckedChange={handleChange} checked={settingValue} id={settingName} />
+      </div>
     </div>
   );
 }

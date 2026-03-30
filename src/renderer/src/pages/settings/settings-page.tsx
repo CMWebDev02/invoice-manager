@@ -19,12 +19,16 @@ export default function SettingsPage(): React.JSX.Element {
     }
   }
 
-  function updateUserSetting(settingName: string, settingValue: boolean): void {
-    userSettings[settingName] = settingValue;
+  function updateUserSetting(settingName: string, newSettingValue: boolean): void {
+    setUserSettings((prevSettings) => {
+      const newSettings = { ...prevSettings };
+      newSettings[settingName] = newSettingValue;
+      return newSettings;
+    });
   }
 
   const UserSettingsOptions = Object.entries(userSettings).map(([settingName, settingValue]) => {
-    return <SettingOption key={settingName} settingName={settingName} settingValue={settingValue} />;
+    return <SettingOption key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
   });
 
   return (
