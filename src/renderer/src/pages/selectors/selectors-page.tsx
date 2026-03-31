@@ -66,25 +66,23 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           </Button>
         )}
         {/* Navigation link to respective sorter or viewer with selector id passed as a url parameter */}
-        <Link to={`/${selectorType}/${selectorId}`}>
-          <Button
-            disabled={editingMode}
-            className={`
+        <Button
+          disabled={editingMode}
+          className={`
             ${editingMode ? 'w-4/6' : 'w-full'}
             text-lg
             md:text-xl
             lg:text-2xl
             `}
-          >
-            {selectorTitle}
-          </Button>
-        </Link>
+        >
+          <Link to={`/${selectorType}/${selectorId}`}>{selectorTitle}</Link>
+        </Button>
         {editingMode && (
           <Popover>
             <PopoverTrigger className="w-1/6">
-              <Button variant="destructive" className="w-full">
-                <FontAwesomeIcon icon={faXmark} size="lg" />
-              </Button>
+              <div className="w-full hover:cursor-pointer">
+                <FontAwesomeIcon icon={faXmark} size="lg" className="text-red-600" />
+              </div>
             </PopoverTrigger>
             <PopoverContent className="w-full">
               <Button className="w-full" onClick={() => removeExistingSelector(selectorId)}>
@@ -109,8 +107,10 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           
           h-3/4 md:h-1/2
           max-h-3/4 md:max-h-1/2
-          w-78 md:w-86 lg:w-96
-        "
+          w-78 
+          md:w-86 
+          lg:w-96
+          "
         >
           <CardContent
             className="flex flex-col items-center h-full max-h-full overflow-x-hidden overflow-y-auto scrollbar border-2 border-background p-0

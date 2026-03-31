@@ -148,6 +148,10 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       className="
     min-h-80
     h-10/12 md:h-5/6 lg:h-4/5
+    w-full
+    sm:max-w-5/6
+    lg:max-w-3/4
+    xl:max-w-1/2
     flex flex-col justify-around
     "
       // Close modal if user clicks outside
@@ -156,7 +160,9 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     >
       <DialogHeader className="flex flex-col h-20">
         <FlexRowContainer className="w-full justify-between">
-          <Button onClick={validateChanges}>Save</Button>
+          <Button onClick={validateChanges} variant="secondary">
+            Save
+          </Button>
           <DialogTitle
             className="
           text-lg md:text-2xl lg:text-3xl
@@ -165,20 +171,20 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           >
             Editor
           </DialogTitle>
-          <Button onClick={toggleModal}>
-            <FontAwesomeIcon icon={faXmark} size="lg" />
+          <Button onClick={toggleModal} variant="secondary">
+            <FontAwesomeIcon icon={faXmark} size="lg" className="text-red-600" />
           </Button>
         </FlexRowContainer>
-        <FlexRowContainer className="gap-4 items-center">
+        <FlexRowContainer className="gap-4 items-center justify-center">
           <Label
-            className="w-1/4 md:w-1/3
+            className=" w-auto
           text-lg md:text-2xl
         "
             htmlFor="selector-title"
           >
             Title:
           </Label>
-          <WhiteListInput className="w-3/4 md:w-2/3" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
+          <WhiteListInput className="w-1/2 bg-secondary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
@@ -186,19 +192,19 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         {selectorType === 'sorters' && (
           <div className="h-full">
             <FlexColContainer className="h-16">
-              <h3 className="md:text-lg">Invoices Destination</h3>
+              <h3 className="md:text-lg">Invoices Destination:</h3>
               <h4>{invoicesDestination}</h4>
             </FlexColContainer>
-            <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
+            <DirectorySelector className="h-[calc(100%-4rem)] w-full border-4 border-secondary rounded-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
           </div>
         )}
 
         <div className="h-full">
           <FlexColContainer className="h-16">
-            <h3 className="md:text-lg">Directories Destination</h3>
+            <h3 className="md:text-lg">Directories Destination:</h3>
             <h4>{directoriesDestination}</h4>
           </FlexColContainer>
-          <DirectorySelector className="h-[calc(100%-4rem)] w-full" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
+          <DirectorySelector className="h-[calc(100%-4rem)] w-full border-4 border-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
         </div>
       </FlexRowContainer>
     </DialogContent>
