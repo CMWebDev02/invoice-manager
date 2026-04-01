@@ -59,9 +59,13 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
 
   const SelectorsButtons = savedSorters.map(({ selectorTitle, selectorId }) => {
     return (
-      <div key={selectorId} className="bg-primary w-full flex flex-row justify-center p-1">
+      <div key={selectorId} className="bg-primary w-full flex flex-row justify-center p-2">
         {editingMode && (
-          <Button className="w-1/6" onClick={() => editExistingSelector(selectorId)}>
+          <Button
+            className="w-1/6 rounded-2xl
+            hover:bg-secondary/40"
+            onClick={() => editExistingSelector(selectorId)}
+          >
             <FontAwesomeIcon icon={faAngleUp} size="lg" />
           </Button>
         )}
@@ -70,16 +74,24 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           disabled={editingMode}
           className={`
             ${editingMode ? 'w-4/6' : 'w-full'}
+            p-0
             text-lg
             md:text-xl
             lg:text-2xl
+            rounded-2xl
+            hover:bg-secondary/40
             `}
         >
-          <Link to={`/${selectorType}/${selectorId}`}>{selectorTitle}</Link>
+          <Link to={`/${selectorType}/${selectorId}`} className="w-full h-full">
+            {selectorTitle}
+          </Link>
         </Button>
         {editingMode && (
           <Popover>
-            <PopoverTrigger className="w-1/6">
+            <PopoverTrigger
+              className={`w-1/6 rounded-2xl
+            hover:bg-secondary/40`}
+            >
               <div className="w-full hover:cursor-pointer">
                 <FontAwesomeIcon icon={faXmark} size="lg" className="text-red-600" />
               </div>

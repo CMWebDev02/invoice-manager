@@ -190,22 +190,22 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)] w-full">
         {/* //?Invoices directory selector only displays for sorters page */}
         {selectorType === 'sorters' && (
-          <div className="h-full w-1/2">
+          <FlexColContainer className="h-full w-1/2 gap-1">
             <FlexColContainer className="h-16">
               <h3 className="md:text-lg">Invoices Destination:</h3>
-              <h4 className="border-2 border-secondary bg-primary p-0.5">{invoicesDestination}</h4>
+              <h4 className="border-2 border-secondary bg-primary p-0.5 text-lg min-h-8">{invoicesDestination}</h4>
             </FlexColContainer>
             <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
-          </div>
+          </FlexColContainer>
         )}
 
-        <div className="h-full w-1/2">
+        <FlexColContainer className="h-full w-1/2 gap-1">
           <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Directories Destination:</h3>
-            <h4 className="border-2 border-secondary bg-primary p-0.5">{directoriesDestination}</h4>
+            <h4 className="border-2 border-secondary bg-primary p-0.5 text-lg min-h-8">{directoriesDestination}</h4>
           </FlexColContainer>
           <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
-        </div>
+        </FlexColContainer>
       </FlexRowContainer>
     </DialogContent>
   );

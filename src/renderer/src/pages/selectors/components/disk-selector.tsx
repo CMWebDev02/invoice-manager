@@ -1,6 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@renderer/components/ui/select';
 import { cn } from '@renderer/lib/utils';
-import { type ChangeEvent } from 'react';
 
 interface DiskSelectorProps {
   drivesList: string[];
