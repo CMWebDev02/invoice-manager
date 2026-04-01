@@ -18,7 +18,7 @@ export default function YearSelector({ disabled, updateCurrentYear }: YearSelect
       years.push(year - i);
     }
     const YearsItems = years.map((year) => (
-      <SelectItem key={year} value={year.toString()}>
+      <SelectItem key={year} value={year.toString()} className="focus:bg-foreground focus:text-white">
         {year}
       </SelectItem>
     ));
@@ -28,11 +28,11 @@ export default function YearSelector({ disabled, updateCurrentYear }: YearSelect
   return (
     <>
       <Select onValueChange={updateCurrentYear} disabled={disabled}>
-        <SelectTrigger>
+        <SelectTrigger className="rounded-none bg-secondary text-accent outline-none border border-accent">
           <SelectValue placeholder="XXXX" />
         </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>{YearsItems}</SelectGroup>
+        <SelectContent className="bg-secondary border border-accent">
+          <SelectGroup className="outline-none">{YearsItems}</SelectGroup>
         </SelectContent>
       </Select>
     </>

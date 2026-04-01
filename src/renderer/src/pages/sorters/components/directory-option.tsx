@@ -10,13 +10,11 @@ interface DirectoryOptionProps {
 
 export default function DirectoryOption({ disabled, directoryObject, currentDirectory, updateCurrentDirectory }: DirectoryOptionProps): React.JSX.Element {
   const { name } = directoryObject;
-  const backGroundColor = currentDirectory !== null && currentDirectory.name === name ? 'red-900' : 'background';
+  const isSelected = currentDirectory !== null && currentDirectory.name === name;
 
   return (
-    <div>
-      <Button className={`w-5/6 bg-${backGroundColor}`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
-        {name}
-      </Button>
-    </div>
+    <Button className={`w-full ${isSelected ? 'bg-secondary/30' : 'bg-primary'} rounded-none border border-foreground flex justify-start hover:bg-white/70`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
+      {name}
+    </Button>
   );
 }

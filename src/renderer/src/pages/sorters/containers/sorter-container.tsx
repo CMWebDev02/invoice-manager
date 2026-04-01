@@ -12,6 +12,7 @@ import ChangeLogDrawer from '../components/changelog-drawer';
 import { FileSystem, SorterActions } from '@renderer/lib/file-system';
 import LoadingPage from '@renderer/pages/loading/loading-page';
 import ErrorPage from '@renderer/components/pages/error-page';
+import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -202,14 +203,14 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
     <>
       <SortersNavBar sorterTitle={sorterActions.sorterTitle} triggerSorting={validateCurrentSelections} triggerModal={toggleModal} />
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
-        <div className="w-full h-full flex flex-row p-2">
+        <FlexRowContainer className="w-full h-full p-2">
           <div className="w-1/3 h-full flex flex-col gap-1">
             {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
             <ChangeLog triggerChangeLog={toggleDrawer} />
           </div>
 
           {invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
-        </div>
+        </FlexRowContainer>
       </main>
       <Toaster />
       <NewDirectoryModal isOpen={isModalOpen} changeOpen={toggleModal} createNewDirectory={createNewDirectory} newDirectoryName={newDirectoryName} setNewDirectoryName={setNewDirectoryName} />

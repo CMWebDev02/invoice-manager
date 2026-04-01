@@ -6,6 +6,8 @@ import { userSettings } from '@renderer/lib/temp';
 import DirectoryOption from '../components/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
 import useDebounce from '@renderer/hooks/useDebounce';
+import FlexRowContainer from '@renderer/components/ui/flex-row-container';
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
 interface DirectoryNavigationProps {
   disabled: boolean;
@@ -52,17 +54,15 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
 
   return (
     <div className="w-full h-11/12">
-      <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} />
+      <FlexRowContainer className="p-1 justify-around items-center w-full h-12">
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-2/3 rounded-none bg-secondary text-accent border border-foreground" />
         <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
-      </div>
-      <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
-        <div className="w-full">
-          {filteredDirectories.map((dirObj) => (
-            <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} disabled={disabled} />
-          ))}
-        </div>
-      </div>
+      </FlexRowContainer>
+      <FlexColContainer className="w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
+        {filteredDirectories.map((dirObj) => (
+          <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} disabled={disabled} />
+        ))}
+      </FlexColContainer>
     </div>
   );
 }
