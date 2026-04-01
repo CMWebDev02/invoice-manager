@@ -16,7 +16,7 @@ interface DirectoryListProps {
 export default function DirectoryList({ directoriesArray, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
   const BackwardsNavigateButton = useMemo(
     () => (
-      <Button className="w-full border-2 rounded-none" onClick={reversePathTraversal}>
+      <Button className={`w-full flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal}>
         ...
       </Button>
     ),
@@ -28,22 +28,23 @@ export default function DirectoryList({ directoriesArray, updateCurrentDirectory
 
     return (
       <div key={dir.name} className="flex w-full bg-primary">
-        <div
-          className={`w-3/4 flex items-center select-none ${childDirPath === selectedDirectoryPath ? 'text-white' : 'text-foreground'}`}
+        <Button
+          className={`w-3/4 flex justify-start select-none outline-none rounded-none border-2 border-accent hover:text-accent
+            ${childDirPath === selectedDirectoryPath ? 'text-red-600 bg-secondary/20' : 'text-foreground bg-secondary'}`}
           id={dir.name}
           onClick={() => {
             updateSelectDirectoryPath(childDirPath);
           }}
         >
           {dir.name}
-        </div>
+        </Button>
         <Button
           onClick={() => {
             updateCurrentDirectoryPath(childDirPath);
           }}
-          className="w-1/4"
+          className="w-1/4 text-foreground bg-secondary select-none outline-none rounded-none border-2 border-accent hover:text-accent"
         >
-          -{'>'}
+          {'>'}
         </Button>
       </div>
     );

@@ -42,7 +42,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
   }
 
   return (
-    <div className={cn('flex flex-col', className)}>
+    <div className={cn('flex flex-col w-full', className)}>
       <FlexRowContainer className="flex-wrap justify-between h-17 bg-navbar">
         <DiskSelector drivesList={drivesList} updateCurrentDirectoryPath={updateCurrentDirectoryPath} className="w-1/2 text-foreground rounded-none border-white border-2 outline-white" />
 

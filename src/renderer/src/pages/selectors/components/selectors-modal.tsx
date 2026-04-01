@@ -187,10 +187,10 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           <WhiteListInput className="w-1/2 bg-secondary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
-      <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)]">
+      <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)] w-full">
         {/* //?Invoices directory selector only displays for sorters page */}
         {selectorType === 'sorters' && (
-          <div className="h-full">
+          <div className="h-full w-1/2">
             <FlexColContainer className="h-16">
               <h3 className="md:text-lg">Invoices Destination:</h3>
               <h4 className="border-2 border-secondary bg-primary p-0.5">{invoicesDestination}</h4>
@@ -199,7 +199,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           </div>
         )}
 
-        <div className="h-full">
+        <div className="h-full w-1/2">
           <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Directories Destination:</h3>
             <h4 className="border-2 border-secondary bg-primary p-0.5">{directoriesDestination}</h4>
