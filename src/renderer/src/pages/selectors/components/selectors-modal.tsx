@@ -160,7 +160,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     >
       <DialogHeader className="flex flex-col h-20">
         <FlexRowContainer className="w-full justify-between">
-          <Button onClick={validateChanges} variant="secondary">
+          <Button onClick={validateChanges} variant="secondary" className="hover:cursor-pointer">
             Save
           </Button>
           <DialogTitle
@@ -171,7 +171,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           >
             Editor
           </DialogTitle>
-          <Button onClick={toggleModal} variant="secondary">
+          <Button onClick={toggleModal} variant="secondary" className="hover:cursor-pointer">
             <FontAwesomeIcon icon={faXmark} size="lg" className="text-red-600" />
           </Button>
         </FlexRowContainer>
@@ -193,18 +193,18 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           <div className="h-full">
             <FlexColContainer className="h-16">
               <h3 className="md:text-lg">Invoices Destination:</h3>
-              <h4>{invoicesDestination}</h4>
+              <h4 className="border-2 border-secondary bg-primary p-0.5">{invoicesDestination}</h4>
             </FlexColContainer>
-            <DirectorySelector className="h-[calc(100%-4rem)] w-full border-4 border-secondary rounded-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
+            <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
           </div>
         )}
 
         <div className="h-full">
           <FlexColContainer className="h-16">
             <h3 className="md:text-lg">Directories Destination:</h3>
-            <h4>{directoriesDestination}</h4>
+            <h4 className="border-2 border-secondary bg-primary p-0.5">{directoriesDestination}</h4>
           </FlexColContainer>
-          <DirectorySelector className="h-[calc(100%-4rem)] w-full border-4 border-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
+          <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
         </div>
       </FlexRowContainer>
     </DialogContent>
