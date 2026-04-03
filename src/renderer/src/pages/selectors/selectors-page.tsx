@@ -74,7 +74,7 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
           disabled={editingMode}
           className={`
             ${editingMode ? 'w-4/6' : 'w-full'}
-            p-0
+            p-1
             text-lg
             md:text-xl
             lg:text-2xl
