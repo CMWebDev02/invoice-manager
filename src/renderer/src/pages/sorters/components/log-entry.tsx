@@ -34,11 +34,15 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
   }
 
   return (
-    <div className="flex flex-row w-full h-1/6 items-center justify-center p-0">
-      <h1 className="w-2/12 h-full border border-foreground p-1">{changeTitle}</h1>
-      <p className="w-10/12 h-full border border-foreground p-1 truncate">{changeDescription}</p>
-      {(change.actionType === 'sort' || change.actionType === 'create') && (
-        <Button onClick={() => undoChangeLogAction(change)} className="w-1/12 h-full border border-foreground p-1.5 rounded-none hover:bg-secondary/50 hover:text-accent">
+    <div className="flex flex-row w-full h-1/6 items-center p-0">
+      <h1 className="w-1/12 h-full border border-foreground p-1.5">{changeTitle}</h1>
+      <p className="w-10/12 h-full border border-foreground p-1.5 truncate">{changeDescription}</p>
+      {change.actionType === 'sort' || change.actionType === 'create' ? (
+        <Button onClick={() => undoChangeLogAction(change)} className="w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent">
+          ^
+        </Button>
+      ) : (
+        <Button className="w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent" disabled>
           ^
         </Button>
       )}

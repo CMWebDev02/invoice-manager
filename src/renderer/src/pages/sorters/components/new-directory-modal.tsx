@@ -1,5 +1,6 @@
 import { Label } from '@radix-ui/react-label';
 import { Button } from '@renderer/components/ui/button';
+import { ButtonGroup } from '@renderer/components/ui/button-group';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@renderer/components/ui/sheet';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
@@ -20,9 +21,15 @@ export default function NewDirectoryModal({ isOpen, changeOpen, createNewDirecto
           <SheetTitle>Directory Initializer</SheetTitle>
         </SheetHeader>
         <Label htmlFor="newDirectoryTextBox">New Directory Name:</Label>
-        <WhiteListInput id="newDirectoryTextBox" regexWhiteList={titleCharactersWhiteList} value={newDirectoryName} onChange={(e) => setNewDirectoryName(e.target.value)} />
-        <Button onClick={createNewDirectory}>Create</Button>
-        <Button onClick={() => changeOpen(false)}>Cancel</Button>
+        <WhiteListInput id="newDirectoryTextBox" regexWhiteList={titleCharactersWhiteList} value={newDirectoryName} onChange={(e) => setNewDirectoryName(e.target.value)} className="rounded-none bg-secondary text-foreground border border-foreground" />
+        <ButtonGroup orientation={'vertical'} className="w-full">
+          <Button onClick={createNewDirectory} variant={'action'}>
+            Create
+          </Button>
+          <Button onClick={() => changeOpen(false)} variant={'action'}>
+            Cancel
+          </Button>
+        </ButtonGroup>
       </SheetContent>
     </Sheet>
   );

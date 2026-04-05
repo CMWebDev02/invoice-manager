@@ -7,7 +7,6 @@ import type { ChangeLogEntry, DirectoryExport, FileExport } from '@renderer/lib/
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 import NewDirectoryModal from '../components/new-directory-modal';
-import ChangeLog from './changelog';
 import ChangeLogDrawer from '../components/changelog-drawer';
 import { FileSystem, SorterActions } from '@renderer/lib/file-system';
 import LoadingPage from '@renderer/pages/loading/loading-page';

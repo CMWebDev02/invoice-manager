@@ -55,7 +55,7 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
   return (
     <div className="w-full h-11/12">
       <FlexRowContainer className="p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-2/3 rounded-none bg-secondary text-accent border border-foreground" />
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-2/3 rounded-none bg-secondary text-foreground border border-foreground" />
         <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">

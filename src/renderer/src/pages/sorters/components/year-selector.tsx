@@ -28,8 +28,8 @@ export default function YearSelector({ disabled, updateCurrentYear }: YearSelect
   return (
     <>
       <Select onValueChange={updateCurrentYear} disabled={disabled}>
-        <SelectTrigger className="rounded-none bg-secondary text-accent outline-none border border-accent">
-          <SelectValue placeholder="XXXX" />
+        <SelectTrigger className="rounded-none bg-secondary text-foreground outline-none border border-foreground">
+          <SelectValue placeholder="XXXX" className="text-foreground" />
         </SelectTrigger>
         <SelectContent className="bg-secondary border border-accent">
           <SelectGroup className="outline-none">{YearsItems}</SelectGroup>
