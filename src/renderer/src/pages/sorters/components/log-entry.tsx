@@ -1,4 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
+import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { ChangeLogEntry } from '@renderer/lib/types';
 
 interface LogEntryProps {
@@ -34,7 +35,7 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
   }
 
   return (
-    <div className="flex flex-row w-full h-1/6 items-center p-0">
+    <FlexRowContainer className="flex flex-row w-full h-1/6 items-center p-0">
       <h1 className="w-1/12 h-full border border-foreground p-1.5">{changeTitle}</h1>
       <p className="w-10/12 h-full border border-foreground p-1.5 truncate">{changeDescription}</p>
       {change.actionType === 'sort' || change.actionType === 'create' ? (
@@ -46,6 +47,6 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
           ^
         </Button>
       )}
-    </div>
+    </FlexRowContainer>
   );
 }

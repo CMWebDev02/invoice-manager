@@ -20,18 +20,18 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
             <DrawerTitle>ChangeLog</DrawerTitle>
           </DrawerHeader>
         </FlexColContainer>
-        <div className="w-full h-full flex flex-col border-2 border-foreground">
+        <FlexColContainer className="w-full h-full border-2 border-foreground">
           <DrawerDescription>
-            <div className="flex flex-row w-full h-1/6 items-center justify-between p-0">
+            <FlexRowContainer className="w-full h-1/6 items-center justify-between p-0">
               <h1 className="w-1/12 h-full border border-foreground p-1">Past Action</h1>
               <p className="w-10/12 h-full border border-foreground p-1 truncate">Action Description</p>
               <p className="w-1/12 h-full border border-foreground p-1 rounded-none">Undo Button</p>
-            </div>
+            </FlexRowContainer>
           </DrawerDescription>
           {changeLog.map((change) => (
             <LogEntry key={change.id} change={change} undoChangeLogAction={undoChangeLogAction} />
           ))}
-        </div>
+        </FlexColContainer>
       </DrawerContent>
     </Drawer>
   );
