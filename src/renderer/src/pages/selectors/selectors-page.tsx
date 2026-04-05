@@ -1,4 +1,4 @@
-import { Button } from '@renderer/components/ui/button';
+import { Button, buttonVariants } from '@renderer/components/ui/button';
 import { Card, CardContent } from '@renderer/components/ui/card';
 import { Dialog } from '@renderer/components/ui/dialog';
 import ButtonLink from '@renderer/components/user/button-link';
@@ -141,15 +141,21 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
         >
           {editingMode ? (
             <>
-              <Button className="w-1/6" onClick={toggleModal}>
+              <Button onClick={toggleModal} variant={'action'} className="bg-secondary">
                 New
               </Button>
-              <Button onClick={toggleEditingMode}>Save</Button>
+              <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
+                Save
+              </Button>
             </>
           ) : (
             <>
-              <ButtonLink linkHref="/">Return</ButtonLink>
-              <Button onClick={toggleEditingMode}>Edit</Button>
+              <ButtonLink linkHref="/" className={buttonVariants({ variant: 'action', className: 'bg-secondary' })}>
+                Return
+              </ButtonLink>
+              <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
+                Edit
+              </Button>
             </>
           )}
         </div>

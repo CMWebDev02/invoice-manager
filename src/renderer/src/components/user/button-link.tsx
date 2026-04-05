@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { Button } from '../ui/button';
+import { cn } from '@renderer/lib/utils';
 
 interface ButtonLinkProps {
   children: string;

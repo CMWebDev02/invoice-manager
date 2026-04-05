@@ -45,9 +45,8 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
     <div className={cn('flex flex-col w-full', className)}>
       <FlexRowContainer className="flex-wrap justify-between h-17 bg-navbar">
         <DiskSelector drivesList={drivesList} updateCurrentDirectoryPath={updateCurrentDirectoryPath} className="w-1/2 text-foreground rounded-none border-white border-2 outline-white" />
-
         {/* Updates the selected folder to be the new saved path */}
-        <Button variant={'navButton'} onClick={() => updateSavedPath(selectedDirectoryPath)} className="w-1/2 rounded-none border-white border-2">
+        <Button variant={'action'} onClick={() => updateSavedPath(selectedDirectoryPath)} className="w-1/2 rounded-none border-white border-2">
           Save Path
         </Button>
 

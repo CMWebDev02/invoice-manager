@@ -9,7 +9,7 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID } from '@renderer/lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { searchSelector, storeSelector } from '@renderer/lib/store';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
@@ -184,7 +184,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           >
             Title:
           </Label>
-          <WhiteListInput className="w-1/2 bg-secondary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
+          <WhiteListInput className="w-1/2 bg-secondary border border-primary rounded-none outline outline-primary focus-within:border-primary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)] w-full">

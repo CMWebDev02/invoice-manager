@@ -1,5 +1,6 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@renderer/components/ui/select';
 import { cn } from '@renderer/lib/utils';
+import { useMemo } from 'react';
 
 interface DiskSelectorProps {
   drivesList: string[];
@@ -17,20 +18,25 @@ export default function DiskSelector({ drivesList, updateCurrentDirectoryPath, c
     }
   }
 
+  const UserDrives = useMemo(() => {
+    if (drivesList.length > 0) {
+      return drivesList.map((drive) => (
+        <SelectItem key={drive} value={drive} className="focus:bg-foreground focus:text-white">
+          {drive}
+        </SelectItem>
+      ));
+    } else {
+      return <></>;
+    }
+  }, [drivesList]);
+
   return (
     <Select onValueChange={setDrivePath}>
       <SelectTrigger className={cn(className)}>
         <SelectValue placeholder="Select a Disk" />
       </SelectTrigger>
       <SelectContent className="bg-navbar text-foreground">
-        <SelectGroup>
-          {drivesList.length > 0 &&
-            drivesList.map((drive) => (
-              <SelectItem key={drive} value={drive} className="focus:bg-foreground focus:text-white">
-                {drive}
-              </SelectItem>
-            ))}
-        </SelectGroup>
+        <SelectGroup>{UserDrives}</SelectGroup>
       </SelectContent>
     </Select>
   );
