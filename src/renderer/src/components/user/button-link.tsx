@@ -9,8 +9,10 @@ interface ButtonLinkProps {
 
 export default function ButtonLink({ linkHref, children, className }: ButtonLinkProps): React.JSX.Element {
   return (
-    <Link to={linkHref} className={className}>
-      <Button className="w-full">{children}</Button>
-    </Link>
+    <Button className={className}>
+      <Link to={linkHref} className="w-full">
+        {children}
+      </Link>
+    </Button>
   );
 }

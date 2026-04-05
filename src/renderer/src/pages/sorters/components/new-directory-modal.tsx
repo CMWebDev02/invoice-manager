@@ -15,7 +15,7 @@ interface NewDirectoryModalProps {
 export default function NewDirectoryModal({ isOpen, changeOpen, createNewDirectory, newDirectoryName, setNewDirectoryName }: NewDirectoryModalProps): React.JSX.Element {
   return (
     <Sheet open={isOpen} onOpenChange={changeOpen}>
-      <SheetContent className="w-1/3" side="left">
+      <SheetContent className="w-1/3 p-1" side="left">
         <SheetHeader aria-describedby="Modal for initializing a new directory.">
           <SheetTitle>Directory Initializer</SheetTitle>
         </SheetHeader>
