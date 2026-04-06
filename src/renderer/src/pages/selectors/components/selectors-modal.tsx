@@ -9,7 +9,7 @@ import { DialogTitle } from '@radix-ui/react-dialog';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { getUniqueID } from '@renderer/lib/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchSelector, storeSelector } from '@renderer/lib/store';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';

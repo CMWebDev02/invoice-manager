@@ -7,6 +7,7 @@ import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
 import DirectoryOption from '../components/directory-option';
 import useDebounce from '@renderer/hooks/useDebounce';
+import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 
 interface DirectorySelectorProps {
   disabled: boolean;
@@ -71,9 +72,9 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
 
   return (
     <div className="w-full h-11/12 flex-col gap-1">
-      <div className="flex flex-row p-1 justify-around items-center w-full h-12">
+      <FlexRowContainer className="p-1 justify-around items-center w-full h-12">
         <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} />
-      </div>
+      </FlexRowContainer>
       <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
         <div className="w-full">
           {filteredDirectories.map((dirObj) => (

@@ -1,5 +1,4 @@
 import SortersNavBar from '../components/sorters-navbar';
-import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from '../../../components/user/invoice-display';
 import { getUniqueID, subDirectoriesArray } from '@renderer/lib/utils';
 import useFetchData from '../../../hooks/useFetchData';
@@ -13,6 +12,7 @@ import LoadingPage from '@renderer/pages/loading/loading-page';
 import ErrorPage from '@renderer/components/pages/error-page';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import SorterButtons from '../components/sorter-buttons';
+import DirectorySelector from './directory-selector';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -205,7 +205,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <div className="w-1/3 h-full flex flex-col gap-1 justify-center items-center">
-            {directoriesArrays !== undefined && <DirectoryNavigation disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </div>
 

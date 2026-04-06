@@ -9,7 +9,7 @@ import useDebounce from '@renderer/hooks/useDebounce';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
-interface DirectoryNavigationProps {
+interface DirectorySelectorProps {
   disabled: boolean;
   directoriesArrays: DirectoryExport[][];
   selectedDirectory: DirectoryExport | null;
@@ -17,7 +17,7 @@ interface DirectoryNavigationProps {
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function DirectoryNavigation({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectoryNavigationProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const filterString = useDebounce({ updateVar: userSearchString });
@@ -54,11 +54,16 @@ export default function DirectoryNavigation({ disabled, directoriesArrays, selec
 
   return (
     <div className="w-full h-11/12">
-      <FlexRowContainer className="p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-2/3 rounded-none bg-secondary text-foreground border border-foreground" />
-        <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} />
+      <FlexRowContainer className="w-full p-1 justify-around items-center h-28 md:h-24 lg:h-12 gap-0 flex-wrap">
+        <FlexRowContainer className="w-full lg:w-5/6 gap-0 items-center align-middle flex-wrap">
+          <label htmlFor="search-filter" className="w-full md:w-1/3 select-none">
+            Search:
+          </label>
+          <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full md:w-2/3 rounded-none bg-secondary text-foreground border border-foreground" />
+        </FlexRowContainer>
+        <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} className="w-full lg:w-1/6" />
       </FlexRowContainer>
-      <FlexColContainer className="w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
+      <FlexColContainer className="w-full h-[calc(100%-7rem)] md:h-[calc(100%-6rem)] lg:h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
         {filteredDirectories.map((dirObj) => (
           <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} disabled={disabled} />
         ))}
