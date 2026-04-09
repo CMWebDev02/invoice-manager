@@ -31,6 +31,8 @@ export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDis
     if (invoiceFileData !== '') {
       const pdfUri = decodeBase64IntoBlob(invoiceFileData);
       setPDF(pdfUri);
+    } else {
+      setPDF('');
     }
   }, [invoiceFileData]);
 

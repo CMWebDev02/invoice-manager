@@ -1,6 +1,6 @@
 import useAsyncUpdate from '@renderer/hooks/useAsyncUpdate';
 import { FileSystem } from '@renderer/lib/file-system';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import DirectoryList from '../components/directory-list';
 import { toast } from 'sonner';
 import { Button } from '@renderer/components/ui/button';

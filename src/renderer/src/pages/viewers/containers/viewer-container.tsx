@@ -31,7 +31,6 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
     try {
       setIsUserInteractionDisabled(true);
       const dirContents = await viewerActions.getAllDirContents(dirPath);
-      setIsUserInteractionDisabled(false);
       return dirContents;
     } catch (error) {
       if (error instanceof Error) {
@@ -41,6 +40,8 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
       }
 
       return null;
+    } finally {
+      setIsUserInteractionDisabled(false);
     }
   }
 
@@ -50,13 +51,14 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
       const invoiceFile = await viewerActions.getInvoice(path);
       if (invoiceFile === null) throw new Error('Failed to Retrieve Invoice!');
       setSelectedInvoiceData(invoiceFile.data);
-      setIsUserInteractionDisabled(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
         toast.error('An Unknown Error Has Occurred!');
       }
+    } finally {
+      setIsUserInteractionDisabled(false);
     }
   }
 
