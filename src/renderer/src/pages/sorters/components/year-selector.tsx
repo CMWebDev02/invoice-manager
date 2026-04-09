@@ -6,10 +6,11 @@ import { useMemo } from 'react';
 interface YearSelectorProps {
   disabled: boolean;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
+  id?: string;
   className?: string;
 }
 
-export default function YearSelector({ disabled, updateCurrentYear, className }: YearSelectorProps): React.JSX.Element {
+export default function YearSelector({ disabled, updateCurrentYear, id, className }: YearSelectorProps): React.JSX.Element {
   // Creates the year selector options upon first rendering the component
   // Failing to have this component lead to rerendering issues that triggered anytime another component updated
   const YearsItems = useMemo(() => {
@@ -30,8 +31,8 @@ export default function YearSelector({ disabled, updateCurrentYear, className }:
 
   return (
     <>
-      <Select onValueChange={updateCurrentYear} disabled={disabled}>
-        <SelectTrigger className={buttonVariants({ variant: 'action', className: className })}>
+      <Select onValueChange={updateCurrentYear} disabled={disabled} >
+        <SelectTrigger className={buttonVariants({ variant: 'action', className: className })} id={id}>
           <SelectValue placeholder="XXXX" className="text-foreground" />
         </SelectTrigger>
         <SelectContent className="bg-secondary border border-accent">
