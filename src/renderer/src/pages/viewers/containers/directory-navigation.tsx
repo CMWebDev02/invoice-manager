@@ -1,6 +1,6 @@
 import useAsyncUpdate from '@renderer/hooks/useAsyncUpdate';
 import { FileSystem } from '@renderer/lib/file-system';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DirectoryList from '../components/directory-list';
 import { toast } from 'sonner';
 import { Button } from '@renderer/components/ui/button';
@@ -46,7 +46,10 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
       <Button onClick={returnToSearch} disabled={disabled} variant={'action'} className="h-10">
         Return
       </Button>
-      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}
+      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}
+      <Button className="w-full bg-primary hover:text-accent" variant={'action'} onClick={reversePathTraversal}>
+        ...
+      </Button>
     </FlexColContainer>
   );
 }

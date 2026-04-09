@@ -1,26 +1,15 @@
 import { Button } from '@renderer/components/ui/button';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import { DirectoryContent } from '@renderer/lib/types';
-import { useMemo } from 'react';
 
 interface DirectoryListProps {
-  reversePathTraversal: () => void;
   subDirs: DirectoryContent[];
   updateCurrentPath: React.Dispatch<React.SetStateAction<string>>;
   getInvoice: (path: DirectoryContent) => Promise<void>;
   disabled: boolean;
 }
 
-export default function DirectoryList({ subDirs, reversePathTraversal, updateCurrentPath, getInvoice, disabled }: DirectoryListProps): React.JSX.Element {
-  const BackwardsNavigateButton = useMemo(
-    () => (
-      <Button className="w-full bg-primary hover:text-accent" variant={'action'} onClick={reversePathTraversal}>
-        ...
-      </Button>
-    ),
-    [reversePathTraversal]
-  );
-
+export default function DirectoryList({ subDirs, updateCurrentPath, getInvoice, disabled }: DirectoryListProps): React.JSX.Element {
   const values = subDirs.map((path: DirectoryContent) => {
     if (path.isDir) {
       return (
@@ -57,7 +46,6 @@ export default function DirectoryList({ subDirs, reversePathTraversal, updateCur
 
   return (
     <FlexColContainer className="h-[calc(100%-3rem)] w-full border border-foreground bg-secondary">
-      {BackwardsNavigateButton}
       {values}
     </FlexColContainer>
   );
