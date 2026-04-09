@@ -7,6 +7,7 @@ import { Button } from '@renderer/components/ui/button';
 import { DirectoryContent } from '@renderer/lib/types';
 import LoadingIndicator from '@renderer/components/pages/loading-indicator';
 import ErrorPage from '@renderer/components/pages/error-page';
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
 interface DirectoryNavigationProps {
   mainDirPath: string;
@@ -41,11 +42,11 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
   }
 
   return (
-    <>
-      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}
-      <Button onClick={returnToSearch} disabled={disabled}>
+    <FlexColContainer className="w-full h-full justify-between">
+      <FlexColContainer>{currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}</FlexColContainer>
+      <Button onClick={returnToSearch} disabled={disabled} variant={'action'}>
         Return
       </Button>
-    </>
+    </FlexColContainer>
   );
 }

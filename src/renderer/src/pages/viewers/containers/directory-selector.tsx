@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import DirectoryOption from '../components/directory-option';
 import useDebounce from '@renderer/hooks/useDebounce';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
 interface DirectorySelectorProps {
   disabled: boolean;
@@ -71,22 +72,25 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
   }
 
   return (
-    <div className="w-full h-11/12 flex-col gap-1">
-      <FlexRowContainer className="p-1 justify-around items-center w-full h-12">
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." onChange={(e) => updateSearchString(e)} value={userSearchString} />
+    <FlexColContainer className="w-full h-full gap-1">
+      <FlexRowContainer className="w-full p-1 justify-around items-center h-12 gap-1 ">
+        <label htmlFor="search-filter" className="w-auto select-none">
+          Search:
+        </label>
+        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
       </FlexRowContainer>
-      <div className="flex flex-col w-full h-[calc(100%-3rem)] overflow-y-scroll bg-secondary">
+      <FlexColContainer className="w-full h-[calc(100%-6rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
         <div className="w-full">
           {filteredDirectories.map((dirObj) => (
             <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={currentDirectory} updateCurrentDirectory={updateCurrentDirectory} disabled={disabled} />
           ))}
         </div>
-      </div>
+      </FlexColContainer>
       <div className="flex flex-row p-1 justify-around items-center w-full h-12">
-        <Button onClick={getSelectedDirSubDirs} className="w-full" disabled={disabled}>
+        <Button onClick={getSelectedDirSubDirs} className="w-full" variant={'action'} disabled={disabled}>
           Select
         </Button>
       </div>
-    </div>
+    </FlexColContainer>
   );
 }
