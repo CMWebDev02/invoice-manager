@@ -12,6 +12,7 @@ type StoreTypes = {
 
 const store = new Store<StoreTypes>();
 
+// TODO: Have this use the node-disk-info module if it is any OS other than windows 11
 export async function storeUserDrives(): Promise<boolean> {
   try {
     const userDrives = await pullUserDrives();

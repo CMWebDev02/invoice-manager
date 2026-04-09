@@ -14,6 +14,7 @@ interface DirectoryListProps {
 }
 
 export default function DirectoryList({ directoriesArray, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
+  // TODO: Move this up a directory to the directory selector to avoid locking the user out when an empty path is reached
   const BackwardsNavigateButton = useMemo(
     () => (
       <Button className={`w-full flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal}>

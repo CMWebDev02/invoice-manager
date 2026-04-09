@@ -6,6 +6,7 @@ interface InvoiceDisplayProps {
   invoiceFileData: string;
 }
 
+// TODO: Look into using pdflib to display read pdf files
 export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDisplayProps): React.JSX.Element {
   const [pdf, setPDF] = useState<string>('');
 

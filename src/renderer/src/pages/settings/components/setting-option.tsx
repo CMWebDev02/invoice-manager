@@ -21,7 +21,9 @@ export default function SettingOption({ settingName, settingValue, updateUserSet
       <p className="text-3xl h-full p-2">{settingsTitle}</p>
       <FlexColContainer className="w-16 h-full items-center gap-1 border-l border-foreground p-2">
         <Switch onCheckedChange={handleChange} checked={settingValue} id={settingName} />
-        <label htmlFor={settingName} className='select-none'>{settingValue === true ? 'True' : 'False'}</label>
+        <label htmlFor={settingName} className="select-none">
+          {settingValue === true ? 'True' : 'False'}
+        </label>
       </FlexColContainer>
     </FlexRowContainer>
   );

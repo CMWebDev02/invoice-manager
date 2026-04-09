@@ -5,6 +5,7 @@ interface ViewersNavBarProps {
 }
 
 export default function ViewersNavBar({ viewerTitle }: ViewersNavBarProps): React.JSX.Element {
+  //TODO: Create a single nav bar and have it display any passed in children
   return (
     <nav className="flex flex-row justify-between bg-navbar px-2 py-1 text-title h-12">
       <h1 className="text-3xl select-none">Viewer - {viewerTitle}</h1>

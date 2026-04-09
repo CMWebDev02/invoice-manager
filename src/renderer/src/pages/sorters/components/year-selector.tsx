@@ -1,6 +1,5 @@
 import { buttonVariants } from '@renderer/components/ui/button';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectItem } from '@renderer/components/ui/select';
-import { cn } from '@renderer/lib/utils';
 import { useMemo } from 'react';
 
 interface YearSelectorProps {
@@ -31,7 +30,7 @@ export default function YearSelector({ disabled, updateCurrentYear, id, classNam
 
   return (
     <>
-      <Select onValueChange={updateCurrentYear} disabled={disabled} >
+      <Select onValueChange={updateCurrentYear} disabled={disabled}>
         <SelectTrigger className={buttonVariants({ variant: 'action', className: className })} id={id}>
           <SelectValue placeholder="XXXX" className="text-foreground" />
         </SelectTrigger>

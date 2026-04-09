@@ -9,9 +9,6 @@ export class FileSystem {
   static _userHomeDir: string = file_system.userHomeDir;
 
   static async getDirectories(dirPath: string): Promise<Dirent<string>[]> {
-    // TODO: Move this to the component for the directory selector
-    //    Assigns user's home directory in the event an empty string is passed in.
-    //   const dirPath = parentDirectoryPath === '' ? file_system.getHomeDir() : parentDirectoryPath;
     try {
       const allContents = await file_system.getDirectoryContents(dirPath);
 
