@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import LoadingIndicator from '../pages/loading-indicator';
 
 interface InvoiceDisplayProps {
   disabled: boolean;
@@ -33,5 +34,5 @@ export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDis
     }
   }, [invoiceFileData]);
 
-  return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} aria-disabled={disabled} /> : <h1>Loading...</h1>}</div>;
+  return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} aria-disabled={disabled} /> : <LoadingIndicator />}</div>;
 }

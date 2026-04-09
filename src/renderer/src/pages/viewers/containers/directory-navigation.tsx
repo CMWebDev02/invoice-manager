@@ -42,11 +42,11 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
   }
 
   return (
-    <FlexColContainer className="w-full h-full justify-between">
-      <FlexColContainer>{currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}</FlexColContainer>
-      <Button onClick={returnToSearch} disabled={disabled} variant={'action'}>
+    <FlexColContainer className="w-full h-full flex-col-reverse justify-between">
+      <Button onClick={returnToSearch} disabled={disabled} variant={'action'} className="h-10">
         Return
       </Button>
+      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} reversePathTraversal={reversePathTraversal} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}
     </FlexColContainer>
   );
 }
