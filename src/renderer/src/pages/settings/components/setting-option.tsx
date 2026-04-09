@@ -1,3 +1,5 @@
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
+import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { Switch } from '@renderer/components/ui/switch';
 import { convertCamelCase } from '@renderer/lib/utils';
 
@@ -15,12 +17,12 @@ export default function SettingOption({ settingName, settingValue, updateUserSet
   }
 
   return (
-    <div className="flex justify-between">
-      <p>{settingsTitle}</p>
-      <div>
-        <label htmlFor={settingName}>{settingValue === true ? 'True' : 'False'}</label>
+    <FlexRowContainer className="w-full h-16 justify-between items-center border border-foreground">
+      <p className="text-3xl h-full p-2">{settingsTitle}</p>
+      <FlexColContainer className="w-16 h-full items-center gap-1 border-l border-foreground p-2">
         <Switch onCheckedChange={handleChange} checked={settingValue} id={settingName} />
-      </div>
-    </div>
+        <label htmlFor={settingName} className='select-none'>{settingValue === true ? 'True' : 'False'}</label>
+      </FlexColContainer>
+    </FlexRowContainer>
   );
 }
