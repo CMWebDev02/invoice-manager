@@ -1,5 +1,4 @@
 import { Button } from '@renderer/components/ui/button';
-import { ButtonGroup, ButtonGroupSeparator } from '@renderer/components/ui/button-group';
 
 interface SorterButtonsProps {
   triggerSorting: () => void;
@@ -9,18 +8,16 @@ interface SorterButtonsProps {
 
 export default function SorterButtons({ triggerSorting, triggerModal, triggerChangeLog }: SorterButtonsProps): React.JSX.Element {
   return (
-    <ButtonGroup>
-      <Button onClick={triggerSorting} variant={'action'}>
+    <div className="w-full flex flex-wrap">
+      <Button onClick={triggerSorting} variant={'action'} className="w-1/2 lg:w-1/3">
         Sort
       </Button>
-      <ButtonGroupSeparator className="bg-foreground" />
-      <Button onClick={triggerModal} variant={'action'}>
+      <Button onClick={triggerModal} variant={'action'} className="w-1/2 lg:w-1/3">
         New Folder
       </Button>
-      <ButtonGroupSeparator className="bg-foreground" />
-      <Button onClick={triggerChangeLog} variant={'action'}>
+      <Button onClick={triggerChangeLog} variant={'action'} className="w-full lg:w-1/3">
         Changelog
       </Button>
-    </ButtonGroup>
+    </div>
   );
 }
