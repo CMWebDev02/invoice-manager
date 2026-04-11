@@ -7,7 +7,6 @@ interface WhiteListInputProps {
 
 export default function WhiteListInput({ regexWhiteList, ...props }: WhiteListInputProps & React.ComponentProps<'input'>): React.JSX.Element {
   function validateInput(e: KeyboardEvent<HTMLInputElement>): void {
-
     if (!regexWhiteList.test(e.key)) {
       e.preventDefault();
     }

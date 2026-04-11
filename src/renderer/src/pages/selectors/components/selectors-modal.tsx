@@ -47,9 +47,12 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
   }, [existingSelectorId, selectorType]);
 
   function validateChanges(): void {
-    // TODO: Have validate changes validate the title string, check for invalid characters and validate the directory and invoice destinations
     try {
       if (selectorTitle === '') {
+        throw new Error('Invalid Title Entry', { cause: 'InvalidEntry' });
+      }
+
+      if (!titleCharactersWhiteList.test(selectorTitle)) {
         throw new Error('Invalid Title Entry', { cause: 'InvalidEntry' });
       }
 
