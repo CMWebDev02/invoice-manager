@@ -1,6 +1,5 @@
 import { ViewerActions } from '@renderer/lib/file-system';
 import { toast, Toaster } from 'sonner';
-import ViewersNavBar from '../components/viewers-navbar';
 import DirectorySelector from './directory-selector';
 import { useEffect, useState } from 'react';
 import useFetchData from '@renderer/hooks/useFetchData';
@@ -9,6 +8,8 @@ import DirectoryNavigation from './directory-navigation';
 import InvoiceDisplay from '@renderer/components/user/invoice-display';
 import LoadingPage from '@renderer/pages/loading/loading-page';
 import ErrorPage from '@renderer/components/pages/error-page';
+import NavBar from '@renderer/components/user/nav-bar';
+import MenuButton from '@renderer/components/user/menu-button';
 
 interface ViewerContainerProps {
   viewerActions: ViewerActions;
@@ -84,7 +85,10 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
 
   return (
     <>
-      <ViewersNavBar viewerTitle={viewerActions.sorterTitle} />
+      <NavBar>
+        <h1 className="text-3xl select-none">Viewer - {viewerActions.sorterTitle}</h1>
+        <MenuButton />
+      </NavBar>
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           {/* Shows the selected directory contents or the directory navigation list */}

@@ -1,4 +1,3 @@
-import SortersNavBar from '../components/sorters-navbar';
 import InvoiceDisplay from '../../../components/user/invoice-display';
 import { getUniqueID, subDirectoriesArray } from '@renderer/lib/utils';
 import useFetchData from '../../../hooks/useFetchData';
@@ -13,6 +12,8 @@ import ErrorPage from '@renderer/components/pages/error-page';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import SorterButtons from '../components/sorter-buttons';
 import DirectorySelector from './directory-selector';
+import NavBar from '@renderer/components/user/nav-bar';
+import MenuButton from '@renderer/components/user/menu-button';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -201,7 +202,10 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
 
   return (
     <>
-      <SortersNavBar sorterTitle={sorterActions.sorterTitle} />
+      <NavBar>
+        <h1 className="text-3xl select-none">Sorter - {sorterActions.sorterTitle}</h1>
+        <MenuButton />
+      </NavBar>
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <div className="w-1/3 h-full flex flex-col gap-1 justify-center items-center">
