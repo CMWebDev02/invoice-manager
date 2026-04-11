@@ -24,3 +24,6 @@ ViewerActions
 
 Hooks:
 012 - useAsyncInit
+
+preload-FileSystem
+020 - validateDirectoryPath

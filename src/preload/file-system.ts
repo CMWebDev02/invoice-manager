@@ -45,9 +45,14 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     //* Attempts to check the user's permissions for a file or directory, and if it can read the permissions from said file or directory it exists.
     await fs.access(dirPath);
     return true;
-  } catch {
+  } catch (error) {
     //* If an error occurs due to the path not leading to any file or directory, then the file does not exist.
-    return false;
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+      return false;
+    } else {
+      console.error(error);
+      throw new Error(`020 - Failed to check if file is invalid for file path - ${dirPath}!`);
+    }
   }
 }
 
