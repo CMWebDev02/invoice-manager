@@ -9,6 +9,7 @@ import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { FileSystem } from '@renderer/lib/file-system';
 import LoadingIndicator from '@renderer/components/pages/loading-indicator';
 import ErrorPage from '@renderer/components/pages/error-page';
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -52,7 +53,13 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
 
         <h2 className="w-full border-white border-2 p-0.5">{currentDirectoryPath}</h2>
       </FlexRowContainer>
-      {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList className="h-[calc(100%-4.25rem)] overflow-x-hidden overflow-y-auto" directoriesArray={directoriesArray} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} reversePathTraversal={reversePathTraversal} />}
+      <FlexColContainer className="w-full h-[calc(100%-4.25rem)] overflow-x-hidden overflow-y-auto">
+        {/* Backwards traversal button is disabled when loading  */}
+        <Button className={`w-full flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal} disabled={isLoading}>
+          ...
+        </Button>
+        {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList directoriesArray={directoriesArray} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} />}
+      </FlexColContainer>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { Button } from '@renderer/components/ui/button';
 import { FileSystem } from '@renderer/lib/file-system';
-import { cn } from '@renderer/lib/utils';
 import { type Dirent } from 'fs';
 import { useMemo } from 'react';
 
@@ -9,21 +8,9 @@ interface DirectoryListProps {
   updateCurrentDirectoryPath: (dirPath: string) => void;
   selectedDirectoryPath: string;
   updateSelectDirectoryPath: (dirPath: string) => void;
-  reversePathTraversal: () => void;
-  className?: string;
 }
 
-export default function DirectoryList({ directoriesArray, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath, reversePathTraversal, className }: DirectoryListProps): React.JSX.Element {
-  // TODO: Move this up a directory to the directory selector to avoid locking the user out when an empty path is reached
-  const BackwardsNavigateButton = useMemo(
-    () => (
-      <Button className={`w-full flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal}>
-        ...
-      </Button>
-    ),
-    [reversePathTraversal]
-  );
-
+export default function DirectoryList({ directoriesArray, updateCurrentDirectoryPath, selectedDirectoryPath, updateSelectDirectoryPath }: DirectoryListProps): React.JSX.Element {
   const DirectoryOptions = useMemo(() => {
     return directoriesArray.map((dir: Dirent) => {
       const childDirPath = FileSystem.joinPaths(dir.parentPath, dir.name);
@@ -53,10 +40,5 @@ export default function DirectoryList({ directoriesArray, updateCurrentDirectory
     });
   }, [directoriesArray, selectedDirectoryPath, updateCurrentDirectoryPath, updateSelectDirectoryPath]);
 
-  return (
-    <div className={cn('w-full', className)}>
-      {BackwardsNavigateButton}
-      {DirectoryOptions}
-    </div>
-  );
+  return <>{DirectoryOptions}</>;
 }
