@@ -7,7 +7,7 @@ interface WhiteListInputProps {
 
 export default function WhiteListInput({ regexWhiteList, ...props }: WhiteListInputProps & React.ComponentProps<'input'>): React.JSX.Element {
   function validateInput(e: KeyboardEvent<HTMLInputElement>): void {
-    // TODO: Have this allow all valid windows folder characters and space
+
     if (!regexWhiteList.test(e.key)) {
       e.preventDefault();
     }

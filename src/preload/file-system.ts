@@ -39,7 +39,6 @@ export async function appendContentToFile(filePath: string, newContent: string):
   return;
 }
 
-// TODO Change this to throw an error if anything other than invalid file path occurs, only allow the invalid directory error to return false
 export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
   try {
     //* Attempts to check the user's permissions for a file or directory, and if it can read the permissions from said file or directory it exists.
@@ -50,6 +49,7 @@ export async function validateDirectoryPath(dirPath: string): Promise<boolean> {
     if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return false;
     } else {
+      //* If an error other than the file not existing, an error is thrown
       console.error(error);
       throw new Error(`020 - Failed to check if file is invalid for file path - ${dirPath}!`);
     }
