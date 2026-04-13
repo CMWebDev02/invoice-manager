@@ -187,7 +187,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           >
             Title:
           </Label>
-          {/* // TODO: Debounce this text input */}
+          {/* // TODO: Figure out why this input is causing rerendering issues */}
           <WhiteListInput className="w-1/2 bg-secondary border border-primary rounded-none outline outline-primary focus-within:border-primary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
         </FlexRowContainer>
       </DialogHeader>

@@ -7,7 +7,7 @@ export default function HeaderAndBody(): React.JSX.Element {
       <NavBar>
         <h1 className="text-3xl select-none">Invoice Manager</h1>
       </NavBar>
-      <main className="h-[calc(100vh-2.5rem)] w-screen bg-background">
+      <main className="h-[calc(100vh-3rem)] w-screen bg-background">
         <Outlet />
       </main>
     </>
