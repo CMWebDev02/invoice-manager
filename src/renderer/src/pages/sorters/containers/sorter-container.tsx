@@ -14,6 +14,7 @@ import SorterButtons from '../components/sorter-buttons';
 import DirectorySelector from './directory-selector';
 import NavBar from '@renderer/components/user/nav-bar';
 import MenuButton from '@renderer/components/user/menu-button';
+import { UserSettings } from '@renderer/lib/user-settings';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -28,6 +29,9 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+  // Uses the static UserSettings class to access the current user settings
+  const userSettings = UserSettings.getUserSettings();
 
   const toggleModal = (): void => {
     if (isModalOpen) {
@@ -209,7 +213,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <div className="w-1/3 h-full flex flex-col gap-1 justify-center items-center">
-            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} />}
+            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} useStrictInputs={userSettings.strictInputs} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </div>
 

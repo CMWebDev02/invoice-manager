@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
-import { userSettings } from '@renderer/lib/temp';
 import { DirectoryExport } from '@renderer/lib/types';
 import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
@@ -14,9 +13,10 @@ interface DirectorySelectorProps {
   disabled: boolean;
   directoriesArrays: DirectoryExport[][];
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
+  useStrictInputs: boolean;
 }
 
-export default function DirectorySelector({ disabled, directoriesArrays, updateSelectedDirectory }: DirectorySelectorProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, updateSelectedDirectory, useStrictInputs }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const [currentDirectory, setCurrentDirectory] = useState<DirectoryExport | null>(null);
@@ -33,10 +33,8 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
       if (textInput !== '' && subDirectoryIndex >= 0 && subDirectoryIndex < 26) {
         const filteredArray = directoriesArrays[subDirectoryIndex].filter((directory) => {
           // Performs the necessary check of the directory name based on the user's capitalization setting,
-
-          // TODO: Have this grab the actual user settings from the store
-          const directoryName = !userSettings.autoCapitalizeAllInputs ? directory.name : directory.name.toUpperCase();
-          const comparedTextInput = !userSettings.autoCapitalizeAllInputs ? textInput : textInput.toUpperCase();
+          const directoryName = !useStrictInputs ? directory.name : directory.name.toUpperCase();
+          const comparedTextInput = !useStrictInputs ? textInput : textInput.toUpperCase();
 
           return directoryName.startsWith(comparedTextInput);
         });
@@ -47,7 +45,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
     }
 
     reFilter();
-  }, [directoriesArrays, filterString]);
+  }, [directoriesArrays, filterString, useStrictInputs]);
 
   function updateSearchString(e: React.ChangeEvent<HTMLInputElement>): void {
     const textInput = e.target.value;
