@@ -213,7 +213,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </div>
 
-          {invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} />}
+          {invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} invoiceFileType={invoiceObj.fileType} />}
         </FlexRowContainer>
       </main>
       <Toaster />

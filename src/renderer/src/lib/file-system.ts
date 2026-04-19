@@ -238,11 +238,14 @@ export class SorterActions {
 
       const firstFilePath = FileSystem.joinPaths(firstFile.parentPath, firstFile.name);
       const currentInvoiceData = await file_system.readFile(firstFilePath);
+      // Pulls the file extension type from the file name
+      const currentInvoiceFileType = firstFile.name.substring(firstFile.name.indexOf('.') + 1, firstFile.name.length);
 
       const firstFileObj: FileExport = {
         data: currentInvoiceData,
         name: firstFile.name,
-        path: firstFilePath
+        path: firstFilePath,
+        fileType: currentInvoiceFileType
       };
 
       return firstFileObj;
@@ -325,10 +328,12 @@ export class ViewerActions {
       if (!isInvoiceDirValid) throw new Error('Invoice Path is invalid!', { cause: '004' });
 
       const currentInvoiceData = await file_system.readFile(invoiceInfo.path);
+      const invoiceInfoFileType = invoiceInfo.name.substring(invoiceInfo.name.indexOf('.') + 1, invoiceInfo.name.length);
 
       // Spreads in the associated info from the invoiceInfo Object
       const fileObj: FileExport = {
         data: currentInvoiceData,
+        fileType: invoiceInfoFileType,
         ...invoiceInfo
       };
 

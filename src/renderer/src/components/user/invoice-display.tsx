@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import LoadingIndicator from '../pages/loading-indicator';
+import FlexRowContainer from '../ui/flex-row-container';
 
 interface InvoiceDisplayProps {
   disabled: boolean;
   invoiceFileData: string;
+  invoiceFileType: string;
 }
 
-// TODO: Look into using pdflib to display read pdf files
-export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDisplayProps): React.JSX.Element {
-  const [pdf, setPDF] = useState<string>('');
+export default function InvoiceDisplay({ disabled, invoiceFileData, invoiceFileType }: InvoiceDisplayProps): React.JSX.Element {
+  const [invoiceData, setInvoiceData] = useState<string>('');
 
   useEffect(() => {
     function decodeBase64IntoBlob(fileString: string): string {
@@ -23,7 +24,16 @@ export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDis
       }
 
       //? Constructs a blob out of the array buffer created from the buffer array.
-      const pdfBlob = new Blob([arrayBuffer], { type: 'application/pdf' });
+      let pdfBlob: Blob;
+
+      if (invoiceFileType === 'png') {
+        pdfBlob = new Blob([arrayBuffer], { type: 'application/png' });
+      } else if (invoiceFileType === 'pdf') {
+        pdfBlob = new Blob([arrayBuffer], { type: 'application/pdf' });
+      } else {
+        // If an invalid file type is used returns an empty sting
+        return '';
+      }
 
       //? Returns a objectUrl that points towards the pdfBlob.
       return URL.createObjectURL(pdfBlob);
@@ -31,11 +41,31 @@ export default function InvoiceDisplay({ disabled, invoiceFileData }: InvoiceDis
 
     if (invoiceFileData !== '') {
       const pdfUri = decodeBase64IntoBlob(invoiceFileData);
-      setPDF(pdfUri);
+      setInvoiceData(pdfUri);
     } else {
-      setPDF('');
+      setInvoiceData('');
     }
-  }, [invoiceFileData]);
+  }, [invoiceFileData, invoiceFileType]);
 
-  return <div className="w-2/3 h-full p-2">{pdf !== '' ? <iframe className="bg-secondary w-full h-full" src={pdf} aria-disabled={disabled} /> : <LoadingIndicator />}</div>;
+  const Invoice = (): React.JSX.Element => {
+    if (invoiceFileType === 'png') {
+      // Adds a div to allow the image to be centered within the display
+      return (
+        <div className="h-fit w-full">
+          <img src={invoiceData} aria-disabled={disabled} className="aspect-auto" />
+        </div>
+      );
+    } else if (invoiceFileType === 'pdf') {
+      return (
+        <div className="h-full w-full">
+          <iframe src={invoiceData} aria-disabled={disabled} className="w-full h-full" />
+        </div>
+      );
+    } else {
+      // Returns empty element if invalid invoice file type is used
+      return <></>;
+    }
+  };
+
+  return <FlexRowContainer className="w-2/3 h-full items-center p-2">{invoiceData !== '' ? <Invoice /> : <LoadingIndicator />}</FlexRowContainer>;
 }

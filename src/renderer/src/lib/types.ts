@@ -16,6 +16,7 @@ export type FileExport = {
   data: string;
   name: string;
   path: string;
+  fileType: string;
 };
 
 export type DirectoryContent = {
