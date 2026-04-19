@@ -1,8 +1,11 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import icon from '../../resources/icon.png?asset';
+import os from 'os';
+
 import { storeUserDrives } from '../preload/system-storage';
+
+import icon from '../../resources/icon.png?asset';
 import pdfFilePath from '../../resources/PDF.pdf?commonjs-external&asset';
 
 function createWindow(): void {
@@ -27,8 +30,15 @@ function createWindow(): void {
     // Opens dev tools upon launching the app, for troubleshooting purposes.
     mainWindow.webContents.openDevTools();
 
-    // Pulls the user's drives letter names
-    await storeUserDrives();
+    const userOs = os.platform();
+    if (userOs === 'win32') {
+      const isWindows11 = os.version().includes('Windows 11');
+      await storeUserDrives(isWindows11);
+    } else {
+      // Pulls the user's drives letter names
+      //? False passed to the usePowerShell boolean since only windows 11 needs a different method to gather user drives
+      await storeUserDrives(false);
+    }
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
