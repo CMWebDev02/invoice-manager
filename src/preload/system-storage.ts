@@ -13,7 +13,6 @@ type StoreTypes = {
 
 const store = new Store<StoreTypes>();
 
-// TODO: Have this use the node-disk-info module if it is any OS other than windows 11
 export async function storeUserDrives(usePowerShell: boolean): Promise<boolean> {
   try {
     let userDrives: string[];

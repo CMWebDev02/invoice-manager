@@ -2,11 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import os from 'os';
-
 import { storeUserDrives } from '../preload/system-storage';
-
 import icon from '../../resources/icon.png?asset';
-import pdfFilePath from '../../resources/PDF.pdf?commonjs-external&asset';
 
 function createWindow(): void {
   // Create the browser window.
