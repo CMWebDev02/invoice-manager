@@ -1,6 +1,7 @@
 import Store from 'electron-store';
 import { pullUserDrives } from './powershell';
 import type { SelectorDetails, UserSettings } from './types';
+import { getDiskInfo } from 'node-disk-info';
 
 type StoreTypes = {
   userData: boolean;
