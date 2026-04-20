@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { HashRouter, Route, Routes } from 'react-router';
 import './styles/styles.css';
 import TitlePage from './pages/title-page/title-page';
 import SettingsPage from './pages/settings/settings-page';
@@ -31,7 +31,7 @@ export default function App(): React.JSX.Element {
 
   return (
     <>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<HeaderAndBody />}>
             <Route index element={<TitlePage />} />
@@ -45,7 +45,7 @@ export default function App(): React.JSX.Element {
           <Route path="/sorters/:sorterId" element={<SortersPage />} />
           <Route path="/viewers/:viewerId" element={<ViewersPage />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
