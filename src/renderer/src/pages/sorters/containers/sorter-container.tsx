@@ -217,7 +217,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </div>
 
-          <div className="w-2/3 h-full items-center p-2">{invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFile={invoiceObj} />}</div>
+          <FlexRowContainer className="w-2/3 h-full items-center p-2">{invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFile={invoiceObj} />}</FlexRowContainer>
         </FlexRowContainer>
       </main>
       <Toaster />
