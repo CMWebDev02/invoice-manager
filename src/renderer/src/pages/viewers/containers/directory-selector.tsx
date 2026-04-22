@@ -4,7 +4,7 @@ import { titleCharactersWhiteList } from '@renderer/lib/patterns';
 import { DirectoryExport } from '@renderer/lib/types';
 import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
-import DirectoryOption from '../components/directory-option';
+import DirectoryOption from '../../../components/user/directory-option';
 import useDebounce from '@renderer/hooks/useDebounce';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';

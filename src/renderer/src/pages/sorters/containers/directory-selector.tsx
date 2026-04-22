@@ -2,7 +2,7 @@ import YearSelector from '../components/year-selector';
 import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersWhiteList } from '@renderer/lib/patterns';
-import DirectoryOption from '../components/directory-option';
+import DirectoryOption from '@renderer/components/user/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
 import useDebounce from '@renderer/hooks/useDebounce';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';

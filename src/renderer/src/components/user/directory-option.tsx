@@ -13,7 +13,7 @@ export default function DirectoryOption({ disabled, directoryObject, currentDire
   const isSelected = currentDirectory !== null && currentDirectory.name === name;
 
   return (
-    <Button className={`w-full ${isSelected ? 'bg-secondary/30' : 'bg-primary'} rounded-none border border-foreground flex justify-start hover:bg-white/70`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
+    <Button className={`w-full ${isSelected ? 'bg-secondary/30' : 'bg-primary'} rounded-none border border-foreground flex justify-start hover:bg-white/70 select-none`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
       {name}
     </Button>
   );
