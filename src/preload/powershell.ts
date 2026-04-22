@@ -94,7 +94,9 @@ class PowerShell {
 export async function pullUserDrives(): Promise<string[]> {
   try {
     const newShell = new PowerShell();
-    const userDrives = await newShell.getUserDrives();
+    let userDrives = await newShell.getUserDrives();
+    // Appends the needed colon to the user drive letters
+    userDrives = userDrives.map((drive) => drive + ':');
     return userDrives;
   } catch (error) {
     console.error(error);

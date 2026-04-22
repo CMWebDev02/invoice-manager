@@ -13,8 +13,8 @@ export default function DiskSelector({ drivesList, updateCurrentDirectoryPath, c
   function setDrivePath(value: string): void {
     if (value !== 'N/A') {
       const drivePath = value;
-      // Appends the ':\\' to the drive letter
-      updateCurrentDirectoryPath(`${drivePath}:\\`);
+      // Appends the '\' to the drive letter
+      updateCurrentDirectoryPath(`${drivePath}\\`);
     }
   }
 
