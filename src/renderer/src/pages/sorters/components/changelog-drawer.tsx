@@ -23,9 +23,9 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
         <FlexColContainer className="w-full h-full border-2 border-foreground">
           <DrawerDescription>
             <FlexRowContainer className="w-full h-1/6 items-center justify-between p-0">
-              <h1 className="w-1/12 h-full border border-foreground p-1">Past Action</h1>
-              <p className="w-10/12 h-full border border-foreground p-1 truncate">Action Description</p>
-              <p className="w-1/12 h-full border border-foreground p-1 rounded-none">Undo Button</p>
+              <h1 className="w-1/6 xl:w-1/12 h-full border border-foreground p-1">Past Action</h1>
+              <p className="w-4/6 xl:w-10/12 h-full border border-foreground p-1 truncate">Action Description</p>
+              <p className="w-1/6 xl:w-1/12 h-full border border-foreground p-1 rounded-none">Undo Button</p>
             </FlexRowContainer>
           </DrawerDescription>
           {changeLog.map((change) => (

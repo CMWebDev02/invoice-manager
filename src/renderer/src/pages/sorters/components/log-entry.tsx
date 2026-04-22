@@ -36,14 +36,14 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
 
   return (
     <FlexRowContainer className="flex flex-row w-full h-1/6 items-center p-0">
-      <h1 className="w-1/12 h-full border border-foreground p-1.5">{changeTitle}</h1>
-      <p className="w-10/12 h-full border border-foreground p-1.5 truncate">{changeDescription}</p>
+      <h1 className="w-1/6 xl:w-1/12 h-full border border-foreground p-1.5">{changeTitle}</h1>
+      <p className="w-4/6 xl:w-10/12 h-full border border-foreground p-1.5 truncate">{changeDescription}</p>
       {change.actionType === 'sort' || change.actionType === 'create' ? (
-        <Button onClick={() => undoChangeLogAction(change)} className="w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent">
+        <Button onClick={() => undoChangeLogAction(change)} className="w-1/6 xl:w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent">
           ^
         </Button>
       ) : (
-        <Button className="w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent" disabled>
+        <Button className="w-1/6 xl:w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent" disabled>
           ^
         </Button>
       )}
