@@ -30,7 +30,7 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
     if (directoriesArrays !== null && directoriesArrays !== undefined) {
       setIsUserInteractionDisabled(false);
     }
-  }, [directoriesArrays]);
+  }, [isUserInteractionDisabled, directoriesArrays]);
 
   async function getDirectoryContents(dirPath: string): Promise<DirectoryContent[] | null> {
     try {
@@ -97,7 +97,7 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
         <div className="w-full h-full flex flex-row p-2">
           {/* Shows the selected directory contents or the directory navigation list */}
           <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} useStrictInputs={userSettings.strictInputs} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} getDirectoryContents={getDirectoryContents} getInvoice={getInvoice} disabled={isUserInteractionDisabled} />}</div>
-          {selectedInvoiceData !== null && <InvoiceDisplay disabled={isUserInteractionDisabled} invoiceFileData={selectedInvoiceData.data} invoiceFileType={selectedInvoiceData.fileType} />}
+          <div className="w-2/3 h-full items-center p-2">{selectedInvoiceData !== null && <InvoiceDisplay disabled={isUserInteractionDisabled} invoiceFile={selectedInvoiceData} />}</div>
         </div>
       </main>
       <Toaster />

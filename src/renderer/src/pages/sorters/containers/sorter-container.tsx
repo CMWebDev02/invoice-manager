@@ -49,7 +49,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
     if (invoiceObj !== null && invoiceObj !== undefined && directoriesArrays !== undefined) {
       setIsInteractionDisabled(false);
     }
-  }, [invoiceObj, directoriesArrays]);
+  }, [isInteractionDisabled, invoiceObj, directoriesArrays]);
 
   function updateSelectedDirectory(dirObj: DirectoryExport): void {
     setSelectedDirectory(dirObj);
@@ -217,7 +217,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </div>
 
-          {invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFileData={invoiceObj.data} invoiceFileType={invoiceObj.fileType} />}
+          <div className="w-2/3 h-full items-center p-2">{invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFile={invoiceObj} />}</div>
         </FlexRowContainer>
       </main>
       <Toaster />
