@@ -1,0 +1,20 @@
+import { Button } from '@renderer/components/ui/button';
+import type { DirectoryExport } from '@renderer/lib/types';
+
+interface DirectoryOptionProps {
+  disabled: boolean;
+  directoryObject: DirectoryExport;
+  currentDirectory: DirectoryExport | null;
+  updateCurrentDirectory: (dirName: DirectoryExport) => void;
+}
+
+export default function DirectoryOption({ disabled, directoryObject, currentDirectory, updateCurrentDirectory }: DirectoryOptionProps): React.JSX.Element {
+  const { name } = directoryObject;
+  const isSelected = currentDirectory !== null && currentDirectory.name === name;
+
+  return (
+    <Button className={`w-full ${isSelected ? 'bg-secondary/30' : 'bg-primary'} rounded-none border border-foreground flex justify-start hover:bg-white/70 select-none`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
+      {name}
+    </Button>
+  );
+}
