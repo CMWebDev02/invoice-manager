@@ -6,7 +6,9 @@ import ErrorPage from '@renderer/components/pages/error-page';
 
 export default function ViewersPage(): React.JSX.Element {
   const { viewerId } = useParams();
-  const { viewerActions, isLoading, error } = useViewerClassInit({ viewerId, asyncFunctionKey: 'viewers-class' });
+  // Creates a unique query key using the viewerId
+  //! There is the possibility for the key to append undefined but if this occurs no page is returned anyway
+  const { viewerActions, isLoading, error } = useViewerClassInit({ viewerId, asyncFunctionKey: `viewers-class-${viewerId}` });
 
   if (error !== null) {
     return <ErrorPage errors={[error]} />;

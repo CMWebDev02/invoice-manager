@@ -5,7 +5,9 @@ import ErrorPage from '@renderer/components/pages/error-page';
 
 export default function SortersPage(): React.JSX.Element {
   const { sorterId } = useParams();
-  const { sorterActions, isLoading, error } = useSorterClassInit({ sorterId, asyncFunctionKey: 'sorting-class' });
+  // Creates a unique query key using the sorterId
+  //! There is the possibility for the key to append undefined but if this occurs no page is returned anyway
+  const { sorterActions, isLoading, error } = useSorterClassInit({ sorterId, asyncFunctionKey: `sorting-class-${sorterId}` });
 
   if (error !== null) {
     return <ErrorPage errors={[error]} />;
