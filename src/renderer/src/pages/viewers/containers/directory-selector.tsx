@@ -74,7 +74,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
   return (
     <FlexColContainer className="w-full h-full gap-1">
       <FlexRowContainer className="w-full p-1 justify-around items-center h-12 gap-1 ">
-        <label htmlFor="search-filter" className="w-auto select-none">
+        <label htmlFor="search-filter" className="w-auto select-none text-foreground">
           Search:
         </label>
         <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />

@@ -56,13 +56,13 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
     <div className="w-full h-11/12">
       <FlexRowContainer className="w-full p-1 justify-around items-center h-24 xl:h-12 gap-0 xl:gap-2">
         <div className="w-2/3 xl:w-full flex flex-col xl:flex-row gap-0 xl:gap-2 items-center align-middle">
-          <label htmlFor="search-filter" className="w-full xl:w-auto select-none">
+          <label htmlFor="search-filter" className="w-full xl:w-auto select-none text-foreground">
             Search:
           </label>
           <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
         </div>
         <div className="w-1/3 xl:w-auto flex flex-col xl:flex-row items-center align-middle xl:gap-2">
-          <label htmlFor="year-selector" className="w-full xl:w-auto select-none">
+          <label htmlFor="year-selector" className="w-full xl:w-auto select-none text-foreground">
             Year:
           </label>
           <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} className="w-full xl:w-auto" id="year-selector" />
