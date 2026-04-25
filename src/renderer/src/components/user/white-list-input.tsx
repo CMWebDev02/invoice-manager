@@ -2,12 +2,14 @@ import { KeyboardEvent } from 'react';
 import { Input } from '../ui/input';
 
 interface WhiteListInputProps {
-  regexWhiteList: RegExp;
+  regexBlackList: RegExp;
 }
 
-export default function WhiteListInput({ regexWhiteList, ...props }: WhiteListInputProps & React.ComponentProps<'input'>): React.JSX.Element {
+export default function WhiteListInput({ regexBlackList, ...props }: WhiteListInputProps & React.ComponentProps<'input'>): React.JSX.Element {
   function validateInput(e: KeyboardEvent<HTMLInputElement>): void {
-    if (!regexWhiteList.test(e.key)) {
+    // Checks if the key entered is within the black list
+    if (regexBlackList.test(e.key)) {
+      // Prevents the key from being entered
       e.preventDefault();
     }
   }

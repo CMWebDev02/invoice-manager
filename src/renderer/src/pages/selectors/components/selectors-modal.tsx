@@ -12,7 +12,7 @@ import { getUniqueID } from '@renderer/lib/utils';
 import { useEffect, useState } from 'react';
 import { searchSelector, storeSelector } from '@renderer/lib/store';
 import type { SelectorDetails } from '@renderer/lib/types';
-import { titleCharactersWhiteList } from '@renderer/lib/patterns';
+import { titleCharactersBlackList } from '@renderer/lib/patterns';
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
 import { SorterTest, ViewerTest } from '@renderer/pages/selectors/tests/selectors-tests';
@@ -52,7 +52,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         throw new Error('Invalid Title Entry', { cause: 'InvalidEntry' });
       }
 
-      if (!titleCharactersWhiteList.test(selectorTitle)) {
+      if (titleCharactersBlackList.test(selectorTitle)) {
         throw new Error('Invalid Title Entry', { cause: 'InvalidEntry' });
       }
 
@@ -188,7 +188,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
             Title:
           </Label>
           {/* // TODO: Figure out why this input is causing rerendering issues */}
-          <WhiteListInput className="w-1/2 bg-secondary border border-primary rounded-none outline outline-primary focus-within:border-primary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexWhiteList={titleCharactersWhiteList} />
+          <WhiteListInput className="w-1/2 bg-secondary border border-primary rounded-none outline outline-primary focus-within:border-primary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexBlackList={titleCharactersBlackList} />
         </FlexRowContainer>
       </DialogHeader>
       <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)] w-full">

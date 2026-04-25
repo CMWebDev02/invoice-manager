@@ -1,1 +1,1 @@
-export const titleCharactersWhiteList: RegExp = /^[A-Za-z0-9_.-\s]*$/;
+export const titleCharactersBlackList: RegExp = /^[<>:"/\\|?*]*$/;

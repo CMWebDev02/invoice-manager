@@ -1,7 +1,7 @@
 import YearSelector from '../components/year-selector';
 import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
-import { titleCharactersWhiteList } from '@renderer/lib/patterns';
+import { titleCharactersBlackList } from '@renderer/lib/patterns';
 import DirectoryOption from '@renderer/components/user/directory-option';
 import { DirectoryExport } from '@renderer/lib/types';
 import useDebounce from '@renderer/hooks/useDebounce';
@@ -59,7 +59,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
           <label htmlFor="search-filter" className="w-full xl:w-auto select-none">
             Search:
           </label>
-          <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
+          <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
         </div>
         <div className="w-1/3 xl:w-auto flex flex-col xl:flex-row items-center align-middle xl:gap-2">
           <label htmlFor="year-selector" className="w-full xl:w-auto select-none">

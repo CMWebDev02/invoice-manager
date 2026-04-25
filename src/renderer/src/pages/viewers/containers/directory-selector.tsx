@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import WhiteListInput from '@renderer/components/user/white-list-input';
-import { titleCharactersWhiteList } from '@renderer/lib/patterns';
+import { titleCharactersBlackList } from '@renderer/lib/patterns';
 import { DirectoryExport } from '@renderer/lib/types';
 import { Button } from '@renderer/components/ui/button';
 import { toast } from 'sonner';
@@ -77,7 +77,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
         <label htmlFor="search-filter" className="w-auto select-none">
           Search:
         </label>
-        <WhiteListInput disabled={disabled} regexWhiteList={titleCharactersWhiteList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
+        <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-6rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
         <div className="w-full">
