@@ -32,7 +32,7 @@ export default function YearSelector({ disabled, updateCurrentYear, id, classNam
     <>
       <Select onValueChange={updateCurrentYear} disabled={disabled}>
         <SelectTrigger className={buttonVariants({ variant: 'action', className: className })} id={id}>
-          <SelectValue placeholder="XXXX" className="text-foreground" />
+          <SelectValue placeholder="XXXX" className="text-foreground bg-secondary" />
         </SelectTrigger>
         <SelectContent className="bg-secondary border border-accent">
           <SelectGroup className="outline-none">{YearsItems}</SelectGroup>
