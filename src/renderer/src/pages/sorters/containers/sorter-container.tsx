@@ -227,7 +227,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <FlexColContainer className="w-1/3 h-full justify-between p-2 items-center">
-            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} useStrictInputs={userSettings.strictInputs} />}
+            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </FlexColContainer>
 

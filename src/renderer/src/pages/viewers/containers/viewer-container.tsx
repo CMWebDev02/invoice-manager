@@ -97,7 +97,7 @@ export default function ViewerContainer({ viewerActions }: ViewerContainerProps)
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <div className="w-full h-full flex flex-row p-2">
           {/* Shows the selected directory contents or the directory navigation list */}
-          <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} useStrictInputs={userSettings.strictInputs} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} getDirectoryContents={getDirectoryContents} getInvoice={getInvoice} disabled={isUserInteractionDisabled} />}</div>
+          <div className="w-1/3 h-full flex flex-col gap-1">{selectedDirectoryPath === null ? <DirectorySelector disabled={isUserInteractionDisabled} directoriesArrays={directoriesArrays} updateSelectedDirectory={updateSelectedDirectory} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} /> : <DirectoryNavigation mainDirPath={selectedDirectoryPath} returnToSearch={returnToSearch} getDirectoryContents={getDirectoryContents} getInvoice={getInvoice} disabled={isUserInteractionDisabled} />}</div>
           <FlexRowContainer className="w-2/3 h-full items-center p-2">{selectedInvoiceData !== null && <InvoiceDisplay disabled={isUserInteractionDisabled} invoiceFile={selectedInvoiceData} />}</FlexRowContainer>
         </div>
       </main>

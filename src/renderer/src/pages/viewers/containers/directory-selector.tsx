@@ -14,9 +14,10 @@ interface DirectorySelectorProps {
   directoriesArrays: DirectoryExport[][];
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
   useStrictInputs: boolean;
+  autoSelectText: boolean;
 }
 
-export default function DirectorySelector({ disabled, directoriesArrays, updateSelectedDirectory, useStrictInputs }: DirectorySelectorProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, updateSelectedDirectory, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const [currentDirectory, setCurrentDirectory] = useState<DirectoryExport | null>(null);
@@ -71,13 +72,20 @@ export default function DirectorySelector({ disabled, directoriesArrays, updateS
     }
   }
 
+  // Selects all text in the text box upon entering it
+  function selectAllText(e: React.SyntheticEvent<HTMLInputElement, Event>): void {
+    if (autoSelectText) {
+      e.currentTarget.select();
+    }
+  }
+
   return (
     <FlexColContainer className="w-full h-full gap-1">
       <FlexRowContainer className="w-full p-1 justify-around items-center h-12 gap-1 ">
         <label htmlFor="search-filter" className="w-auto select-none text-foreground">
           Search:
         </label>
-        <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
+        <WhiteListInput className="w-full rounded-none bg-secondary text-foreground border border-foreground" disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id="search-filter" onChange={(e) => updateSearchString(e)} value={userSearchString} onFocus={(e) => selectAllText(e)} />
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-6rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
         <div className="w-full">

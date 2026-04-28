@@ -50,4 +50,5 @@ export type FileSystemTypes = {
 
 export type UserSettingsTypes = {
   strictInputs: boolean;
+  quickSelectInSearchBars: boolean;
 };

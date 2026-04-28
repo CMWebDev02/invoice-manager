@@ -3,7 +3,8 @@ import { UserSettingsTypes } from './types';
 export class UserSettings {
   static getDefaultSettings(): UserSettingsTypes {
     const defaultUserSettings: UserSettingsTypes = {
-      strictInputs: false
+      strictInputs: false,
+      quickSelectInSearchBars: false
     };
     return { ...defaultUserSettings };
   }

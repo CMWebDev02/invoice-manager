@@ -15,9 +15,10 @@ interface DirectorySelectorProps {
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
   useStrictInputs: boolean;
+  autoSelectText: boolean;
 }
 
-export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear, useStrictInputs }: DirectorySelectorProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const filterString = useDebounce({ updateVar: userSearchString });
@@ -52,6 +53,13 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
     setUserSearchString(textInput);
   }
 
+  // Selects all text in the text box upon entering it
+  function selectAllText(e: React.SyntheticEvent<HTMLInputElement, Event>): void {
+    if (autoSelectText) {
+      e.currentTarget.select();
+    }
+  }
+
   return (
     <FlexColContainer className="w-full h-10/12 lg:h-11/12  justify-between">
       <FlexRowContainer className="w-full p-1 items-center h-24 xl:h-12 gap-0 xl:gap-2">
@@ -59,7 +67,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
           <label htmlFor="search-filter" className="w-full xl:w-auto select-none text-foreground">
             Search:
           </label>
-          <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
+          <WhiteListInput className="w-full rounded-none bg-secondary text-foreground border border-foreground" disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} onFocus={(e) => selectAllText(e)} />
         </FlexColContainer>
         <FlexColContainer className="w-1/3 xl:w-auto xl:flex-row items-center align-middle xl:gap-2">
           <label htmlFor="year-selector" className="w-full xl:w-auto select-none text-foreground">
