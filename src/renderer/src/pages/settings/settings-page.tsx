@@ -11,6 +11,11 @@ import FlexColContainer from '@renderer/components/ui/flex-col-container';
 export default function SettingsPage(): React.JSX.Element {
   const [userSettings, setUserSettings] = useState<UserSettingsTypes>(UserSettings.getUserSettings());
 
+  function defaultSettings(): void {
+    setUserSettings(UserSettings.getDefaultSettings());
+    toast.success('Default Settings Applied! Remember to Save Changes!');
+  }
+
   function saveSettings(): void {
     const isSaved = UserSettings.updateUserSettings(userSettings);
     if (isSaved) {
@@ -43,6 +48,9 @@ export default function SettingsPage(): React.JSX.Element {
           <ButtonLink linkHref="/" className={buttonVariants({ variant: 'action', className: '' })}>
             Return
           </ButtonLink>
+          <Button onClick={defaultSettings} variant={'action'} className="bg-primary">
+            Defaults
+          </Button>
           <Button onClick={saveSettings} variant={'action'} className="bg-primary">
             Save
           </Button>
