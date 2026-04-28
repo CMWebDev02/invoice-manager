@@ -15,11 +15,16 @@ export class ErrorHandling {
   }
 
   static _initializeErrorMessage(error: Error | unknown): string {
+    // Gets the current date and time
+    const currentDate = new Date();
+    // Month needs to be offset by 1
+    const date = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()} | ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
     // Appends two line returns to make it easier to differentiate the errors in the file
     if (error instanceof Error) {
-      return `Name: ${error.name} Cause: ${error.cause} - ${error.message}\n\n`;
+      return `${date} | Name: ${error.name} Cause: ${error.cause} - ${error.message}\n\n`;
     } else {
-      return 'An Unknown Error has Occurred!\n\n';
+      return `${date} | An Unknown Error has Occurred!\n\n`;
     }
   }
 
