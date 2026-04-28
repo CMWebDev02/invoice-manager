@@ -15,6 +15,7 @@ import DirectorySelector from './directory-selector';
 import NavBar from '@renderer/components/user/nav-bar';
 import MenuButton from '@renderer/components/user/menu-button';
 import { UserSettings } from '@renderer/lib/user-settings';
+import FlexColContainer from '@renderer/components/ui/flex-col-container';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -212,10 +213,10 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       </NavBar>
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
-          <div className="w-1/3 h-full flex flex-col gap-1 justify-center items-center">
+          <FlexColContainer className="w-1/3 h-full justify-between p-2 items-center">
             {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} useStrictInputs={userSettings.strictInputs} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
-          </div>
+          </FlexColContainer>
 
           <FlexRowContainer className="w-2/3 h-full items-center p-2">{invoiceObj !== undefined && invoiceObj !== null && <InvoiceDisplay disabled={isInteractionDisabled} invoiceFile={invoiceObj} />}</FlexRowContainer>
         </FlexRowContainer>

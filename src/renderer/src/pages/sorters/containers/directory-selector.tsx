@@ -53,26 +53,26 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
   }
 
   return (
-    <div className="w-full h-11/12">
-      <FlexRowContainer className="w-full p-1 justify-around items-center h-24 xl:h-12 gap-0 xl:gap-2">
-        <div className="w-2/3 xl:w-full flex flex-col xl:flex-row gap-0 xl:gap-2 items-center align-middle">
+    <FlexColContainer className="w-full h-10/12 lg:h-11/12  justify-between">
+      <FlexRowContainer className="w-full p-1 items-center h-24 xl:h-12 gap-0 xl:gap-2">
+        <FlexColContainer className="w-2/3 xl:w-full xl:flex-row gap-0 xl:gap-2 items-center align-middle">
           <label htmlFor="search-filter" className="w-full xl:w-auto select-none text-foreground">
             Search:
           </label>
           <WhiteListInput disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} className="w-full rounded-none bg-secondary text-foreground border border-foreground" />
-        </div>
-        <div className="w-1/3 xl:w-auto flex flex-col xl:flex-row items-center align-middle xl:gap-2">
+        </FlexColContainer>
+        <FlexColContainer className="w-1/3 xl:w-auto xl:flex-row items-center align-middle xl:gap-2">
           <label htmlFor="year-selector" className="w-full xl:w-auto select-none text-foreground">
             Year:
           </label>
           <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} className="w-full xl:w-auto" id="year-selector" />
-        </div>
+        </FlexColContainer>
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-6rem)] xl:h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
         {filteredDirectories.map((dirObj) => (
           <DirectoryOption key={dirObj.name} directoryObject={dirObj} currentDirectory={selectedDirectory} updateCurrentDirectory={updateSelectedDirectory} disabled={disabled} />
         ))}
       </FlexColContainer>
-    </div>
+    </FlexColContainer>
   );
 }

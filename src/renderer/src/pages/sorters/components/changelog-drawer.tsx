@@ -1,4 +1,4 @@
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@renderer/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@renderer/components/ui/drawer';
 import type { ChangeLogEntry } from '@renderer/lib/types';
 import LogEntry from './log-entry';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
