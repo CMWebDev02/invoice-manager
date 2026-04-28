@@ -4,6 +4,7 @@ import useFileToBlob from '@renderer/hooks/useFileToBlob';
 import ErrorPage from '../pages/error-page';
 import FlexColContainer from '../ui/flex-col-container';
 import FlexRowContainer from '../ui/flex-row-container';
+import FileNameDisplay from './file-name-display';
 
 interface InvoiceDisplayProps {
   disabled: boolean;
@@ -28,14 +29,18 @@ export default function InvoiceDisplay({ disabled, invoiceFile }: InvoiceDisplay
     return (
       <FlexColContainer className="w-full h-full gap-2">
         <iframe className="w-full h-[calc(100%-3rem)]" src={fileDataURL} aria-disabled={disabled} />
-        <FlexRowContainer className="w-full h-10 p-1 border border-foreground text-foreground bg-secondary lg:text-xl">
-          <p className="w-20 lg:w-24 h-full select-none">File Name:</p>
-          <p className="w-[calc(100%-5rem)] lg:w-[calc(100%-7rem)] h-full truncate">{invoiceFile.name}</p>
-        </FlexRowContainer>
+        <FileNameDisplay fileName={invoiceFile.name} />
       </FlexColContainer>
     );
   } else if (fileType === 'png') {
-    return <img className="aspect-auto" src={fileDataURL} aria-disabled={disabled} />;
+    return (
+      <FlexColContainer className="w-full h-full gap-2">
+        <div className="w-full h-[calc(100%-3rem)]">
+          <img className="aspect-auto" src={fileDataURL} aria-disabled={disabled} />
+        </div>
+        <FileNameDisplay fileName={invoiceFile.name} />
+      </FlexColContainer>
+    );
   } else {
     // Returns an indicator that the file type is not supported.
     return <h2>Invalid File Type!</h2>;
