@@ -42,13 +42,13 @@ export default function DirectoryNavigation({ mainDirPath, returnToSearch, getDi
   }
 
   return (
-    <FlexColContainer className="w-full h-full flex-col-reverse justify-between">
+    <FlexColContainer className="w-full h-full justify-between">
+      <Button className="w-full bg-primary hover:text-accent h-10" variant={'action'} onClick={reversePathTraversal}>
+        ...
+      </Button>
+      <div className="w-full h-[calc(100%-5rem)] overflow-y-auto border border-foreground bg-secondary">{currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}</div>
       <Button onClick={returnToSearch} disabled={disabled} variant={'action'} className="h-10">
         Return
-      </Button>
-      {currentDirSubDirs !== null && <DirectoryList subDirs={currentDirSubDirs} updateCurrentPath={setCurrentDirPath} getInvoice={getInvoice} disabled={disabled} />}
-      <Button className="w-full bg-primary hover:text-accent" variant={'action'} onClick={reversePathTraversal}>
-        ...
       </Button>
     </FlexColContainer>
   );

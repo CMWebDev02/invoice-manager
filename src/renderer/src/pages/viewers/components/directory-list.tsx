@@ -44,5 +44,5 @@ export default function DirectoryList({ subDirs, updateCurrentPath, getInvoice, 
     }
   });
 
-  return <FlexColContainer className="h-[calc(100%-3rem)] w-full border border-foreground bg-secondary">{values}</FlexColContainer>;
+  return <FlexColContainer>{values}</FlexColContainer>;
 }
