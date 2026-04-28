@@ -24,12 +24,12 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
     }
     case 'undoCreate': {
       changeTitle = `Undo ${change.successful === true ? 'Successful' : 'Failed'}:`;
-      changeDescription = `Remove directory ${change.actionDetails.itemPath}!`;
+      changeDescription = `Failed to remove directory ${change.actionDetails.itemPath}!`;
       break;
     }
     case 'undoSort': {
       changeTitle = `Undo ${change.successful === true ? 'Successful' : 'Failed'}:`;
-      changeDescription = `Remove file ${change.actionDetails.itemName} from ${change.actionDetails.itemPath}!`;
+      changeDescription = `Failed to remove file ${change.actionDetails.itemName} from ${change.actionDetails.itemPath}!`;
       break;
     }
   }

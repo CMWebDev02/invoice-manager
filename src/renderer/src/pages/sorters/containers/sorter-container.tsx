@@ -135,8 +135,14 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
         toast.error('Invalid Starting Character!');
         return;
       }
-    } catch {
-      toast.error('Failed to Create New Directory');
+    } catch (error) {
+      // Checks if the error is specific
+      if (error instanceof Error && error.cause == 'DirExisting') {
+        toast.error('Directory Name Already In Use');
+      } else {
+        // Else provides generic error message
+        toast.error('Failed to Create New Directory');
+      }
     }
   }
 
@@ -168,7 +174,8 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
         return [newChange, ...currentArray];
       });
       toast.success('Action Undone!');
-    } catch {
+    } catch (error) {
+      // Updates the change log to show the failed undo action
       setChangeLog((changeArray) => {
         const changeId = getUniqueID();
         const newChange: ChangeLogEntry = {
@@ -184,7 +191,13 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
         return [newChange, ...changeArray];
       });
 
-      toast.error('Undo Failed!');
+      // Checks if the undo error is specific
+      if (error instanceof Error && error.cause == 'DirNotEmpty') {
+        toast.error('Nonempty Directories Cannot Be Removed!');
+      } else {
+        // If no specific errors occur, a generic error message is shown
+        toast.error('Undo Failed!');
+      }
       // In the instance where no changes are made to the directories or current invoice,
       // the interaction needs to be reenabled
       setIsInteractionDisabled(false);

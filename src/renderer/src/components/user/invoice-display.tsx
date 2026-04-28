@@ -3,7 +3,6 @@ import { FileExport } from '@renderer/lib/types';
 import useFileToBlob from '@renderer/hooks/useFileToBlob';
 import ErrorPage from '../pages/error-page';
 import FlexColContainer from '../ui/flex-col-container';
-import FlexRowContainer from '../ui/flex-row-container';
 import FileNameDisplay from './file-name-display';
 
 interface InvoiceDisplayProps {

@@ -66,9 +66,13 @@ export class FileSystem {
     try {
       await file_system.initializeNewDir(dirPath);
     } catch (error) {
-      const message = `005 - Initializing Directory at ${dirPath}\n`;
-      ErrorHandling.updateErrorFile(message, error);
-      throw new Error(`An Issue Occurred Creating New Directory`);
+      if (error instanceof Error && 'code' in error && error.code === 'EEXIST') {
+        throw new Error(`Directory Already Exists`, { cause: 'DirExisting' });
+      } else {
+        const message = `005 - Initializing Directory at ${dirPath}\n`;
+        ErrorHandling.updateErrorFile(message, error);
+        throw new Error(`An Issue Occurred Creating New Directory`);
+      }
     }
   }
 
