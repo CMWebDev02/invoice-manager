@@ -155,14 +155,16 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
     sm:max-w-5/6
     lg:max-w-3/4
     xl:max-w-1/2
-    flex flex-col justify-around
+    flex flex-col justify-between
+    gap-4
     "
+      //? Defines the max width to overwrite the preset max width for the dialog and gap 0 is needed to remove the unnecessary gap for the modal
       // Close modal if user clicks outside
       onPointerDownOutside={toggleModal}
       showCloseButton={false}
     >
-      <DialogHeader className="flex flex-col h-20">
-        <FlexRowContainer className="w-full justify-between">
+      <DialogHeader className="flex flex-col h-20 gap-0">
+        <FlexRowContainer className="w-full h-full justify-between">
           <Button onClick={validateChanges} variant="secondary" className="hover:cursor-pointer">
             Save
           </Button>
@@ -191,24 +193,25 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
           <WhiteListInput className="w-1/2 bg-secondary border border-primary rounded-none outline outline-primary focus-within:border-primary" id="selector-title" value={selectorTitle} onChange={(e) => setSelectorTitle(e.target.value)} regexBlackList={titleCharactersBlackList} />
         </FlexRowContainer>
       </DialogHeader>
-      <FlexRowContainer className="gap-1 justify-around h-[calc(100%-5rem)] w-full">
+      {/* Height calculation includes the height for the header and the gap between content */}
+      <FlexRowContainer className="h-[calc(100%-6rem)] w-full justify-around">
         {/* //?Invoices directory selector only displays for sorters page */}
         {selectorType === 'sorters' && (
-          <FlexColContainer className="h-full w-1/2 gap-1">
+          <FlexColContainer className="h-full w-[calc(50%-.25rem)] justify-between gap-1">
             <FlexColContainer className="h-16">
-              <h3 className="md:text-lg">Invoices Destination:</h3>
-              <h4 className="border-2 border-secondary bg-primary p-0.5 text-lg min-h-8">{invoicesDestination}</h4>
+              <h3 className="h-1/2 text-lg">Invoices Destination:</h3>
+              <h4 className="h-1/2 text-lg border-2 border-secondary bg-primary p-0.5 truncate">{invoicesDestination}</h4>
             </FlexColContainer>
-            <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
+            <DirectorySelector className="h-[calc(100%-4.25rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
           </FlexColContainer>
         )}
 
-        <FlexColContainer className="h-full w-1/2 gap-1">
+        <FlexColContainer className="h-full w-[calc(50%-.25rem)] justify-between gap-1">
           <FlexColContainer className="h-16">
-            <h3 className="md:text-lg">Directories Destination:</h3>
-            <h4 className="border-2 border-secondary bg-primary p-0.5 text-lg min-h-8">{directoriesDestination}</h4>
+            <h3 className="h-1/2 text-lg">Directories Destination:</h3>
+            <h4 className="h-1/2 text-lg border-2 border-secondary bg-primary p-0.5 truncate">{directoriesDestination}</h4>
           </FlexColContainer>
-          <DirectorySelector className="h-[calc(100%-4rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
+          <DirectorySelector className="h-[calc(100%-4.25rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
         </FlexColContainer>
       </FlexRowContainer>
     </DialogContent>

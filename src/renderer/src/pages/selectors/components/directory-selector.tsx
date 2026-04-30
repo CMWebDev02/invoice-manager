@@ -1,4 +1,3 @@
-import { cn } from '@renderer/lib/utils';
 import { useState } from 'react';
 import DiskSelector from './disk-selector';
 import { Button } from '@renderer/components/ui/button';
@@ -43,23 +42,25 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
   }
 
   return (
-    <div className={cn('flex flex-col w-full', className)}>
-      <FlexRowContainer className="flex-wrap justify-between h-17 bg-navbar">
-        <DiskSelector drivesList={drivesList} updateCurrentDirectoryPath={updateCurrentDirectoryPath} className="w-1/2 text-foreground rounded-none border-white border-2 outline-white" />
-        {/* Updates the selected folder to be the new saved path */}
-        <Button variant={'action'} onClick={() => updateSavedPath(selectedDirectoryPath)} className="w-1/2 rounded-none border-white border-2">
-          Save Path
-        </Button>
+    <FlexColContainer className={className}>
+      <FlexColContainer className="w-full h-18 bg-navbar">
+        <FlexRowContainer className="w-full h-1/2">
+          <DiskSelector drivesList={drivesList} updateCurrentDirectoryPath={updateCurrentDirectoryPath} className="w-1/2 text-foreground rounded-none border-white border-2 outline-white" />
+          {/* Updates the selected folder to be the new saved path */}
+          <Button variant={'action'} onClick={() => updateSavedPath(selectedDirectoryPath)} className="w-1/2 rounded-none border-white border-2">
+            Save Path
+          </Button>
+        </FlexRowContainer>
 
-        <h2 className="w-full border-white border-2 p-0.5">{currentDirectoryPath}</h2>
-      </FlexRowContainer>
-      <FlexColContainer className="w-full h-[calc(100%-4.25rem)] overflow-x-hidden overflow-y-auto">
+        <h2 className="w-full h-1/2 border-white border-2 p-0.5 truncate">{currentDirectoryPath}</h2>
+      </FlexColContainer>
+      <FlexColContainer className="w-full h-[calc(100%-4.5rem)] max-h-[calc(100%-4.5rem)]">
         {/* Backwards traversal button is disabled when loading  */}
-        <Button className={`w-full flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal} disabled={isLoading}>
+        <Button className={`w-full h-9 flex justify-center select-none outline-none rounded-none border-2 border-accent hover:text-accent`} onClick={reversePathTraversal} disabled={isLoading}>
           ...
         </Button>
         {isLoading || directoriesArray === null ? <LoadingIndicator /> : <DirectoryList directoriesArray={directoriesArray} updateCurrentDirectoryPath={updateCurrentDirectoryPath} selectedDirectoryPath={selectedDirectoryPath} updateSelectDirectoryPath={updateDirectoryPath} />}
       </FlexColContainer>
-    </div>
+    </FlexColContainer>
   );
 }
