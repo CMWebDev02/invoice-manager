@@ -9,6 +9,7 @@ import { FileSystem } from '@renderer/lib/file-system';
 import LoadingIndicator from '@renderer/components/pages/loading-indicator';
 import ErrorPage from '@renderer/components/pages/error-page';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
+import TextDisplay from '@renderer/components/user/text-display';
 
 interface DirectorySelectorProps {
   updateSavedPath: (dirPath: string) => void;
@@ -52,7 +53,7 @@ export default function DirectorySelector({ updateSavedPath, drivesList, classNa
           </Button>
         </FlexRowContainer>
 
-        <h2 className="w-full h-1/2 border-white border-2 p-0.5 truncate">{currentDirectoryPath}</h2>
+        <TextDisplay className="w-full h-1/2 flex items-center border-white border-2 p-0.5 truncate" text={currentDirectoryPath} />
       </FlexColContainer>
       <FlexColContainer className="w-full h-[calc(100%-4.5rem)] max-h-[calc(100%-4.5rem)]">
         {/* Backwards traversal button is disabled when loading  */}

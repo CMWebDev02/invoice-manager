@@ -1,5 +1,6 @@
 import { Button } from '@renderer/components/ui/button';
 import type { DirectoryExport } from '@renderer/lib/types';
+import TextDisplay from './text-display';
 
 interface DirectoryOptionProps {
   disabled: boolean;
@@ -14,7 +15,7 @@ export default function DirectoryOption({ disabled, directoryObject, currentDire
 
   return (
     <Button className={`w-full h-8 lg:h-12 text-sm lg:text-lg ${isSelected ? 'bg-secondary/30 text-white' : 'text-foreground bg-primary'} rounded-none border border-foreground flex justify-start hover:bg-white/70 select-none`} onClick={() => updateCurrentDirectory(directoryObject)} disabled={disabled}>
-      <div className="truncate">{name}</div>
+      <TextDisplay className="w-full h-full flex items-center truncate p-0.5" text={name} />
     </Button>
   );
 }

@@ -17,6 +17,7 @@ import WhiteListInput from '@renderer/components/user/white-list-input';
 import { FileSystem } from '@renderer/lib/file-system';
 import { SorterTest, ViewerTest } from '@renderer/pages/selectors/tests/selectors-tests';
 import { toast } from 'sonner';
+import TextDisplay from '@renderer/components/user/text-display';
 
 interface SortersModalProps {
   drivesList: string[];
@@ -199,8 +200,8 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         {selectorType === 'sorters' && (
           <FlexColContainer className="h-full w-[calc(50%-.25rem)] justify-between gap-1">
             <FlexColContainer className="h-16">
-              <h3 className="h-1/2 text-lg">Invoices Destination:</h3>
-              <h4 className="h-1/2 text-lg border-2 border-secondary bg-primary p-0.5 truncate">{invoicesDestination}</h4>
+              <h3 className="w-full h-1/2 text-lg">Invoices Destination:</h3>
+              <TextDisplay className="w-full h-1/2 flex text-lg border-2 border-secondary bg-primary p-0.5 truncate" text={invoicesDestination} />
             </FlexColContainer>
             <DirectorySelector className="h-[calc(100%-4.25rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateInvoiceDestinationPath} drivesList={drivesList} />
           </FlexColContainer>
@@ -209,7 +210,7 @@ export default function SelectorsModal({ drivesList, toggleModal, existingSelect
         <FlexColContainer className="h-full w-[calc(50%-.25rem)] justify-between gap-1">
           <FlexColContainer className="h-16">
             <h3 className="h-1/2 text-lg">Directories Destination:</h3>
-            <h4 className="h-1/2 text-lg border-2 border-secondary bg-primary p-0.5 truncate">{directoriesDestination}</h4>
+            <TextDisplay className="w-full h-1/2 flex text-lg border-2 border-secondary bg-primary p-0.5 truncate" text={directoriesDestination} />
           </FlexColContainer>
           <DirectorySelector className="h-[calc(100%-4.25rem)] w-full border-2 border-secondary rounded-t-2xl p-2 bg-secondary" updateSavedPath={updateDirectoriesDestinationPath} drivesList={drivesList} />
         </FlexColContainer>

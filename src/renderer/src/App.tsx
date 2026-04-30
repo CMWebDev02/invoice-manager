@@ -9,6 +9,7 @@ import HeaderAndBody from './components/pages/header-and-body';
 import ViewersPage from './pages/viewers/viewers-page';
 import LoadingPage from './pages/loading/loading-page';
 import { UserSettings } from './lib/user-settings';
+import { TooltipProvider } from './components/ui/tooltip';
 // import ChangeLogsPage from './pages/changelogs/changelogs-pages';
 
 export default function App(): React.JSX.Element {
@@ -31,21 +32,23 @@ export default function App(): React.JSX.Element {
 
   return (
     <>
-      <HashRouter>
-        <Routes>
-          <Route element={<HeaderAndBody />}>
-            <Route index element={<TitlePage />} />
-            <Route path="/selector-viewers" element={<SelectorsPage selectorType="viewers" />} />
-            <Route path="/selector-sorters" element={<SelectorsPage selectorType="sorters" />} />
-            {/* Will Add Changelogs Saving in the Future */}
-            {/* <Route path="/changelogs" element={<ChangeLogsPage />} /> */}
-            <Route path="/settings" element={<SettingsPage />} />
-          </Route>
+      <TooltipProvider delayDuration={2000}>
+        <HashRouter>
+          <Routes>
+            <Route element={<HeaderAndBody />}>
+              <Route index element={<TitlePage />} />
+              <Route path="/selector-viewers" element={<SelectorsPage selectorType="viewers" />} />
+              <Route path="/selector-sorters" element={<SelectorsPage selectorType="sorters" />} />
+              {/* Will Add Changelogs Saving in the Future */}
+              {/* <Route path="/changelogs" element={<ChangeLogsPage />} /> */}
+              <Route path="/settings" element={<SettingsPage />} />
+            </Route>
 
-          <Route path="/sorters/:sorterId" element={<SortersPage />} />
-          <Route path="/viewers/:viewerId" element={<ViewersPage />} />
-        </Routes>
-      </HashRouter>
+            <Route path="/sorters/:sorterId" element={<SortersPage />} />
+            <Route path="/viewers/:viewerId" element={<ViewersPage />} />
+          </Routes>
+        </HashRouter>
+      </TooltipProvider>
     </>
   );
 }

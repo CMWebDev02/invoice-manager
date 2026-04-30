@@ -1,6 +1,7 @@
 import { Button } from '@renderer/components/ui/button';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
+import TextDisplay from '@renderer/components/user/text-display';
 import { FileSystem } from '@renderer/lib/file-system';
 import { type Dirent } from 'fs';
 import { useMemo } from 'react';
@@ -20,14 +21,14 @@ export default function DirectoryList({ directoriesArray, updateCurrentDirectory
       return (
         <FlexRowContainer key={dir.name} className="w-full h-9 flex bg-primary">
           <Button
-            className={`w-3/4 flex justify-start select-none outline-none rounded-none border-2 border-accent hover:text-accent
+            className={`w-3/4 h-full p-0 select-none outline-none rounded-none border-2 border-accent hover:text-accent
             ${childDirPath === selectedDirectoryPath ? 'text-red-600 bg-secondary/20' : 'text-foreground bg-secondary'}`}
             id={dir.name}
             onClick={() => {
               updateSelectDirectoryPath(childDirPath);
             }}
           >
-            {dir.name}
+            <TextDisplay className="w-full h-full flex items-center truncate p-0.5" text={dir.name} />
           </Button>
           <Button
             onClick={() => {
