@@ -4,7 +4,8 @@ export class UserSettings {
   static getDefaultSettings(): UserSettingsTypes {
     const defaultUserSettings: UserSettingsTypes = {
       strictInputs: false,
-      quickSelectInSearchBars: false
+      quickSelectInSearchBars: false,
+      textDisplayDelay: 2
     };
     return { ...defaultUserSettings };
   }

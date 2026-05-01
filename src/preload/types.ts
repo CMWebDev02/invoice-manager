@@ -13,4 +13,5 @@ export type DirectoryExport = {
 export type UserSettings = {
   strictInputs: boolean;
   quickSelectInSearchBars: boolean;
+  textDisplayDelay: number;
 };

@@ -7,6 +7,7 @@ import { toast, Toaster } from 'sonner';
 import { Button, buttonVariants } from '@renderer/components/ui/button';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
 import SettingOptionBool from './components/setting-option-bool';
+import SettingOptionNum from './components/setting-option-num';
 
 export default function SettingsPage(): React.JSX.Element {
   const [userSettings, setUserSettings] = useState<UserSettingsTypes>(UserSettings.getUserSettings());
@@ -25,7 +26,7 @@ export default function SettingsPage(): React.JSX.Element {
     }
   }
 
-  function updateUserSetting(settingName: string, newSettingValue: boolean): void {
+  function updateUserSetting(settingName: string, newSettingValue: boolean | number): void {
     setUserSettings((prevSettings) => {
       const newSettings = { ...prevSettings };
       newSettings[settingName] = newSettingValue;
@@ -34,7 +35,11 @@ export default function SettingsPage(): React.JSX.Element {
   }
 
   const UserSettingsOptions = Object.entries(userSettings).map(([settingName, settingValue]) => {
-    return <SettingOptionBool key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
+    if (typeof settingValue === 'boolean') {
+      return <SettingOptionBool key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
+    } else {
+      return <SettingOptionNum key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
+    }
   });
 
   return (
