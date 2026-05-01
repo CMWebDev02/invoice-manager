@@ -12,6 +12,7 @@ import { Link } from 'react-router';
 import type { SelectorDetails } from '@renderer/lib/types';
 import { toast, Toaster } from 'sonner';
 import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover';
+import TooltipProviderOutline from '@renderer/components/pages/tool-tip-provider-outline';
 
 interface SelectorsPageProps {
   selectorType: 'sorters' | 'viewers';
@@ -108,59 +109,59 @@ export default function SelectorsPage({ selectorType }: SelectorsPageProps): Rea
   });
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
-      <Dialog open={isModalOpen}>
-        {/* Modal for the associated selector */}
-        <SelectorsModal drivesList={drivesList} toggleModal={toggleModal} existingSelectorId={currentSelectorId} selectorType={selectorType} />
-
-        {/* Main card displayed on the page */}
-        <Card
-          className="bg-secondary p-2 
-          
-          h-3/4 md:h-1/2
-          max-h-3/4 md:max-h-1/2
-          w-78 
-          md:w-86 
-          lg:w-96
-          "
-        >
-          <CardContent
-            className="flex flex-col items-center h-full max-h-full overflow-x-hidden overflow-y-auto scrollbar border-2 border-background p-0
-        "
+    <TooltipProviderOutline>
+      <div className="w-full h-full flex flex-col justify-center items-center gap-y-6">
+        <Dialog open={isModalOpen}>
+          {/* Modal for the associated selector */}
+          <SelectorsModal drivesList={drivesList} toggleModal={toggleModal} existingSelectorId={currentSelectorId} selectorType={selectorType} />
+          {/* Main card displayed on the page */}
+          <Card
+            className="bg-secondary p-2
+      
+            h-3/4 md:h-1/2
+            max-h-3/4 md:max-h-1/2
+            w-78
+            md:w-86
+            lg:w-96
+            "
           >
-            {SelectorsButtons}
-          </CardContent>
-        </Card>
-
-        {/* Container for the buttons on the page */}
-        <div
-          className="flex flex-row justify-between 
-        w-78
-      md:w-86
-      lg:w-96"
-        >
-          {editingMode ? (
-            <>
-              <Button onClick={toggleModal} variant={'action'} className="bg-secondary">
-                New
-              </Button>
-              <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
-                Save
-              </Button>
-            </>
-          ) : (
-            <>
-              <ButtonLink linkHref="/" className={buttonVariants({ variant: 'action', className: 'bg-secondary' })}>
-                Return
-              </ButtonLink>
-              <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
-                Edit
-              </Button>
-            </>
-          )}
-        </div>
-      </Dialog>
-      <Toaster />
-    </div>
+            <CardContent
+              className="flex flex-col items-center h-full max-h-full overflow-x-hidden overflow-y-auto scrollbar border-2 border-background p-0
+          "
+            >
+              {SelectorsButtons}
+            </CardContent>
+          </Card>
+          {/* Container for the buttons on the page */}
+          <div
+            className="flex flex-row justify-between
+          w-78
+        md:w-86
+        lg:w-96"
+          >
+            {editingMode ? (
+              <>
+                <Button onClick={toggleModal} variant={'action'} className="bg-secondary">
+                  New
+                </Button>
+                <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
+                  Save
+                </Button>
+              </>
+            ) : (
+              <>
+                <ButtonLink linkHref="/" className={buttonVariants({ variant: 'action', className: 'bg-secondary' })}>
+                  Return
+                </ButtonLink>
+                <Button onClick={toggleEditingMode} variant={'action'} className="bg-secondary">
+                  Edit
+                </Button>
+              </>
+            )}
+          </div>
+        </Dialog>
+        <Toaster />
+      </div>
+    </TooltipProviderOutline>
   );
 }

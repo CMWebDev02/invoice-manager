@@ -3,6 +3,7 @@ import ViewerContainer from './containers/viewer-container';
 import useViewerClassInit from '@renderer/hooks/useViewerClassInit';
 import LoadingPage from '../loading/loading-page';
 import ErrorPage from '@renderer/components/pages/error-page';
+import TooltipProviderOutline from '@renderer/components/pages/tool-tip-provider-outline';
 
 export default function ViewersPage(): React.JSX.Element {
   const { viewerId } = useParams();
@@ -21,7 +22,9 @@ export default function ViewersPage(): React.JSX.Element {
   return (
     <>
       {isLoading && <LoadingPage />}
-      <ViewerContainer viewerActions={viewerActions} />
+      <TooltipProviderOutline>
+        <ViewerContainer viewerActions={viewerActions} />
+      </TooltipProviderOutline>
     </>
   );
 }

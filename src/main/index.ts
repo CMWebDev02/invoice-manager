@@ -25,7 +25,7 @@ function createWindow(): void {
     mainWindow.setTitle('Invoice Manager');
     mainWindow.show();
     // Opens dev tools upon launching the app, for troubleshooting purposes.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     const userOs = os.platform();
     if (userOs === 'win32') {

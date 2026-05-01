@@ -2,6 +2,7 @@ import SorterContainer from './containers/sorter-container';
 import { useParams } from 'react-router';
 import useSorterClassInit from '../../hooks/useSorterClassInit';
 import ErrorPage from '@renderer/components/pages/error-page';
+import TooltipProviderOutline from '@renderer/components/pages/tool-tip-provider-outline';
 
 export default function SortersPage(): React.JSX.Element {
   const { sorterId } = useParams();
@@ -20,7 +21,9 @@ export default function SortersPage(): React.JSX.Element {
   return (
     <>
       {isLoading && <h1>Loading...</h1>}
-      <SorterContainer sorterActions={sorterActions} />
+      <TooltipProviderOutline>
+        <SorterContainer sorterActions={sorterActions} />
+      </TooltipProviderOutline>
     </>
   );
 }
