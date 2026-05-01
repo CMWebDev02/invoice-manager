@@ -16,6 +16,7 @@ import NavBar from '@renderer/components/user/nav-bar';
 import MenuButton from '@renderer/components/user/menu-button';
 import { UserSettings } from '@renderer/lib/user-settings';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
+import useHotKey from '@renderer/hooks/useHotKey';
 
 interface SortersContainerProps {
   sorterActions: SorterActions;
@@ -30,6 +31,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isUserFocused, setIsUserFocused] = useState<boolean>(false);
 
   // Uses the static UserSettings class to access the current user settings
   const userSettings = UserSettings.getUserSettings();
@@ -42,6 +44,12 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
     setIsModalOpen(!isModalOpen);
   };
   const toggleDrawer = (): void => setIsDrawerOpen(!isDrawerOpen);
+
+  // Initializes a global hotkey that triggers the sorting action only when
+  // the new dir modal nor the changelog drawer are not opened,
+  // interaction is not disabled,
+  // and the user is not interacting with the search or year selector
+  useHotKey({ triggerKey: 'Enter', action: validateCurrentSelections, isHotKeyEnabled: isModalOpen || isInteractionDisabled || isDrawerOpen || isUserFocused });
 
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionKey: 'directories' });
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
@@ -227,7 +235,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <FlexColContainer className="w-1/3 h-full justify-between p-2 items-center">
-            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} />}
+            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} updateUserFocusBool={setIsUserFocused} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </FlexColContainer>
 

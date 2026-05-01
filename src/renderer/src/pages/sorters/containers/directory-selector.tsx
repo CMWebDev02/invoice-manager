@@ -14,11 +14,12 @@ interface DirectorySelectorProps {
   selectedDirectory: DirectoryExport | null;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
+  updateUserFocusBool: React.Dispatch<React.SetStateAction<boolean>>;
   useStrictInputs: boolean;
   autoSelectText: boolean;
 }
 
-export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear, updateUserFocusBool, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const filterString = useDebounce({ updateVar: userSearchString });
@@ -53,11 +54,20 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
     setUserSearchString(textInput);
   }
 
-  // Selects all text in the text box upon entering it
-  function selectAllText(e: React.SyntheticEvent<HTMLInputElement, Event>): void {
+  function setUserFocus(e: React.SyntheticEvent<HTMLInputElement, Event>): void {
+    // Checks if all text should be selected based on the UserSetting
     if (autoSelectText) {
+      // Selects all text in the text box upon entering it
       e.currentTarget.select();
     }
+
+    // Updates the bool to indicate that the user has entered the textbox
+    updateUserFocusBool(true);
+  }
+
+  function removeUserFocus(): void {
+    // Updates the bool to indicate that the user has left the textbox
+    updateUserFocusBool(false);
   }
 
   return (
@@ -67,13 +77,13 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
           <label htmlFor="search-filter" className="w-full xl:w-auto select-none text-foreground">
             Search:
           </label>
-          <WhiteListInput className="w-full rounded-none bg-secondary text-foreground border border-foreground" disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} onFocus={(e) => selectAllText(e)} />
+          <WhiteListInput className="w-full rounded-none bg-secondary text-foreground border border-foreground" disabled={disabled} regexBlackList={titleCharactersBlackList} placeholder="Search..." id={'search-filter'} onChange={(e) => updateSearchString(e)} value={userSearchString} onFocus={(e) => setUserFocus(e)} onBlur={removeUserFocus} />
         </FlexColContainer>
         <FlexColContainer className="w-1/3 xl:w-auto xl:flex-row items-center align-middle xl:gap-2">
           <label htmlFor="year-selector" className="w-full xl:w-auto select-none text-foreground">
             Year:
           </label>
-          <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} className="w-full xl:w-auto" id="year-selector" />
+          <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} updateUserFocusBool={updateUserFocusBool} className="w-full xl:w-auto" id="year-selector" />
         </FlexColContainer>
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-6rem)] xl:h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">
