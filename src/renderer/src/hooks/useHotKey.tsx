@@ -1,4 +1,3 @@
-import { Action } from '@base-ui/react/toast/index.parts';
 import { useEffect } from 'react';
 
 interface useHotKeyProps {
