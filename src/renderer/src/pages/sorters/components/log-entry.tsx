@@ -1,5 +1,6 @@
 import { Button } from '@renderer/components/ui/button';
 import FlexRowContainer from '@renderer/components/ui/flex-row-container';
+import TextDisplay from '@renderer/components/user/text-display';
 import { ChangeLogEntry } from '@renderer/lib/types';
 
 interface LogEntryProps {
@@ -36,8 +37,8 @@ export default function LogEntry({ change, undoChangeLogAction }: LogEntryProps)
 
   return (
     <FlexRowContainer className="w-full h-9 items-center p-0">
-      <p className="w-1/6 xl:w-1/12 h-full border border-foreground p-1.5 truncate">{changeTitle}</p>
-      <p className="w-4/6 xl:w-10/12 h-full border border-foreground p-1.5 truncate">{changeDescription}</p>
+      <TextDisplay className="w-1/6 xl:w-1/12 h-full flex border border-foreground p-1.5 truncate" text={changeTitle} />
+      <TextDisplay className="w-4/6 xl:w-10/12 h-full flex border border-foreground p-1.5 truncate" text={changeDescription} />
       {change.actionType === 'sort' || change.actionType === 'create' ? (
         <Button onClick={() => undoChangeLogAction(change)} className="w-1/6 xl:w-1/12 h-full border border-foreground rounded-none hover:bg-secondary/50 hover:text-accent">
           ^

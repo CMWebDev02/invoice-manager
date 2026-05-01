@@ -30,9 +30,9 @@ export default function ChangeLogDrawer({ isDrawerOpen, triggerChangeLog, change
         </FlexColContainer>
         <FlexColContainer className="w-full h-[calc(100%-3rem)] max-h-[calc(100%-3rem)] overflow-x-hidden overflow-y-scroll border-2 border-foreground">
           <FlexRowContainer className="w-full h-9 items-center justify-between p-0">
-            <p className="w-1/6 xl:w-1/12 h-full border border-foreground p-1 truncate">Past Action</p>
-            <p className="w-4/6 xl:w-10/12 h-full border border-foreground p-1 truncate">Action Description</p>
-            <p className="w-1/6 xl:w-1/12 h-full border border-foreground p-1 rounded-none truncate">Undo Button</p>
+            <p className="w-1/6 xl:w-1/12 h-full text-center border border-foreground p-1 truncate">Past Action</p>
+            <p className="w-4/6 xl:w-10/12 h-full text-center border border-foreground p-1 truncate">Action Description</p>
+            <p className="w-1/6 xl:w-1/12 h-full text-center border border-foreground p-1 rounded-none truncate">Undo Button</p>
           </FlexRowContainer>
           {changeLog.map((change) => (
             <LogEntry key={change.id} change={change} undoChangeLogAction={undoChangeLogAction} />
