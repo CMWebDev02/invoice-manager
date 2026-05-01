@@ -13,13 +13,14 @@ interface DirectorySelectorProps {
   directoriesArrays: DirectoryExport[][];
   selectedDirectory: DirectoryExport | null;
   updateSelectedDirectory: (dirObj: DirectoryExport) => void;
+  currentYear: string;
   updateCurrentYear: React.Dispatch<React.SetStateAction<string>>;
   updateUserFocusBool: React.Dispatch<React.SetStateAction<boolean>>;
   useStrictInputs: boolean;
   autoSelectText: boolean;
 }
 
-export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, updateCurrentYear, updateUserFocusBool, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
+export default function DirectorySelector({ disabled, directoriesArrays, selectedDirectory, updateSelectedDirectory, currentYear, updateCurrentYear, updateUserFocusBool, useStrictInputs, autoSelectText }: DirectorySelectorProps): React.JSX.Element {
   const [userSearchString, setUserSearchString] = useState<string>('');
   const [filteredDirectories, setFilteredDirectories] = useState<DirectoryExport[]>([]);
   const filterString = useDebounce({ updateVar: userSearchString });
@@ -83,7 +84,7 @@ export default function DirectorySelector({ disabled, directoriesArrays, selecte
           <label htmlFor="year-selector" className="w-full xl:w-auto select-none text-foreground">
             Year:
           </label>
-          <YearSelector disabled={disabled} updateCurrentYear={updateCurrentYear} updateUserFocusBool={updateUserFocusBool} className="w-full xl:w-auto" id="year-selector" />
+          <YearSelector disabled={disabled} currentYear={currentYear} updateCurrentYear={updateCurrentYear} updateUserFocusBool={updateUserFocusBool} autoSelectText={autoSelectText} className="w-full xl:w-auto rounded-none bg-secondary text-foreground border border-foreground" id="year-selector" />
         </FlexColContainer>
       </FlexRowContainer>
       <FlexColContainer className="w-full h-[calc(100%-6rem)] xl:h-[calc(100%-3rem)] overflow-y-scroll bg-secondary border-2 border-foreground">

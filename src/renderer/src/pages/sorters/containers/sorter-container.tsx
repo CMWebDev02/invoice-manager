@@ -31,6 +31,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  // Denotes if the user is within a text input
   const [isUserFocused, setIsUserFocused] = useState<boolean>(false);
 
   // Uses the static UserSettings class to access the current user settings
@@ -235,7 +236,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
       <main className="h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] overflow-y-auto w-screen bg-background">
         <FlexRowContainer className="w-full h-full p-2">
           <FlexColContainer className="w-1/3 h-full justify-between p-2 items-center">
-            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} updateCurrentYear={setSelectedYear} updateUserFocusBool={setIsUserFocused} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} />}
+            {directoriesArrays !== undefined && <DirectorySelector disabled={isInteractionDisabled} directoriesArrays={directoriesArrays} selectedDirectory={selectedDirectory} updateSelectedDirectory={updateSelectedDirectory} currentYear={selectedYear} updateCurrentYear={setSelectedYear} updateUserFocusBool={setIsUserFocused} useStrictInputs={userSettings.strictInputs} autoSelectText={userSettings.quickSelectInSearchBars} />}
             <SorterButtons triggerSorting={validateCurrentSelections} triggerModal={toggleModal} triggerChangeLog={toggleDrawer} />
           </FlexColContainer>
 
