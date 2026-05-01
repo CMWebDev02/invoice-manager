@@ -50,7 +50,7 @@ export default function SorterContainer({ sorterActions }: SortersContainerProps
   // the new dir modal nor the changelog drawer are not opened,
   // interaction is not disabled,
   // and the user is not interacting with the search or year selector
-  useHotKey({ triggerKey: 'Enter', action: validateCurrentSelections, isHotKeyEnabled: isModalOpen || isInteractionDisabled || isDrawerOpen || isUserFocused });
+  useHotKey({ action: validateCurrentSelections, isHotKeyEnabled: isModalOpen || isInteractionDisabled || isDrawerOpen || isUserFocused });
 
   const { fetchData: directoriesArrays, error: directoryError, isLoading: areDirectoriesLoading, triggerRefetching: refetchDirectories } = useFetchData<DirectoryExport[][]>({ asyncFunction: sorterActions.getSubDirectories.bind(sorterActions), asyncFunctionKey: 'directories' });
   const { fetchData: invoiceObj, error: invoiceError, isLoading: isInvoiceLoading, triggerRefetching: refetchInvoice } = useFetchData<FileExport | null>({ asyncFunction: sorterActions.getCurrentInvoice.bind(sorterActions), asyncFunctionKey: 'invoices' });
