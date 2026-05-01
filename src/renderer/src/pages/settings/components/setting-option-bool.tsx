@@ -3,13 +3,13 @@ import FlexRowContainer from '@renderer/components/ui/flex-row-container';
 import { Switch } from '@renderer/components/ui/switch';
 import { convertCamelCase } from '@renderer/lib/utils';
 
-interface SettingOptionProps {
+interface SettingOptionBoolProps {
   settingName: string;
   settingValue: boolean;
   updateUserSetting: (settingName: string, settingValue: boolean) => void;
 }
 
-export default function SettingOption({ settingName, settingValue, updateUserSetting }: SettingOptionProps): React.JSX.Element {
+export default function SettingOptionBool({ settingName, settingValue, updateUserSetting }: SettingOptionBoolProps): React.JSX.Element {
   const settingsTitle = convertCamelCase(settingName);
 
   function handleChange(): void {

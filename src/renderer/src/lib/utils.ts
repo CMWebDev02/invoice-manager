@@ -19,8 +19,10 @@ export function getTitleCase(str: string): string {
 }
 
 export function convertCamelCase(str: string): string {
-  let newStr = str.replace(/([a-z])([A-Z])/, '$1 $2');
+  // Inserts a space between all lowercase and uppercase characters
+  let newStr = str.replace(/([a-z])([A-Z])/g, '$1 $2');
 
+  //Capitalizes the first character of the sentence
   newStr = newStr.at(0)?.toUpperCase() + newStr.slice(1, newStr.length);
 
   return newStr;

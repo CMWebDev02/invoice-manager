@@ -1,12 +1,12 @@
 import { Card, CardContent, CardFooter, CardTitle } from '@renderer/components/ui/card';
 import ButtonLink from '@renderer/components/user/button-link';
 import { UserSettings } from '@renderer/lib/user-settings';
-import SettingOption from './components/setting-option';
 import { useState } from 'react';
 import { UserSettingsTypes } from '@renderer/lib/types';
 import { toast, Toaster } from 'sonner';
 import { Button, buttonVariants } from '@renderer/components/ui/button';
 import FlexColContainer from '@renderer/components/ui/flex-col-container';
+import SettingOptionBool from './components/setting-option-bool';
 
 export default function SettingsPage(): React.JSX.Element {
   const [userSettings, setUserSettings] = useState<UserSettingsTypes>(UserSettings.getUserSettings());
@@ -34,7 +34,7 @@ export default function SettingsPage(): React.JSX.Element {
   }
 
   const UserSettingsOptions = Object.entries(userSettings).map(([settingName, settingValue]) => {
-    return <SettingOption key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
+    return <SettingOptionBool key={settingName} settingName={settingName} settingValue={settingValue} updateUserSetting={updateUserSetting} />;
   });
 
   return (
