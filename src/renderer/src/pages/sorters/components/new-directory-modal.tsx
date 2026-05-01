@@ -5,6 +5,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@renderer/componen
 import WhiteListInput from '@renderer/components/user/white-list-input';
 import { titleCharactersBlackList } from '@renderer/lib/patterns';
 
+import type { ChangeEvent, KeyboardEvent } from 'react';
+
 interface NewDirectoryModalProps {
   isOpen: boolean;
   changeOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,6 +16,18 @@ interface NewDirectoryModalProps {
 }
 
 export default function NewDirectoryModal({ isOpen, changeOpen, createNewDirectory, newDirectoryName, setNewDirectoryName }: NewDirectoryModalProps): React.JSX.Element {
+  function checkForSubmission(e: KeyboardEvent<HTMLInputElement>): void {
+    // Checks if the key pressed down is the Enter key
+    if (e.key === 'Enter') {
+      // Triggers a new Directory to be created based on the current newDirectoryName
+      createNewDirectory();
+    }
+  }
+
+  function updateNewDirName(e: ChangeEvent<HTMLInputElement>): void {
+    setNewDirectoryName(e.currentTarget.value);
+  }
+
   return (
     <Sheet open={isOpen} onOpenChange={changeOpen}>
       <SheetContent className="w-1/3 p-1" side="left">
@@ -21,7 +35,7 @@ export default function NewDirectoryModal({ isOpen, changeOpen, createNewDirecto
           <SheetTitle>Directory Initializer</SheetTitle>
         </SheetHeader>
         <Label htmlFor="newDirectoryTextBox">New Directory Name:</Label>
-        <WhiteListInput id="newDirectoryTextBox" regexBlackList={titleCharactersBlackList} value={newDirectoryName} onChange={(e) => setNewDirectoryName(e.target.value)} className="rounded-none bg-secondary text-foreground border border-foreground" />
+        <WhiteListInput id="newDirectoryTextBox" regexBlackList={titleCharactersBlackList} value={newDirectoryName} onChange={(e) => updateNewDirName(e)} onKeyDownCapture={(e) => checkForSubmission(e)} className="rounded-none bg-secondary text-foreground border border-foreground" />
         <ButtonGroup orientation={'vertical'} className="w-full">
           <Button onClick={createNewDirectory} variant={'action'}>
             Create

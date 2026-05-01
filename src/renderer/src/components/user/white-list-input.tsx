@@ -1,4 +1,4 @@
-import { KeyboardEvent } from 'react';
+import type { KeyboardEvent } from 'react';
 import { Input } from '../ui/input';
 
 interface WhiteListInputProps {
